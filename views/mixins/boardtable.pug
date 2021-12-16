@@ -1,0 +1,14 @@
+mixin boardtable(ppd=false, activity=false)
+	.table-container.flex-center.mv-10.text-center
+		table(class=`boardtable${activity ? ' w900' : ''}`)
+			tr
+				th 板
+				th 説明
+				th PPH
+				if ppd
+					th PPD
+				th ユーザー
+				th 投稿
+				if activity
+					th 最後の活動
+			block

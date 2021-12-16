@@ -1,0 +1,39 @@
+extends ../layout.pug
+include ../mixins/boardheader.pug
+include ../mixins/boardnav.pug
+
+block head
+	title /#{board._id}/ - #{startDate.toDateString()}のログ
+
+block content
+	+boardheader('Logs')
+	br
+	include ../includes/stickynav.pug
+	.pages
+		+boardnav('logs', true, true)
+	hr(size=1)
+	.table-container.flex-center.mv-10.text-center
+		table
+				tr
+					th 日にち
+					th ユーザー
+					th 行動
+					th 投稿
+					th ログメッセージ
+				for log in logs
+					tr
+						- const logDate = new Date(log.date);
+						td: time.reltime(datetime=logDate.toISOString()) #{logDate.toLocaleString(undefined, {hourCycle:'h23'})}
+						td(class=(!log.showUser ? 'em' : '')) #{log.showUser ? log.user : '非表示のユーザー'}
+						td #{log.actions}
+						td
+							if log.showLinks
+								for postLink in log.postLinks
+									a(href=`/${board._id}/thread/${postLink.thread || postLink.postId}.html#${postLink.postId}`) &gt;&gt;#{postLink.postId}
+									|   
+							else
+								| #{log.postLinks.map(l => l.postId)}
+						td #{log.message || '-'}
+	hr(size=1)
+	.pages
+		+boardnav('logs', true, true)

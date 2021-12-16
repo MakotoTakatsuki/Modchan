@@ -1,0 +1,726 @@
+'use strict';
+
+const Mongo = require(__dirname+'/db.js')
+	, Boards = require(__dirname+'/boards.js')
+	, Stats = require(__dirname+'/stats.js')
+	, db = Mongo.db.collection('posts')
+	, config = require(__dirname+'/../config.js');
+
+module.exports = {
+
+	db,
+
+	getThreadPage: async (board, thread) => {
+		const threadsBefore = await db.countDocuments({
+			'board': board,
+			'thread': null,
+			'bumped': {
+				'$gte': thread.bumped
+			}
+		});
+		return Math.ceil(threadsBefore/10) || 1; //1 because 0 threads before is page 1
+	},
+
+	getBoardRecent: async (offset=0, limit=20, ip, board, permLevel) => {
+		const query = {};
+		if (board) {
+			query['board'] = board;
+		}
+		const projection = {
+			'salt': 0,
+			'password': 0,
+		};
+		if (!board) {
+			projection['reports'] = 0;
+		} else {
+			projection['globalreports'] = 0;
+		}
+		if (ip instanceof RegExp) {
+			query['ip.single'] = ip;
+		} else if (typeof ip === 'string') {
+			query['ip.raw'] = ip;
+		}
+		if (permLevel > config.get.ipHashPermLevel) {
+			projection['ip.raw'] = 0;
+			//MongoError, why cant i just projection['reports.ip.raw'] = 0;
+			if (board) {
+				projection['reports'] = { ip: { raw: 0 } };
+			} else {
+				projection['globalreports'] = { ip: { raw: 0 } };
+			}
+		}
+		const posts = await db.find(query, {
+			projection
+		}).sort({
+			'_id': -1
+		}).skip(offset).limit(limit).toArray();
+		posts.forEach(p => {
+			//kill me
+			p.ip.single = p.ip.single.slice(-10);
+			p.ip.qrange = p.ip.qrange.slice(-10);
+			p.ip.hrange = p.ip.hrange.slice(-10);
+			if (board) {
+				p.reports.forEach(r => {
+					r.ip.single = r.ip.single.slice(-10);
+				});
+			} else {
+				p.globalreports.forEach(r => {
+					r.ip.single = r.ip.single.slice(-10);
+				});
+			}
+		});
+		return posts;
+	},
+
+	getRecent: async (board, page, limit=10, getSensitive=false, sortSticky=true) => {
+		// get all thread posts (posts with null thread id)
+		const projection = {
+			'salt': 0,
+			'password': 0,
+			'reports': 0,
+			'globalreports': 0,
+		};
+		if (!getSensitive) {
+			projection['ip'] = 0;
+		}
+		const threadsQuery = {
+			'thread': null,
+		};
+		if (board) {
+			if (Array.isArray(board)) {
+				//array for overboard
+				threadsQuery['board'] = {
+					'$in': board
+				}
+			} else {
+				threadsQuery['board'] = board;
+			}
+		}
+		let threadsSort = {
+			'bumped': -1,
+		};
+		if (sortSticky === true) {
+			threadsSort = {
+				'sticky': -1,
+				'bumped': -1
+			}
+		}
+		const threads = await db.find(threadsQuery, {
+			projection
+		})
+		.sort(threadsSort)
+		.skip(10*(page-1))
+		.limit(limit)
+		.toArray();
+
+		// add last n posts in reverse order to preview
+		await Promise.all(threads.map(async thread => {
+			const { stickyPreviewReplies, previewReplies } = config.get;
+			const previewRepliesLimit = thread.sticky ? stickyPreviewReplies : previewReplies;
+			const replies = previewRepliesLimit === 0 ? [] : await db.find({
+				'thread': thread.postId,
+				'board': thread.board
+			},{
+				projection
+			}).sort({
+				'postId': -1
+			}).limit(previewRepliesLimit).toArray();
+
+			//reverse order for board page
+			thread.replies = replies.reverse();
+
+			//if enough replies, show omitted count
+			if (thread.replyposts > previewRepliesLimit) {
+				//dont show all backlinks on OP for previews on index page
+				thread.previewbacklinks = [];
+				if (previewRepliesLimit > 0) {
+					const firstPreviewId = thread.replies[0].postId;
+					const latestPreviewBacklink = thread.backlinks.find(bl => { return bl.postId >= firstPreviewId });
+					if (latestPreviewBacklink != null) {
+						const latestPreviewIndex = thread.backlinks.map(bl => bl.postId).indexOf(latestPreviewBacklink.postId);
+						thread.previewbacklinks = thread.backlinks.slice(latestPreviewIndex);
+					}
+				}
+				//count omitted image and posts
+				const numPreviewFiles = replies.reduce((acc, post) => { return acc + post.files.length }, 0);
+				thread.omittedfiles = thread.replyfiles - numPreviewFiles;
+				thread.omittedposts = thread.replyposts - replies.length;
+			}
+		}));
+		return threads;
+
+	},
+
+	resetThreadAggregates: (ors) => {
+		return db.aggregate([
+			{
+				'$match': {
+					'$or': ors
+				}
+			}, {
+				'$set': {
+					'replyposts': 0,
+					'replyfiles': 0,
+					'bumped': '$date'
+				}
+			}, {
+				'$project': {
+					'_id': 1,
+					'board': 1,
+					'replyposts': 1,
+					'replyfiles': 1,
+					'bumped': 1
+				}
+			}
+		]).toArray();
+	},
+
+	getThreadAggregates: (ors) => {
+		return db.aggregate([
+			{
+				'$match': {
+					'$or': ors
+				}
+			}, {
+				'$group': {
+					'_id': {
+						'thread': '$thread',
+						'board': '$board'
+					},
+					'replyposts': {
+						'$sum': 1
+					},
+					'replyfiles': {
+						'$sum': {
+							'$size': '$files'
+						}
+					},
+					'bumped': {
+						'$max': {
+							'$cond': [
+								{ '$ne': [ '$email', '下げる' ] },
+								'$date',
+								0 //still need to improve this to ignore bump limitthreads
+							]
+						}
+					}
+				}
+			}
+		]).toArray();
+	},
+
+	getPages: (board) => {
+		return db.countDocuments({
+			'board': board,
+			'thread': null
+		});
+	},
+
+	getThread: async (board, id, getSensitive=false) => {
+		// get thread post and potential replies concurrently
+		const projection = {
+			'salt': 0,
+			'password': 0,
+			'reports': 0,
+			'globalreports': 0,
+		};
+		if (!getSensitive) {
+			projection['ip'] = 0;
+		}
+		const [thread, replies] = await Promise.all([
+			db.findOne({
+				'postId': id,
+				'board': board,
+				'thread': null,
+			}, {
+				projection,
+			}),
+			module.exports.getThreadPosts(board, id, projection)
+		])
+		// attach the replies to the thread post
+		if (thread && replies) {
+			thread.replies = replies;
+		}
+		return thread;
+	},
+
+	getThreadPosts: (board, id, projection) => {
+		// all posts within a thread
+		return db.find({
+			'thread': id,
+			'board': board
+		}, {
+			projection
+		}).sort({
+			'postId': 1
+		}).toArray();
+	},
+
+	getMultipleThreadPosts: (board, ids) => {
+		//all posts from multiple threads in a single board
+		return db.find({
+			'board': board,
+			'thread': {
+				'$in': ids
+			}
+		}, {
+			'projection': {
+				'salt': 0 ,
+				'password': 0,
+				'ip': 0,
+				'reports': 0,
+				'globalreports': 0,
+			}
+		}).toArray();
+	},
+
+	getCatalog: (board, sortSticky=true, catalogLimit=0) => {
+
+		const threadsQuery = {
+			thread: null,
+		}
+		if (board) {
+			if (Array.isArray(board)) {
+				//array for overboard catalog
+				threadsQuery['board'] = {
+					'$in': board
+				}
+			} else {
+				threadsQuery['board'] = board;
+			}
+		}
+		let threadsSort = {
+			'bumped': -1,
+		};
+		if (sortSticky === true) {
+			threadsSort = {
+				'sticky': -1,
+				'bumped': -1
+			}
+		}
+		// get all threads for catalog
+		return db.find(threadsQuery, {
+			'projection': {
+				'salt': 0,
+				'password': 0,
+				'ip': 0,
+				'reports': 0,
+				'globalreports': 0,
+			}
+		})
+		.limit(catalogLimit)
+		.sort(threadsSort)
+		.toArray();
+
+	},
+
+	getPost: (board, id, getSensitive=false) => {
+
+		// get a post
+		if (getSensitive) {
+			return db.findOne({
+				'postId': id,
+				'board': board
+			});
+		}
+
+		return db.findOne({
+			'postId': id,
+			'board': board
+		}, {
+			'projection': {
+				'salt': 0,
+				'password': 0,
+				'ip': 0,
+				'reports': 0,
+				'globalreports': 0,
+			}
+		});
+
+	},
+
+	checkExistingMessage: async (board, thread = null, hash) => {
+		const query = {
+			'board': board,
+			'messagehash': hash,
+		}
+		if (thread !== null) {
+			query['$or'] = [
+				{ 'thread': thread },
+				{ 'postId': thread },
+			]
+		}
+		const postWithExistingMessage = await db.findOne(query, {
+			'projection': {
+				'messagehash': 1,
+			}
+		});
+		return postWithExistingMessage;
+	},
+
+	checkExistingFiles: async (board, thread = null, hashes) => {
+		const query = {
+			'board': board,
+			'files.hash': {
+				'$in': hashes
+			}
+		}
+		if (thread !== null) {
+			query['$or'] = [
+				{ 'thread': thread },
+				{ 'postId': thread },
+			]
+		}
+		const postWithExistingFiles = await db.findOne(query, {
+			'projection': {
+				'files.hash': 1,
+			}
+		});
+		return postWithExistingFiles;
+	},
+
+	allBoardPosts: (board) => {
+		return db.find({
+			'board': board
+		}).toArray();
+	},
+
+	//takes array "ids" of post ids
+	getPosts: (board, ids, getSensitive=false) => {
+
+		if (getSensitive) {
+			return db.find({
+				'postId': {
+					'$in': ids
+				},
+				'board': board
+			}).toArray();
+		}
+
+		return db.find({
+			'postId': {
+				'$in': ids
+			},
+			'board': board
+		}, {
+			'projection': {
+				'salt': 0,
+				'password': 0,
+				'ip': 0,
+				'reports': 0,
+				'globalreports': 0,
+			}
+		}).toArray();
+
+	},
+
+	// get only thread and post id for use in quotes
+	getPostsForQuotes: (queryOrs) => {
+		const { quoteLimit } = config.get;
+		return db.find({
+			'$or': queryOrs
+		}, {
+			'projection': {
+				'postId': 1,
+				'board': 1,
+				'thread': 1,
+			}
+		}).limit(quoteLimit).toArray();
+	},
+
+	//takes array "ids" of mongo ids to get posts from any board
+	globalGetPosts: (ids) => {
+		return db.find({
+			'_id': {
+				'$in': ids
+			},
+		}).toArray();
+	},
+
+	insertOne: async (board, data, thread, tor) => {
+		const sageEmail = data.email === '下げる';
+		const bumpLocked = thread && thread.bumplocked === 1;
+		const bumpLimited = thread && thread.replyposts >= board.settings.bumpLimit;
+		const cyclic = thread && thread.cyclic === 1;
+		const saged = sageEmail || bumpLocked || (bumpLimited && !cyclic);
+		if (data.thread !== null) {
+			const filter = {
+				'postId': data.thread,
+				'board': board._id
+			}
+			//update thread reply and reply file count
+			const query = {
+				'$inc': {
+					'replyposts': 1,
+					'replyfiles': data.files.length
+				}
+			}
+			//if post email is not sage, and thread not bumplocked, set bump date
+			if (!saged) {
+				query['$set'] = {
+					'bumped': new Date()
+				}
+			} else if (bumpLimited && !cyclic) {
+				query['$set'] = {
+					'bumplocked': 1
+				}
+			}
+			//update the thread
+			await db.updateOne(filter, query);
+		} else {
+			//this is a new thread so just set the bump date
+			data.bumped = new Date();
+		}
+
+		//get the postId and add it to the post
+		const postId = await Boards.getNextId(board._id, saged);
+		data.postId = postId;
+
+		//insert the post itself
+		const postMongoId = await db.insertOne(data).then(result => result.insertedId); //_id of post
+
+		const statsIp = (config.get.statsCountAnonymizers === false && res.locals.anonymizer === true) ? null : data.ip.single;
+		await Stats.updateOne(board._id, statsIp, data.thread == null);
+
+		//add backlinks to the posts this post quotes
+		if (data.thread && data.quotes.length > 0) {
+			await db.updateMany({
+				'_id': {
+					'$in': data.quotes.map(q => q._id)
+				}
+			}, {
+				'$push': {
+					'backlinks': { _id: postMongoId, postId: postId }
+				}
+			});
+		}
+
+		return { postMongoId, postId };
+
+	},
+
+	getBoardReportCounts: (boards) => {
+		return db.aggregate([
+			{
+				'$match': {
+					'board': {
+						'$in': boards
+					},
+					'reports.0': {
+						'$exists': true
+					},
+				}
+			}, {
+				'$group': {
+					'_id': '$board',
+					'count': {
+						'$sum': 1
+					}
+				}
+			}
+		]).toArray();
+	},
+
+	getGlobalReportsCount: () => {
+		return db.countDocuments({
+			'globalreports.0': {
+				'$exists': true
+			}
+		})
+	},
+
+	getReports: async (board, permLevel) => {
+		const projection = {
+			'salt': 0,
+			'password': 0,
+			'globalreports': 0,
+		};
+		if (permLevel > config.get.ipHashPermLevel) {
+			projection['ip.raw'] = 0;
+			projection['reports'] = { ip: { raw: 0 } };
+		}
+		const posts = await db.find({
+			'reports.0': {
+				'$exists': true
+			},
+			'board': board
+		}, { projection }).toArray();
+		posts.forEach(p => {
+			p.ip.single = p.ip.single.slice(-10);
+			p.ip.qrange = p.ip.qrange.slice(-10);
+			p.ip.hrange = p.ip.hrange.slice(-10);
+			p.reports.forEach(r => {
+				r.ip.single = r.ip.single.slice(-10);
+			});
+		});
+		return posts;
+	},
+
+	getGlobalReports: async (offset=0, limit, ip, permLevel) => {
+		const projection = {
+			'salt': 0,
+			'password': 0,
+			'reports': 0,
+		};
+		if (permLevel > config.get.ipHashPermLevel) {
+			projection['ip.raw'] = 0;
+			projection['globalreports'] = { ip: { raw: 0 } };
+		}
+		const query = {
+			'globalreports.0': {
+				'$exists': true
+			}
+		}
+		if (ip instanceof RegExp) {
+			query['$or'] = [
+				{ 'ip.single': ip },
+				{ 'globalreports.ip.single': ip }
+			];
+		} else if (typeof ip === 'string') {
+			query['$or'] = [
+				{ 'ip.raw': ip },
+				{ 'globalreports.ip.raw': ip }
+			];
+		}
+		const posts = await db.find(query, { projection }).skip(offset).limit(limit).toArray();
+		posts.forEach(p => {
+			p.ip.single = p.ip.single.slice(-10);
+			p.ip.qrange = p.ip.qrange.slice(-10);
+			p.ip.hrange = p.ip.hrange.slice(-10);
+			p.globalreports.forEach(r => {
+				r.ip.single = r.ip.single.slice(-10);
+			});
+		});
+		return posts;
+	},
+
+	deleteOne: (board, options) => {
+		return db.deleteOne(options);
+	},
+
+	pruneThreads: async (board) => {
+
+		//get threads that have been bumped off last page
+		const oldThreads = await db.find({
+			'thread': null,
+			'board': board._id
+		}).sort({
+			'sticky': -1,
+			'bumped': -1
+		}).skip(board.settings.threadLimit).toArray();
+
+		let early404Threads = [];
+		if (board.settings.early404 === true) {
+			early404Threads = await db.aggregate([
+				{
+					//get all the threads for a board
+					'$match': {
+						'thread': null,
+						'board': board._id
+					}
+				}, {
+					//in bump date order
+					'$sort': {
+						'sticky': -1,
+						'bumped': -1
+					}
+				}, {
+					//skip the first (board.settings.threadLimit/early404Fraction)
+					'$skip': Math.ceil(board.settings.threadLimit/config.get.early404Fraction)
+				}, {
+					//then any that have less than early404Replies replies get matched again
+					'$match': {
+						'sticky':0,
+						'replyposts': {
+							'$lt': config.get.early404Replies
+						}
+					}
+				}
+			]).toArray();
+		}
+
+		return oldThreads.concat(early404Threads);
+	},
+
+	fixLatest: (boards) => {
+		return db.aggregate([
+			{
+				'$match': {
+					//going to match against thread bump date instead
+					'thread': null,
+					'board': {
+						'$in': boards
+					},
+				}
+			}, {
+				'$group': {
+					'_id': '$board',
+					'lastPostTimestamp': {
+						'$max':'$bumped'
+					}
+				}
+			}, {
+				'$merge': {
+					'into': 'boards'
+				}
+			}
+		]).toArray();
+	},
+
+	deleteMany: (ids) => {
+		return db.deleteMany({
+			'_id': {
+				'$in': ids
+			}
+		});
+	},
+
+	deleteAll: (board) => {
+		return db.deleteMany();
+	},
+
+	move: (ids, dest) => {
+		return db.updateMany({
+			'_id': {
+				'$in': ids
+			}
+		}, {
+			'$set': {
+				'thread': dest
+			},
+			'$unset': {
+				'replyposts': '',
+				'replyfiles': '',
+				'sticky': '',
+				'locked': '',
+				'bumplocked': '',
+				'cyclic': '',
+				'salt': ''
+			}
+		});
+	},
+
+	threadExists: (board, thread) => {
+		return db.findOne({
+			'postId': thread,
+			'board': board,
+			'thread': null,
+		}, {
+			'projection': {
+				'_id': 1,
+				'postId': 1,
+				'salt': 1,
+			}
+		});
+	},
+
+	exists: async (req, res, next) => {
+		const thread = await module.exports.threadExists(req.params.board, req.params.id);
+		if (!thread) {
+			return res.status(404).render('404');
+		}
+		res.locals.thread = thread; // can acces this in views or next route handlers
+		next();
+	}
+
+}

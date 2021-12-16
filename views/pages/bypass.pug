@@ -1,0 +1,17 @@
+extends ../layout.pug
+
+block head
+	title ブロックバイパス
+
+block content
+	h1.board-title ブロックバイパス
+	.form-wrapper.flex-center.mv-10
+		form.form-post(action='/forms/blockbypass' method='POST' data-captcha-preload='true')
+			.row
+				.col
+					include ../includes/captcha.pug
+			if minimal
+				input(type='hidden' name='minimal' value='1')
+			input(type='submit', value='送信') 
+		if message
+			p.title #{message}

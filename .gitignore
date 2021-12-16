@@ -1,0 +1,15 @@
+node_modules/
+backup.sh
+configs/*.json
+configs/*.js
+static/*
+gulp/res/js/socket.io.js
+/gulp/res/css/codethemes
+gulp/res/css/locals.css
+gulp/res/css/custom.css
+gulp/res/js/locals.js
+gulp/res/js/post.js
+gulp/res/js/modal.js
+gulp/res/icons/*
+tmp/
+.idea/

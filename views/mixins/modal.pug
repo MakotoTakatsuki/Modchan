@@ -1,0 +1,183 @@
+mixin modal(data)
+	.modal-bg(style=data.hidden?'display:none':'')
+	.modal(id=(data.settings ? 'settingsmodal' : '') style=data.hidden?'display:none':'')
+		.row
+			p.bold #{data.title}
+			a.close.postform-style#modalclose X
+		if data.message || data.messages || data.error || data.errors
+			.row
+				ul.nomarks
+					if data.message
+						li #{data.message}
+					if data.error
+						li #{data.error}
+					if data.messages
+						each msg in data.messages
+							li #{msg}
+					if data.errors
+						each error in data.errors
+							li #{error}
+		if data.frame
+			.row.f1
+				iframe.bypass#modalframe(src=data.frame frameborder='0' scrolling='no')
+		else if data.link
+			.row
+				a.button.mv-0(href=data.link.href target='_blank') #{data.link.text}
+		else if data.redirect && data.title === '成功'
+			.row
+				a.button.mv-0(href=data.redirect) OK
+		else if data.settings
+			.row
+				.form-wrapper.flexleft.mt-10
+					.row.wrap.sb
+						.col.mr-5
+							.row
+								label.postform-style.ph-5
+									input#live-setting(type='checkbox')
+								.rlabel ライブ投稿
+							.row
+								label.postform-style.ph-5
+									input#notification-setting(type='checkbox')
+								.rlabel 通知
+							.row
+								label.postform-style.ph-5
+									input#notification-yous-only(type='checkbox')
+								.rlabel （あなた）にのみ通知する
+							.row
+								label.postform-style.ph-5
+									input#scroll-setting(type='checkbox')
+								.rlabel 新しい投稿までスクロール
+							.row
+								label.postform-style.ph-5
+									input#localtime-setting(type='checkbox')
+								.rlabel 現地時間
+							.row
+								label.postform-style.ph-5
+									input#24hour-setting(type='checkbox')
+								.rlabel 24時間
+							.row
+								label.postform-style.ph-5
+									input#relative-setting(type='checkbox')
+								.rlabel 相対時間を表示する
+							.row
+								label.postform-style.ph-5
+									input#noncolorids-setting(type='checkbox')
+								.rlabel 非カラーID
+							.row
+								label.postform-style.ph-5
+									input#hidepoststubs-setting(type='checkbox')
+								.rlabel 投稿スタブを非表示
+							.row
+								label.postform-style.ph-5
+									input#disableboardcss-setting(type='checkbox')
+								.rlabel 板カスタムCSSを無効にする
+
+						.col
+							.row
+								label.postform-style.ph-5
+									input#hidethumbnails-setting(type='checkbox' accesskey='s')
+								.rlabel サムネイルを非表示にする
+							.row
+								label.postform-style.ph-5
+									input#hiderecursive-setting(type='checkbox')
+								.rlabel 再帰的な投稿の非表示
+							.row
+								label.postform-style.ph-5
+									input#loop-setting(type='checkbox')
+								.rlabel オーディオ/ビデオのループ
+							.row
+								label.postform-style.ph-5
+									input#heightlimit-setting(type='checkbox')
+								.rlabel メディアの高さを無制限にする
+							.row
+								label.postform-style.ph-5
+									input#crispimages-setting(type='checkbox')
+								.rlabel 鮮明な画像レンダリング
+							.row
+								label.postform-style.ph-5
+									input#imageloadingbars-setting(type='checkbox')
+								.rlabel 画像読み込みバー
+							.row
+								label.postform-style.ph-5
+									input#alwaysshowspoilers-setting(type='checkbox')
+								.rlabel 常にテキストネタバレを明らかにする
+							.row
+								label.postform-style.ph-5
+									input#yous-setting(type='checkbox')
+								.rlabel （あなた）を表示
+							.row
+								label.postform-style.ph-5
+									input#smoothscrolling-setting(type='checkbox')
+								.rlabel スムーズなスクロール
+					.row.mt-5
+						.label （あなた）
+						input.mr-1#youslist-setting(type='text' readonly)
+						input#youslist-clear(type='button' value='Clear')
+					.row
+						.label 隠し画像
+						input.mr-1#hiddenimages-setting(type='text' readonly)
+						input#hiddenimages-clear(type='button' value='Clear')
+					.row
+						.label キャッシュ
+						input.mr-1#hovercachelist-setting(type='text' readonly)
+						input#hovercachelist-clear(type='button' value='Clear')
+					.row
+						.label ビデオ/オーディオボリューム
+						label.postform-style.ph-5
+							input#volume-setting(type='range' min='0' max='100')
+					.row
+						.label デフォルト名
+						input#name-setting(type='text' name='name')
+					.row
+						.label 投稿パスワード
+						input#postpassword-setting(type='password' name='postpassword' autocomplete='new-password')
+					.row
+						.label テーマ
+						select#theme-setting
+							option(value='default') ディフォルト
+							each theme in data.settings.themes
+								option(value=theme) #{theme}
+					.row
+						.label コードテーマ
+						select#codetheme-setting
+							option(value='default') ディフォルト
+							each theme in data.settings.codeThemes
+								option(value=theme) #{theme}
+					.row
+						.label カスタムCSS
+						textarea#customcss-setting(rows=7)
+					.row.mt-5
+						form.text-center#filter-form
+							table
+								tbody#advancedfilters
+									tr
+										th ポストフィルター
+										th
+										th
+										th
+									tr
+										td 種類
+										td 価値
+										td 正規表現？
+										td: input.right#filters-clear(type='button' value='Clear')
+									tr
+										td: select(name='type')
+											option(value='fname') 名前
+											option(value='ftrip') トリップコード
+											option(value='fsub') 件名
+											option(value='fmsg') メッセージ
+										td
+											input#filter-value-input(required type='text' name='value')
+										td
+											input(type='checkbox' name='regex')
+										td: input.right(type='submit' value='Add')
+					.row.mt-5
+						.label
+							| 設定のインポート/エクスポート
+							small.title 信頼できない設定データをインポートしないでください！
+							small エクスポートには、投稿パスワードまたは（あなた）のパスワードは含まれません
+						textarea#import-export-setting(type='text')
+					.row
+						input.mr-1#export-setting(type='button' value='Export')
+						input#import-setting(type='button' value='Import')
+			

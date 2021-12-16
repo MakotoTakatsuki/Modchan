@@ -1,0 +1,17 @@
+form.form-post(action=`/forms/appeal`, enctype='application/x-www-form-urlencoded', method='POST' data-captcha-preload='true')
+	include ./bantable.pug
+		for ban in bans
+			+ban(ban, true)
+	- const allowAppeal = bans.filter(ban => ban.allowAppeal === true && !ban.appeal).length > 0;
+	if allowAppeal === true
+		h4.no-m-p 控訴禁止：
+			.form-wrapper.flexleft.mt-10
+				input(type='hidden' name='_csrf' value=csrf)
+				.row
+					.label メッセージ
+					textarea(rows='5' name='message' required)
+				if captchaType === 'text'
+					include ./captchasidelabel.pug
+				else
+					include ./captchafieldrow.pug
+				input(type='submit', value='送信')

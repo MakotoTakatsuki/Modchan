@@ -1,0 +1,68 @@
+extends ../layout.pug
+include ../mixins/boardtable.pug
+
+block head
+	title 板リスト
+
+block content
+	h1.board-title 板リスト
+	.flexcenter.mv-10
+		form.form-post(action='/boards.html' method='GET')
+			input(type='hidden' value=page)
+			.row.wrap.sb
+				div(class=`col${enableWebring ? ' mr-5' : ''}`)
+					.row
+						.label 検索 
+						input(type='text' name='search' value=search placeholder='Uriまたはタグ')
+					.row
+						.label 選別
+						select(name='sort')
+							option(value='popularity') 人気
+							option(value='activity' selected=query.sort === 'activity') 最新のアクティビティ
+					.row
+						.label 注文
+						select(name='direction')
+							option(value='desc') 降順
+							option(value='asc' selected=query.direction === 'asc') 上昇
+					if enableWebring
+						.row
+							.label ローカルファースト
+							label.postform-style.ph-5
+								input(type='checkbox', name='local_first', value='true' checked=localFirst)
+				if enableWebring
+					.col
+						.row
+							.label サイト
+							select(name='sites' size='5' multiple)
+								optgroup(label='Shown')
+									each site in shown
+										option(value=site selected=true) #{site}
+								optgroup(label='Not Shown')
+									each site in notShown
+										option(value=site) #{site}
+			input(type='submit', value='フィルター')
+	if boards && boards.length > 0
+		+boardtable(true, true)
+			each board in boards
+				- const path = board.webring ? board.path : `/${board._id}/index.html`;
+				tr
+					td 
+						span.left
+							if board.webring === true
+								span.help(title='Webring') &#x1F517;
+								|  
+							if board.settings.sfw === true
+								span.help(title='SFW') &#x1F4BC;
+								|  
+						a(href=path) #{board.webring ? board.siteName : ''} /#{board.webring ? board.uri : board._id}/ - #{board.settings.name}
+					td #{board.settings.description || '-'}
+					td #{board.pph}
+					td #{board.ppd != null ? board.ppd : '-'}
+					td #{board.ips}
+					td #{board.sequence_value-1}
+					if board.lastPostTimestamp
+						td(style=`background-color: ${board.lastPostTimestamp.color}`) #{board.lastPostTimestamp.text}
+					else
+						td -
+	.pages.text-center.mt-5.mv-0
+		include ../includes/pages.pug

@@ -1,0 +1,74 @@
+extends ../layout.pug
+include ../mixins/ban.pug
+include ../mixins/globalmanagenav.pug
+include ../mixins/boardtable.pug
+
+block head
+	title 管理
+
+block content
+	h1.board-title グローバルマネジメント
+	br
+	+globalmanagenav('boards')
+	hr(size=1)
+	h4.text-center.no-m-p Filter:
+	.flexcenter.mv-10
+		form.form-post(action='/globalmanage/boards.html' method='GET')
+			input(type='hidden' value=page)
+			.row.wrap.sb
+				.col.mr-5
+					.row
+						.label 検索
+						input(type='text' name='search' value=search placeholder='Uri or tags')
+					.row
+						.label 選別
+						select(name='sort')
+							option(value='popularity') 人気
+							option(value='activity' selected=query.sort === 'activity') 最新のアクティビティ
+					.row
+						.label Order
+						select(name='direction')
+							option(value='desc') 降順
+							option(value='asc' selected=query.direction === 'asc') 上昇
+				.col
+					.row
+						.label 非公開
+						label.postform-style.ph-5
+							input(type='checkbox', name='filter_unlisted', value='1' checked=(query.filter_unlisted != null))
+					.row
+						.label わいせつではない
+						label.postform-style.ph-5
+							input(type='checkbox', name='filter_sfw', value='1' checked=(query.filter_sfw != null))
+					.row
+						.label 放棄された
+						label.postform-style.ph-5
+							input(type='checkbox', name='filter_abandoned', value='1' checked=(query.filter_abandoned != null))
+			input(type='submit', value='フィルター')
+	if localBoards && localBoards.length > 0
+		h4.text-center.mv-10 板リスト：
+		+boardtable(true, true)
+			each board in localBoards
+				tr
+					td 
+						span.left
+							if board.settings.sfw === true
+								span.help(title='わいせつではない') &#x1F4BC;
+								|  
+							if board.settings.unlistedLocal === true
+								span.help(title='非公開') &#x1F441;&#xFE0F;
+								|  
+							if !board.owner && board.settings.moderators.length === 0
+								span.help(title='放棄された') &#x1F3DA;&#xFE0F;
+								|  
+						a(href=`/${board._id}/index.html`) /#{board._id}/ - #{board.settings.name}
+					td #{board.settings.description}
+					td #{board.pph}
+					td #{board.ppd}
+					td #{board.ips}
+					td #{board.sequence_value-1}
+					if board.lastPostTimestamp
+						td(style=`background-color: ${board.lastPostTimestamp.color}`) #{board.lastPostTimestamp.text}
+					else
+						td -
+	.pages.text-center.mt-5.mv-0
+		include ../includes/pages.pug

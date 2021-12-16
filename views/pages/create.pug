@@ -1,0 +1,27 @@
+extends ../layout.pug
+
+block head
+	title 板を作成する
+
+block content
+	h1.board-title 板を作成する
+	.form-wrapper.flex-center.mv-10
+		form.form-post(action='/forms/create' method='POST' data-captcha-preload='true')
+			.row
+				.label URI e.g. /uri/
+				input(type='text', name='uri', maxlength=globalLimits.fieldLength.uri pattern='[a-zA-Z0-9]+' required title='alphanumeric only')
+			.row
+				.label 名前
+				input(type='text', name='name', maxlength=globalLimits.fieldLength.boardname required)
+			.row
+				.label 説明
+				input(type='text', name='description', maxlength=globalLimits.fieldLength.description)
+			.row
+				.label タグ
+				textarea(name='tags' placeholder='Newline separated, max 10')
+			if captchaType === 'text'
+				include ../includes/captchasidelabel.pug
+			else
+				include ../includes/captchafieldrow.pug
+			input(type='submit', value='送信')
+

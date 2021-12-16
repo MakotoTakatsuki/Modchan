@@ -1,0 +1,37 @@
+include ./filelabel.pug
+
+mixin fileform(name, max, total, addPath, deletePath, checkName, fileList, nameList, filePath, imageClass, showName, showLink, formDescription)
+	- const capitalName = `${name.charAt(0).toUpperCase()}${name.substring(1)}`;
+	h4.no-m-p #{capitalName}を追加 (最大 #{total})
+	p #{formDescription}
+	.form-wrapper.flexleft.mt-10
+		form.form-post(action=addPath, enctype='multipart/form-data', method='POST')
+			input(type='hidden' name='_csrf' value=csrf)
+			.row
+				.label
+					span #{capitalName}#{max > 1 ? 's' : ''}
+						span.required *
+					if max > 1
+						|  
+						|  
+						small (最大 #{max})
+				span.col
+					+filelabel(name, max)
+					input(id=name type='file', name='file' multiple required)
+					.upload-list(data-spoilers='false' data-strip-filenames='false')
+			input(type='submit', value='送信')
+	if fileList.length > 0
+		h4.mv-5 #{capitalName}を削除する。
+		.form-wrapper.flexleft.mt-10
+			form.form-post(action=deletePath, enctype='application/x-www-form-urlencoded', method='POST')
+				input(type='hidden' name='_csrf' value=csrf)
+				.catalog
+					each file, index in fileList
+						label.asset-check
+							input(type='checkbox' name=checkName value=nameList[index])
+							img(class=imageClass src=`${filePath}/${file}` loading='lazy')
+							if showName
+								small #{nameList[index]}
+							if showLink
+								a(href=`${filePath}/${file}`) リンク
+				input(type='submit', value = '削除')

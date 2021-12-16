@@ -1,0 +1,77 @@
+extends ../layout.pug
+include ../mixins/globalmanagenav.pug
+
+block head
+	title 管理
+
+block content
+	h1.board-title グローバルマネジメント
+	br
+	+globalmanagenav('accounts')
+	hr(size=1)
+	.form-wrapper.flexleft
+		h4.no-m-p 検索：
+		form.form-post.mv-5(action=`/globalmanage/accounts.html` method='GET')
+			input(type='hidden' value=page)
+			.row
+				.label ユーザー名
+				input(type='text' name='username' value=username)
+			.row
+				.label 板URI
+				input(type='text' name='uri' value=uri)
+			input(type='submit', value='フィルター')
+		h4.no-m-p アカウント：
+		if accounts && accounts.length > 0
+			form.form-post.nogrow(action=`/forms/global/editaccounts` method='POST' enctype='application/x-www-form-urlencoded')
+				input(type='hidden' name='_csrf' value=csrf)
+				.table-container.flex-left
+					table
+						tr
+							th
+							th ユーザー名
+							th アカウントの種類
+							th 自分の板
+							th モデレーター板
+							th 最後にログインした時
+						for account in accounts
+							tr
+								td: input(type='checkbox', name='checkedaccounts' value=account._id)
+								td #{account._id}
+								td #{authLevelNames[account.authLevel]}
+								td
+									if account.ownedBoards.length > 0
+										for b in account.ownedBoards
+											a(href=`/${b}/index.html`) /#{b}/
+											|  
+									else
+										| -
+								td
+									if account.modBoards.length > 0
+										for b in account.modBoards
+											a(href=`/${b}/index.html`) /#{b}/
+											|  
+									else
+										| -		
+								td
+									if account.lastActiveDate
+										time.reltime(datetime=account.lastActiveDate.toISOString()) #{account.lastActiveDate.toLocaleString(undefined, {hourCycle:'h23'})}
+									else
+										| -		
+				.pages.mv-5
+					include ../includes/pages.pug
+				.row
+					.label アカウントタイプの設定
+					select(name='auth_level')
+						option(value='')
+						option(value='0') 管理者
+						option(value='1') グローバルスタッフ
+						option(value='2') グローバル板オーナー
+						option(value='3') グローバルモデレーター
+						option(value='4') 通常のユーザー
+				.row
+					.label アカウントを削除する
+					label.postform-style.ph-5
+						input(type='checkbox', name='delete_account', value='true')
+				input(type='submit', value='保存')
+		else
+			p No results.

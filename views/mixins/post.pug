@@ -1,0 +1,178 @@
+include ./report.pug
+mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboard=false)
+	.anchor(id=post.postId)
+	div(class=`post-container ${post.thread || ban === true ? '' : 'op'}` data-board=post.board data-post-id=post.postId data-user-id=post.userId data-name=post.name data-tripcode=post.tripcode data-subject=post.subject data-email=post.email)
+		- const postURL = `/${post.board}/${(modview || manage || globalmanage) ? 'manage/' : ''}thread/${post.thread || post.postId}.html`;
+		.post-info
+			span
+				label
+					if !overboard
+						if globalmanage
+							input.post-check(type='checkbox', name='globalcheckedposts' value=post._id)
+						else if !ban
+							input.post-check(type='checkbox', name='checkedposts' value=post.postId)
+						| 
+					if manage
+						- const ip = permLevel > ipHashPermLevel ? post.ip.single.slice(-10) : post.ip.raw;
+						a.bold(href=`${upLevel ? '../' : ''}recent.html?ip=${encodeURIComponent(ip)}`) [#{ip}]
+					else if modview
+						a.bold(href=`${upLevel ? '../' : ''}recent.html?postid=${post.postId}`) [+]
+					else if globalmanage
+						- const ip = permLevel > ipHashPermLevel ? post.ip.single.slice(-10) : post.ip.raw;
+						a.bold(href=`?ip=${encodeURIComponent(ip)}`) [#{ip}]
+					| 
+					if !post.thread
+						include ../includes/posticons.pug
+					if post.subject
+						span.post-subject #{post.subject}
+						| 
+					if post.email
+						a.post-name(href=`mailto:${post.email}`) #{post.name}
+					else 
+						span.post-name #{post.name}
+					| 
+				if post.country && post.country.code
+					if post.country.custom === true
+						span(title=post.country.name)
+							img.customflag(src=`/flag/${post.board}/${post.country.src}` alt=' ' loading='lazy')
+						| 
+					else
+						span(class=`flag flag-${post.country.code.toLowerCase()}` title=post.country.name alt=post.country.name)
+						| 
+				if post.tripcode
+					span.post-tripcode #{post.tripcode}
+					| 
+				if post.capcode
+					span.post-capcode #{post.capcode}
+					| 
+				- const postDate = new Date(post.date);
+				time.post-date.reltime(datetime=postDate.toISOString()) #{postDate.toLocaleString(undefined, { hourCycle:'h23' })}
+				| 
+				if post.userId
+					span.user-id(style=`background-color: #${post.userId}`) #{post.userId}
+					| 
+			span.post-links
+				a.noselect.no-decoration(href=`${postURL}#${post.postId}`) No.
+				span.post-quoters
+					a.no-decoration(href=`${postURL}#postform`) #{post.postId}
+				|  
+				if !post.thread && (truncate || manage || globalmanage)
+					|  
+					span.noselect: a(href=`${postURL}`) [開く]
+				select.jsonly.postmenu
+					option(value='single') 隠す
+					if post.userId
+						option(value='fid') フィルタID
+					if post.name
+						option(value='fname') フィルタ名前
+					if post.subject
+						option(value='fsub') フィルタ件名
+					if post.tripcode
+						option(value='ftrip') フィルタトリップコード
+					if !overboard && !ban
+						option(value='moderate') モデレート
+		.post-data
+			if post.files.length > 0
+				.post-files(class=(post.files.length > 1 ? 'fn' : ''))
+					each file, fileindex in post.files
+						.post-file
+							- const type = file.mimetype.split('/')[0]
+							span.post-file-info
+								span: a(href='/file/'+file.filename title='ダウンロード '+file.originalFilename download=file.originalFilename) #{post.spoiler || file.spoiler ? 'ネタバレファイル' : file.originalFilename}
+								|  
+								- const uFile = `${post.u}-${fileindex}${file.extension}`
+								span: a(href='/file/'+file.filename title='ダウンロード '+uFile download=uFile) (u)
+								br
+								if globalmanage && file.phash != null
+									span #{file.phash}
+									br
+								if !file.attachment && !(post.spoiler || file.spoiler)
+									span.jsonly
+										b [
+										a.dummy-link.hide-image.noselect(data-src=`/file/${file.hasThumb ? 'thumb/'+file.hash+file.thumbextension : file.filename}`) 隠す
+										b ]
+								span 
+									|  (#{file.sizeString}
+									if file.geometryString
+										| , #{file.geometryString}
+									if file.durationString
+										| , #{file.durationString}
+									| )
+								if type === 'image' && ((board && board.settings.reverseImageSearchLinks === true) || overboard || manage || globalmanage)
+									|  
+									span: a(href=`${reverseImageLinksURL.replace('%s', encodeURI(meta.url+'/file/'+file.filename))}` rel='nofollow' referrerpolicy='same-origin' title='Reverse Image Search' target='_blank') ImgOps
+							.post-file-src(data-type=type data-添付ファイル=(file.attachment ? "true" : "false"))
+								a(target='_blank' href=`/file/${file.filename}`)
+									if post.spoiler || file.spoiler
+										div.spoilerimg.file-thumb
+									else if file.hasThumb
+										img.file-thumb(src=`/file/thumb/${file.hash}${file.thumbextension}` height=file.geometry.thumbheight width=file.geometry.thumbwidth loading='lazy')
+									else if file.attachment
+										div.attachmentimg.file-thumb(data-mimetype=file.mimetype)
+									else if type === 'audio'
+										div.audioimg.file-thumb
+									else
+										img.file-thumb(src=`/file/${file.filename}` height=file.geometry.height width=file.geometry.width loading='lazy')
+			- if (post.message && modview) { post.message = post.message.replace(new RegExp(`<a class="quote" href="/${post.board}/`, 'g'), `<a class="quote" href="/${post.board}/manage/`); } //its either this, a subdomain, or nothing.
+			- let truncatedMessage = post.message;
+			if post.message
+				if truncate
+					-
+						const splitPost = post.message.split('\n');
+						const messageLines = splitPost.length;
+						if (messageLines > 15) {
+							truncatedMessage = splitPost.slice(0, 15).join('\n');
+						} else if (post.message.length > 1500) {
+							truncatedMessage = post.message.substring(0, 1500).replace(/<([\w]+)?([^>]*)?$/, '');
+							const lastAnchorOpen = truncatedMessage.lastIndexOf('<a');
+							const lastAnchorClose = truncatedMessage.lastIndexOf('</a>');
+							if (lastAnchorOpen >= 0 && (lastAnchorClose === -1 || lastAnchorClose < lastAnchorOpen)) {
+								truncatedMessage += '</a>';
+							}
+						}
+					pre.post-message !{truncatedMessage}
+				else
+					pre.post-message !{post.message}
+			if !post.message && post.files.length === 0
+				p No message or files.
+			if post.edited
+				- const postEditDate = new Date(post.edited.date);
+				small.cb.mt-5.ml-5.edited
+					| Last edited 
+					time.reltime(datetime=postEditDate.toISOString()) #{postEditDate.toLocaleString(undefined, { hourCycle:'h23' })}
+					|  by #{post.edited.username}
+			if post.banmessage
+				p.ban
+					span.message ユーザーはこの投稿で禁止されました
+					|  
+					span.reason(data-reason=post.banmessage) #{post.banmessage}
+			if truncatedMessage !== post.message
+				div.cb.mt-5.ml-5
+					| Message too long. #[a.viewfulltext(href=`${postURL}#${post.postId}`) View the full text]
+			if post.omittedposts || post.omittedfiles
+				div.cb.mt-5.ml-5
+					- const ompo = post.omittedposts;
+					- const omfi = post.omittedfiles;
+					| #{ompo} repl#{ompo > 1 ? 'ies' : 'y'}
+					| #{omfi > 0 ? ` and ${omfi} file${omfi > 1 ? 's' : ''}` : ''} omitted. 
+					| #[a(href=postURL) View the full thread]
+			if post.previewbacklinks != null
+				if post.previewbacklinks.length > 0
+					div.replies.mt-5.ml-5 返信：
+						each backlink in post.previewbacklinks
+							a.quote(href=`${postURL}#${backlink.postId}`) &gt;&gt;#{backlink.postId}
+							|  
+						if post.previewbacklinks.length < post.backlinks.length
+							- const ombls = post.backlinks.length-post.previewbacklinks.length;
+							| + #[a(href=`${postURL}#${post.postId}`) #{ombls} earlier]
+			else if post.backlinks && post.backlinks.length > 0
+				div.replies.mt-5.ml-5 返信：
+					each backlink in post.backlinks
+						a.quote(href=`${postURL}#${backlink.postId}`) &gt;&gt;#{backlink.postId}
+						|  
+	if manage === true
+		each r in post.reports
+			+report(r, true)
+	if globalmanage === true
+		each r in post.globalreports
+			+report(r)

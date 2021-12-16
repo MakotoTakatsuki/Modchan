@@ -1,0 +1,31 @@
+details.toggle-label#actionform
+	summary.collapse#action-menu 投稿アクションを表示
+	.actions
+		h4.no-m-p 行動：
+		if board.settings.userPostDelete
+			label
+				input.post-check(type='checkbox', name='delete' value='1')
+				| 投稿を削除する
+		if board.settings.userPostUnlink
+			label
+				input.post-check(type='checkbox', name='unlink_file' value='1')
+				| ファイルのリンクを解除する
+		if board.settings.userPostSpoiler
+			label
+				input.post-check(type='checkbox', name='spoiler' value='1')
+				| ネタバレファイル
+		if board.settings.userPostSpoiler || board.settings.userPostUnlink || board.settings.userPostDelete
+			label
+				input#password(type='password', name='postpassword', placeholder='Post password' autocomplete='off')
+		label
+			input.post-check(type='checkbox', name='report' value='1')
+			| 報告する
+		label
+			input.post-check(type='checkbox', name='global_report' value='1')
+			| グローバルレポート
+		label
+			input#report(type='text', name='report_reason', placeholder='報告する reason' autocomplete='off')
+	.actions
+		h4.no-m-p CAPTCHA：
+		include ./captcha.pug
+	input(type='submit', value='送信')

@@ -1,0 +1,78 @@
+extends ../layout.pug
+include ../mixins/post.pug
+include ../mixins/boardnav.pug
+include ../mixins/managenav.pug
+include ../mixins/boardheader.pug
+include ../mixins/announcements.pug
+
+block head
+	- const subjectString = thread.subject || (thread.nomarkup ? `${thread.nomarkup.substring(0, globalLimits.fieldLength.subject)}${thread.nomarkup.length > globalLimits.fieldLength.subject ? '...' : ''}` : thread.postId);
+	title /#{board._id}/ - #{subjectString}
+	if !modview
+		meta(property='og:title', content=thread.subject)
+		meta(property='og:description', content=thread.nomarkup)
+		if thread.files.length > 0
+			if thread.spoiler || thread.files[0].spoiler
+				meta(property='og:image', content='/file/spoiler.png')
+			else
+				- const file = thread.files[0];
+				- const maintype = file.mimetype.split('/')[0];
+				case maintype
+					when 'image'
+						meta(property='og:image', content=`/file/${file.filename}`)
+					when 'video'
+						meta(property='og:video', content=`/file/${file.filename}`)
+					when 'audio'
+						meta(property='og:audio', content=`/file/${file.filename}`)
+					default
+						- break
+
+block content
+	+boardheader(modview ? 'Mod View' : null)
+	br
+	if thread.replyposts >= board.settings.replyLimit && !thread.cyclic && !modview
+		p.title.text-center ⊖ スレッドが応答制限に達しました。
+	else
+		include ../includes/postform.pug
+		br
+	+announcements()
+	include ../includes/stickynav.pug
+	if modview
+		+managenav(null, true)
+	else
+		.pages
+			+boardnav(null, true, true)
+	- const uids = board.settings.ids ? new Set() : void 0;
+	form(action=`/forms/board/${board._id}/${modview ? 'mod' : ''}actions` method='POST' enctype='application/x-www-form-urlencoded')
+		if modview
+			input(type='hidden' name='_csrf' value=csrf)
+		hr(size=1)
+		.thread
+			- uids && thread.userId && uids.add(thread.userId)
+			+post(thread)
+			for post in thread.replies
+				- uids && post.userId && uids.add(post.userId)
+				+post(post)
+		a.bottom-reply.no-decoration(href='#postform') [新しい返信]
+		hr(size=1)
+		.wrapbar
+			if modview
+				+managenav(null, true)
+			else
+				.pages
+					+boardnav(null, true, true)
+			#threadstats 
+				span #{thread.replyposts} repl#{thread.replyposts === 1 ? 'y' : 'ies'}
+				|  |  
+				span #{thread.replyfiles + thread.files.length} file#{thread.replyfiles + thread.files.length === 1 ? '' : 's'}
+				if board.settings.ids
+					|  |   
+					span #{uids.size} UID#{uids.size === 1 ? '' : 's'}
+		.jsonly#livetext
+			.dot#livecolor
+			|  接続しています...
+			input.postform-style.ml-5.di#updatepostsbutton(type='button' value = '更新')
+		if modview
+			include ../includes/actionfooter_manage.pug
+		else
+			include ../includes/actionfooter.pug

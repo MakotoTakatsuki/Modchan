@@ -1,0 +1,92 @@
+extends ../layout.pug
+include ../mixins/boardtable.pug
+
+block head
+	title #{meta.siteName}
+
+block content
+	//h1.board-title #{meta.siteName}
+	img.logo(src='/misc/marutanew.png' title='モッドちゃんねる')
+	.table-container.flex-center.mv-10.text-center
+	
+		table
+			tr
+				th.alt サイトについて
+			tr
+				td
+					pre.no-m-p
+						| 無限に広がる無限の画像掲示板、モッドちゃんねるへようこそ
+						| モッドちゃんねるでは、経験やプログラミングの知識がなくても、独自の画像掲示板や掲示板を無料で作成できます。
+						
+						a(href='/faq.html#make-a-board') 板を作る
+	if recentNews && recentNews.length > 0
+		.table-container.flex-center.mv-5
+			table.newstable
+				tr
+					th(colspan=3) ニュース
+				each post in recentNews
+					tr
+						td
+							a.left(href=`/news.html#${post._id}`) #{post.title}
+						td
+							p.no-m-p #{`${post.message.raw.substring(0,50)}${post.message.raw.length > 50 ? '...' : ''}`}
+						td
+							- const newsDate = new Date(post.date);
+							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(undefined, {hourCycle:'h23'})}
+	if hotThreads && hotThreads.length > 0
+		.table-container.flex-center.mv-5
+			table.posttable
+				tr(colspan=3) 
+				each post in hotThreads
+					tr
+						td 🔥#{post.replyposts + post.replyfiles}
+						td 
+							if post.nomarkup != null
+								a.quote(href=`/${post.board}/thread/${post.postId}.html#${post.postId}`) #{`${post.subject.substring(0,30)}${post.subject && post.subject.length > 30 ? '...' : ''} ${post.nomarkup && post.nomarkup.substring(0,50)}${post.nomarkup && post.nomarkup.length > 50 ? '...' : ''}`}
+							if post.nomarkup === null
+								a.quote(href=`/${post.board}/thread/${post.postId}.html#${post.postId}`) （テキストなし）
+
+						td
+							- const newsDate = new Date(post.bumped);
+							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(undefined, {hourCycle:'h23'})}
+	if boards && boards.length > 0
+		+boardtable(true, false)
+			each board in boards
+				tr
+					td 
+						if board.settings.sfw === true
+							span.left
+								span.help(title='わいせつではない') &#x1F4BC;
+								|  
+						a(href=`/${board._id}/index.html`) /#{board._id}/ - #{board.settings.name}
+					td #{board.settings.description}
+					td #{board.pph}
+					td #{board.ppd}
+					td #{board.ips}
+					td #{board.sequence_value-1}
+			if localStats.total-localStats.unlisted > boards.length
+				tr
+					td(colspan=6)
+						a.bold(href='/boards.html') より多くの板
+		.table-container.flex-center.mv-10.text-center
+			table(style='max-width:450px')
+				tr
+					th 情報
+				tr
+					td
+						pre.no-m-p
+							| 公開されている掲示板は、#[span.bold #{localStats.total-localStats.unlisted}]で、全部で#[span.bold #{localStats.total}]となります。最近1日の間に#[span.bold #{localStats.ppd}]出版物#{localStats.ppd === 1 ? ' ' : ''}、 最近1時間の間に#[span.bold #{localStats.pph}]、合計#[span.bold #{localStats.posts}]がありました。
+							| #[span.bold #{fileStats.count}] #{fileStats.count === 1 ? '' : ''}ファイル#[span.bold #{fileStats.totalSizeString}].
+							| 
+							a(href='http://jieq75a6uwqbj5sjzaxlnd7xwgs35audjmkk4g3gfjwosfrz7cp47xid.onion') Tor
+							| 
+							a(href='http://yg8tt1wnsgmkjxkhm5oxc4h3tgtch1q3yycngx8h8xwg3ef7bjco.loki') Loki
+		if enableWebring === true && webringStats != null
+			.table-container.flex-center.mv-10.text-center
+				table(style='max-width:450px')
+					tr
+						th Webring Stats
+					tr
+						td
+							pre.no-m-p
+								| There are currently #[span.bold #{webringStats.sites}] sites and #[span.bold #{webringStats.total}] boards in the known webring. Across all webring boards, #[span.bold #{webringStats.pph}] post#{webringStats.pph === 1 ? ' has' : 's have'} been made in the last hour, #[span.bold #{webringStats.posts}] in total.

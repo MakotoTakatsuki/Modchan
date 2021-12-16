@@ -1,0 +1,16 @@
+if post.sticky || post.bumplocked || post.locked || post.cyclic
+	span.post-icons
+		if post.sticky
+			img(src='/file/sticky.png' height='14' width='14' title='貼る')
+			| 
+		if post.bumplocked
+			img(src='/file/bumplock.png' height='14' width='14' title='ロックを上げるed')
+			| 
+		if post.locked
+			img(src='/file/lock.png' height='14' width='14' title='Locked')
+			| 
+		if post.cyclic
+			img(src='/file/cyclic.png' height='14' width='14' title='Cyclic')
+			| 
+
+　

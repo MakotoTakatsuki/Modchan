@@ -1,0 +1,25 @@
+extends ../layout.pug
+include ../mixins/post.pug
+include ../mixins/ban.pug
+include ../mixins/managenav.pug
+include ../mixins/boardheader.pug
+
+block head
+	title /#{board._id}/ - 管理
+
+block content
+	+boardheader('レポート')
+	br
+	+managenav('reports')
+	hr(size=1)
+	h4.no-m-p レポート:
+	form(action=`/forms/board/${board._id}/modactions` method='POST' enctype='application/x-www-form-urlencoded')
+		if reports.length === 0
+			p No reports.
+		else
+			input(type='hidden' name='_csrf' value=csrf)
+			for report in reports
+				.thread
+					+post(report, false, true)
+				hr(size=1)
+			include ../includes/actionfooter_manage.pug

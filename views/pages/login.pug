@@ -1,0 +1,21 @@
+extends ../layout.pug
+
+block head
+	title ログイン
+
+block content
+	h1.board-title ログイン
+	.form-wrapper.flex-center.mv-10
+		form.form-post(action='/forms/login' method='POST')
+			input(type='hidden' name='goto' value=goto)
+			.row
+				.label ユーザー名
+				input(type='text', name='username', maxlength='50' required)
+			.row
+				.label パスワード
+				input(type='password', name='password', maxlength='100' required)
+			input(type='submit', value='送信')
+		if enableUserAccountCreation
+			p: a(href='/register.html') 登録
+		p: a(href='/changepassword.html') パスワードを変更する
+

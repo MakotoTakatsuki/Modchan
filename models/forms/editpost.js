@@ -1,0 +1,239 @@
+'use strict';
+
+const { Posts, Bans, Modlogs } = require(__dirname+'/../../db/')
+	, { createHash } = require('crypto')
+	, Mongo = require(__dirname+'/../../db/db.js')
+	, { prepareMarkdown } = require(__dirname+'/../../helpers/posting/markdown.js')
+	, messageHandler = require(__dirname+'/../../helpers/posting/message.js')
+	, nameHandler = require(__dirname+'/../../helpers/posting/name.js')
+	, config = require(__dirname+'/../../config.js')
+	, buildQueue = require(__dirname+'/../../queue.js')
+	, dynamicResponse = require(__dirname+'/../../helpers/dynamic.js')
+	, { buildThread } = require(__dirname+'/../../helpers/tasks.js')
+	, { remove } = require('fs-extra');
+
+module.exports = async (req, res, next) => {
+
+/*
+todo: handle some more situations
+- last activity date
+- correct bump date when editing thread or last post in a thread
+- allow for regular users (OP ONLY) and option for staff to disable in board settings
+*/
+
+	const { previewReplies, strictFiltering } = config.get;
+	const { board, post } = res.locals;
+
+	//filters
+	if (res.locals.permLevel > 1) { //global staff bypass filters for edit
+		const globalSettings = config.get;
+		if (globalSettings && globalSettings.filters.length > 0 && globalSettings.filterMode > 0) {
+			let hitGlobalFilter = false
+				, ban
+				, concatContents = `|${req.body.name}|${req.body.message}|${req.body.subject}|${req.body.email}|${res.locals.numFiles > 0 ? req.files.file.map(f => f.name).join('|') : ''}`.toLowerCase()
+				, allContents = concatContents;
+			if (strictFiltering) {
+				allContents += concatContents.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); //removing diacritics
+				allContents += concatContents.replace(/[\u200B-\u200D\uFEFF]/g, ''); //removing ZWS
+				allContents += concatContents.replace(/[^a-zA-Z0-9.-]+/gm, ''); //removing anything thats not alphamnumeric or . and -
+				allContents += concatContents.split(/(\%[^\%]+)/).map(part => { try { return decodeURIComponent(part) } catch(e) { return '' } }).join(''); //catch pedophile spammers url-fu with encoding
+			}
+			//global filters
+			hitGlobalFilter = globalSettings.filters.some(filter => { return allContents.includes(filter.toLowerCase()) });
+			if (hitGlobalFilter) {
+				if (globalSettings.filterMode === 1) {
+					return dynamicResponse(req, res, 400, 'message', {
+						'title': '要求の形式が正しくありません',
+						'message': 'あなたの編集はグローバルワードフィルターによってブロックされました',
+					});
+				} else {
+					const banDate = new Date();
+					const banExpiry = new Date(globalSettings.filterBanDuration + banDate.getTime());
+					const ban = {
+						'ip': {
+							'single': res.locals.ip.single,
+							'raw': res.locals.ip.raw,
+						},
+						'type': 'single',
+						'reason': 'グローバルワードフィルター自動禁止',
+						'board': null,
+						'posts': null,
+						'issuer': 'システム', //what should i call this
+						'date': banDate,
+						'expireAt': banExpiry,
+						'allowAppeal': true, //should i make this configurable if appealable?
+						'showUser': true,
+						'seen': false
+					};
+ 					const insertedResult = await Bans.insertOne(ban);
+					ban._id = insertedResult.insertedId;
+					return res.status(403).render('ban', {
+						bans: [ban]
+					});
+				}
+			}
+		}
+	}
+
+	//message hash
+	let messageHash = null;
+	if (req.body.message && req.body.message.length > 0) {
+		const noQuoteMessage = req.body.message.replace(/>>\d+/g, '').replace(/>>>\/\w+(\/\d*)?/gm, '').trim();
+		messageHash = createHash('sha256').update(noQuoteMessage).digest('base64');
+	}
+	//new name, trip and cap
+	const { name, tripcode, capcode } = await nameHandler(req.body.name, res.locals.permLevel,
+		board.settings, board.owner, res.locals.user ? res.locals.user.username : null);
+	//new message and quotes
+	const nomarkup = prepareMarkdown(req.body.message, false);
+	const { message, quotes, crossquotes } = await messageHandler(nomarkup, req.body.board, post.thread, res.locals.permLevel);
+	//todo: email and subject (probably dont need any transformation since staff bypass limits on forceanon, and it doesnt have to account for sage/etc
+
+	//intersection/difference of quotes sets for linking and unlinking
+	const oldQuoteIds = post.quotes.map(q => q._id.toString());
+	const oldQuotesSet = new Set(oldQuoteIds);
+	const newQuoteIds = quotes.map(q => q._id.toString());
+	const newQuotesSet = new Set(newQuoteIds);
+
+	const addedQuotesSet = new Set(newQuoteIds.filter(qid => !oldQuotesSet.has(qid)).map(Mongo.ObjectId));
+	const removedQuotesSet = new Set(oldQuoteIds.filter(qid => !newQuotesSet.has(qid)).map(Mongo.ObjectId));
+
+	//linking new added quotes
+	if (addedQuotesSet.size > 0) {
+		await Posts.db.updateMany({
+			'_id': {
+				'$in': [...addedQuotesSet]
+			}
+		}, {
+			'$push': {
+				'backlinks': { _id: post._id, postId: post.postId }
+			}
+		});
+	}
+
+	//unlinking removed quotes
+	if (removedQuotesSet.size > 0) {
+		await Posts.db.updateMany({
+			'_id': {
+				'$in': [...removedQuotesSet]
+			}
+		}, {
+			'$pull': {
+				'backlinks': {
+					'postId': post.postId
+				}
+			}
+		});
+	}
+
+	//update the post
+	const postId = await Posts.db.updateOne({
+		board: req.body.board,
+		postId: post.postId
+	}, {
+		'$set': {
+			edited: {
+				username: req.body.hide_name ? '非表示のユーザー' : req.session.user,
+				date: new Date(),
+			},
+			nomarkup,
+			message,
+			'messagehash': messageHash || null,
+			quotes,
+			crossquotes,
+			name,
+			tripcode,
+			capcode,
+			email: req.body.email,
+			subject: req.body.subject,
+		}
+	});
+
+	//add the edit to the modlog
+	await Modlogs.insertOne({
+		board: board._id,
+		showLinks: true,
+		postLinks: [{
+			postId: post.postId,
+			thread: post.thread,
+		}],
+		actions: '編集',
+		date: new Date(),
+		showUser: req.body.hide_name ? false : true,
+		message: req.body.log_message || null,
+		user: req.session.user,
+		ip: {
+			single: res.locals.ip.single,
+			raw: res.locals.ip.raw,
+		}
+	});
+
+	const buildOptions = {
+		'threadId': post.thread || post.postId,
+		'board': res.locals.board
+	};
+
+	//build thread immediately for redirect
+	await buildThread(buildOptions);
+
+	dynamicResponse(req, res, 200, 'message', {
+		'title': '成功',
+		'message': '投稿が正常に編集されました',
+		'redirect': req.body.referer,
+	});
+	res.end();
+
+	//rebuild the modlogs
+	buildQueue.push({
+		'task': 'buildModLog',
+		'options': {
+			'board': board,
+		}
+	});
+	buildQueue.push({
+		'task': 'buildModLogList',
+		'options': {
+			'board': board,
+		}
+	});
+
+	//check if post is visible in preview posts
+	let postInPreviewPosts = false;
+	if (post.thread) {
+		const threadPreviewPosts = await Posts.db.find({
+			'thread': post.thread,
+			'board': board._id
+		},{
+			'projection': {
+				'postId': 1, //only get postId
+			}
+		}).sort({
+			'postId': -1
+		}).limit(previewReplies).toArray();
+		postInPreviewPosts = threadPreviewPosts.some(p => p.postId <= post.postId)
+	}
+
+	if (post.thread === null || postInPreviewPosts) {
+		const thread = post.thread === null ? post : (await Posts.getPost(board._id, post.thread));
+		const threadPage = await Posts.getThreadPage(board._id, thread);
+		//rebuild index page if its a thread or visible in preview posts
+		buildQueue.push({
+			'task': 'buildBoard',
+			'options': {
+				'board': res.locals.board,
+				'page': threadPage
+			}
+		});
+	}
+
+	if (post.thread === null) {
+		//rebuild catalog if its a thread to correct catalog tile
+		buildQueue.push({
+			'task': 'buildCatalog',
+			'options': {
+				'board': res.locals.board,
+			}
+		});
+	}
+
+}

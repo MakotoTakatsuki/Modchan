@@ -1,0 +1,24 @@
+mixin managenav(selected, upLevel)
+	nav.pages
+		if selected === 'index'
+			include ../includes/boardpages.pug
+			|  
+		else
+			a(href=`${upLevel ? '../' : ''}index.html` class=(selected === 'index' ? 'bold' : '')) [モデレーターインデックス]
+			|  
+		a(href=`${upLevel ? '../' : ''}catalog.html` class=(selected === 'catalog' ? 'bold' : '')) [モデレーターカタログ]
+		|  
+		a(href=`${upLevel ? '../' : ''}recent.html` class=(selected === 'recent' ? 'bold' : '')) [最近]
+		|  
+		a(href=`${upLevel ? '../' : ''}reports.html` class=(selected === 'reports' ? 'bold' : '')) [レポート]
+		|  
+		a(href=`${upLevel ? '../' : ''}bans.html` class=(selected === 'bans' ? 'bold' : '')) [禁止]
+		|  
+		a(href=`${upLevel ? '../' : ''}logs.html` class=(selected === 'logs' ? 'bold' : '')) [ログ]
+		|  
+		if permLevel < 3
+			a(href=`${upLevel ? '../' : ''}settings.html` class=(selected === 'settings' ? 'bold' : '')) [設定]
+			|  
+			a(href=`${upLevel ? '../' : ''}assets.html` class=(selected === 'assets' ? 'bold' : '')) [アセット]
+			|  
+			a(href=`${upLevel ? '../' : ''}custompages.html` class=(selected === 'custompages' ? 'bold' : '')) [カスタムページ]

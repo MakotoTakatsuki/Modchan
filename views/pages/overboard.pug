@@ -1,0 +1,30 @@
+extends ../layout.pug
+include ../mixins/post.pug
+include ../mixins/overboardform.pug
+include ../mixins/announcements.pug
+
+block head
+	title オーバー板インデックス
+
+block content
+	.board-header
+		h1.board-title オーバー板インデックス
+		h4.board-description 複数の板から最近発生したスレッド
+			|  
+			| (
+			a(href=`/catalog.html?${cacheQueryString}`) カタログビュー
+			| )
+	include ../includes/stickynav.pug
+	if allowCustomOverboard === true
+		+overboardform('/overboard.html')
+	+announcements(true, true, false)
+	hr(size=1)
+	if threads.length === 0
+		p 投稿はありません。
+	for thread in threads
+		h4.no-m-p スレッド#[a(href=`/${thread.board}/index.html`) /#{thread.board}/]から。
+		.thread
+			+post(thread, true, false, false, false, true)
+			for post in thread.replies
+				+post(post, true, false, false, false, true)
+		hr(size=1)

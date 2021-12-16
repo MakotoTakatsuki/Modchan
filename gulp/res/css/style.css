@@ -1,0 +1,3333 @@
+body {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10pt;
+	color: var(--font-color);
+	background: linear-gradient(var(--background-top) 3em, var(--background-rest) 230px);
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	margin: 0;
+}
+
+main {
+	margin: 3em 0 0 0;
+}
+main.minimal {
+	margin: 0;
+	background: var(--post-color);
+	height: 100vh;
+}
+
+.form-post {
+	display: flex;
+	flex-direction: column;
+	max-width: 100%;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	max-width: 100%;
+	margin-bottom: 1px;
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+.col {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.wrap {
+	flex-wrap: wrap;
+}
+
+.sb {
+	justify-content: space-between;
+}
+
+.flexcenter {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.em {
+	font-style: italic;
+}
+
+.strike {
+	text-decoration: line-through;
+}
+
+@keyframes rainbow-anim {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 400% 0;
+	}
+}
+
+.rainbow {
+	background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	animation: rainbow-anim 10s linear infinite;
+	background-size: 400% 100%;
+	text-shadow: #00000050 0px 0px 1px;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+pre {
+	font-family: inherit;
+	margin: 1em 2em;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+.navbar {
+	background: var(--navbar-color);
+	box-shadow: 0 0 3px 1px var(--darken);
+	border-bottom: 1px solid var(--post-outline-color);
+	position: fixed;
+	width: 100%;
+	z-index: 2;
+	top: 0;
+}
+
+.replies {
+	padding-top: 5px;
+	font-size: smaller;
+	clear: both;
+}
+
+.code {
+	text-align: left;
+	border-style: solid;
+	border-color: var(--darken);
+	display: block;
+	margin: 0.5em 0;
+	overflow-x: auto;
+	white-space: pre;
+}
+
+.ああ {
+	font-family: Monapo, Mona, 'MS Pgothic', 'MS P繧ｴ繧ｷ繝�け', IPAMonaPGothic, 'IPA 繝｢繝翫� P繧ｴ繧ｷ繝�け', submona !important;
+	font-size: 16px;
+	display: block;
+	overflow-x: auto;
+	white-space: pre;
+	max-width: calc(100vw - 50px);
+}
+
+.code:not(.hljs) {
+	white-space: unset;
+}
+
+.code, .mono {
+		background: var(--darken);
+		padding: 2px;
+		font-family: monospace;
+		max-width: max-content;
+		max-width: -moz-max-content;
+}
+.edit {
+	background: transparent!important;
+	border-color: transparent!important;
+	width: 80px;
+}
+.fw, #filter-form {
+	width: 100%;
+}
+.pr-20 {
+	padding-right: 20px;
+}
+.ml-1 {
+	margin-left: 1px;
+}
+.ml-5 {
+	margin-left: 5px!important;
+}
+.mr-1 {
+	margin-right: 1px!important;
+}
+.mr-5 {
+	margin-right: 5px;
+}
+.mv-10 {
+	margin: 10px 0;
+}
+.mt-10 {
+	margin-top: 10px;
+}
+.mt-5 {
+	margin-top: 5px;
+}
+.mt-1 {
+	margin-top: 1px;
+}
+.mv-5 {
+	margin: 5px 0;
+}
+.mr-0 {
+	margin-right: 0px!important;
+}
+.mv-0 {
+	margin: 0 auto;
+}
+.mb-10 {
+	margin-bottom: 10px;
+}
+.ph-5 {
+	padding: 0 5px;
+}
+.pv-5 {
+	padding: 5px 0;
+}
+.vh {
+	visibility: hidden!important;
+}
+#settings, .dummy-link {
+	cursor: pointer;
+}
+#settings::after {
+	content: "Settings";
+}
+
+#dragHandle {
+	flex-grow: 1;
+	background: var(--darken);
+	height: 1.75em;
+	cursor: grab;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+}
+
+.wrapbar {
+	display: flex;
+	justify-content: space-between;
+	flex-flow: row wrap;
+}
+
+.wrapbar + form hr:first-of-type {
+	margin-top: 1px;
+}
+
+.pages, #livetext, #threadstats {
+	box-sizing: border-box;
+	padding: 10px;
+	width: -moz-max-content;
+	width: max-content;
+	max-width: 100%;
+	margin-bottom: 5px;
+}
+
+.pages.jsonly {
+	padding: 8px;
+}
+
+a, a:visited, a.post-name {
+	text-decoration: underline;
+	color: var(--link-color);
+}
+
+.invalid-quote {
+	cursor:pointer;
+	text-decoration: line-through;
+}
+
+.post-message a {
+	text-decoration: underline;
+	color: var(--post-link-color);
+}
+
+.pages a, .stickynav a {
+	text-decoration: none;
+}
+
+object {
+	object-fit: contain;
+}
+
+.board-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.catalog-tile {
+	padding: 5px;
+	margin: 5px;
+	text-align: center;
+	height: 340px;
+	width: 280px;
+	overflow: hidden;
+	border: 1px solid var(--post-outline-color);
+	box-sizing: border-box;
+	flex-grow: 1;
+	max-width: 280px;
+}
+
+.catalog-tile:focus {
+	overflow-y: auto;
+}
+
+p {
+	margin: 5px;
+}
+
+.no-m-p {
+	margin: 0px;
+	padding: 0px;
+}
+
+.catalog-thumb {
+	display: block;
+	box-shadow: 0 0 3px black;
+	width: auto;
+	max-height: 100px;
+	box-sizing: border-box;
+	object-fit: cover;
+	margin: 3px;
+	padding: 2px;
+}
+
+.catalog-thumb.attachmentimg, .catalog-thumb.audioimg, .catalog-thumb.spoilerimg {
+	height: 64px;
+	width: 64px;
+}
+
+.catalog-thumb.small {
+	max-height: 48px;
+	max-width: 48px;
+}
+
+.ct-r1 {
+	justify-content: center;
+}
+
+.ct-r2 {
+	justify-content: space-evenly;
+}
+
+.upload-list {
+	max-height: 75px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	max-width: 100%;
+	/*scrollbar-width: none;*/
+	border: 1px solid var(--input-borders);
+	margin-top: 1px;
+	display: none;
+}
+/*
+.upload-list::-webkit-scrollbar { 
+	display: none; 
+}
+*/
+.upload-item {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.upload-item p {
+	max-width: calc(100% - 85px);
+	max-height: 1.5em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	position: absolute;
+	margin-left: 60px;
+}
+
+.upload-item a {
+	height: 50px;
+	display: flex;
+	align-items: center;
+}
+
+.upload-thumb {
+	width: 50px;
+	height: 50px;
+	object-fit: contain;
+}
+
+.catalog {
+	display:flex;
+	align-items:flex-start;
+	justify-content: center;
+	flex-flow: row wrap;
+}
+
+.detected {
+	background: #FAF8F8;
+	color: #3060A8;
+}
+
+.horscroll {
+	overflow-x:auto;
+}
+
+.spoiler {
+	background: black;
+	color: black;
+	cursor: none;
+	padding: 0 1px;
+}
+
+.spoiler:hover, .spoiler:hover a {
+	color: white;
+}
+
+.spoiler:not(:hover) * {
+	color: black;
+	background: black!important;
+}
+
+.filelabel {
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+	border-style: dashed !important;
+	justify-content: center;
+	padding: 5px;
+	min-width: 220px;
+	flex-grow: 1;
+	flex-direction: column;
+	min-height: 38px;
+}
+
+.form-file {
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: keep-all;
+	align-items: center;
+	display: flex;
+	margin-top: 1px;
+}
+
+.banposts .thread {
+	display: none;
+	text-align: left;
+}
+
+.banposts:hover .thread {
+	display: block;
+	position: fixed;
+	z-index: 1;
+	left:10px;
+	right:10px;
+}
+
+.ban {
+	color: red;
+	font-weight: bold;
+}
+.reason::before {
+	content:"\0028";
+}
+.reason::after {
+	content:"\0029";
+}
+
+.edited {
+	font-style: italic;
+}
+
+.close {
+	text-decoration: none;
+	justify-content: center;
+	font-weight: bolder;
+	margin-left: auto;
+	width: 25px;
+	cursor: pointer;
+}
+
+.reports {
+	margin-top: 5px;
+	background: var(--highlighted-post-color) !important;
+	border-color: var(--highlighted-post-outline-color)!important;
+	border-width: 1px 0;
+	border-style: solid none;
+}
+
+.dice {
+	color: var(--dice-color);
+}
+
+.title, .required {
+	font-weight: bold;
+}
+
+.required {
+	color: maroon;
+	margin: 0 .5em;
+}
+
+.title {
+	color: var(--title-color);
+}
+
+#bottom {
+	margin-bottom: 10px;
+}
+
+.pinktext {
+	color: var(--pinktext-color);
+}
+
+.greentext {
+	color: var(--greentext-color);
+}
+
+a:hover {
+	color: var(--link-hover)!important;
+}
+
+.thread, .action-wrapper, .form-wrapper, .table-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+table {
+	background: var(--background-rest);
+	border: 1px solid var(--box-border-color);
+	border-spacing: 0;
+	width: 700px;
+}
+
+.w900 {
+	width: 900px;
+}
+
+th {
+	background: var(--label-color);
+}
+
+.alt {
+	background: var(--alt-label-color, --label-color);
+	color: var(--alt-font-color, --font-color)
+}
+
+.fw td, .fw th {
+    width: 8%; /*Fixes log tables when large actions are taken*/
+}
+
+td, th {
+	padding: 5px;
+	/*word-break: break-all;*/
+	overflow-wrap: anywhere;
+}
+
+td pre {
+	overflow-wrap: anywhere;
+}
+
+.flex-center {
+	align-items: center;
+}
+
+.f1 {
+	flex: 1;
+}
+
+.stickynav {
+	bottom: 5px;
+	right: 5px;
+	position: fixed;
+	z-index: 1;
+}
+
+.ml-0 {
+	margin-left: 0;
+}
+
+.dot {
+	margin-right: 7px;
+	height: .75em;
+	width: .75em;
+	background-color: orange;
+	border-radius: 50%;
+	animation: pulsate 2s ease infinite;
+	display: inline-block;
+}
+
+.spin {
+	animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+ 	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes pulsate {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+.post-container, #float .post-container, .stickynav, .pages, .catalog-tile, #livetext, #threadstats, .bottom-reply, .collapse {
+	background: var(--post-color);
+	border-width: 1px;
+	border-style: solid;
+	border-color: var(--post-outline-color);
+}
+
+.bottom-reply {
+	display: block;
+	max-width: 100%;
+	margin: 5px 0;
+	padding: 10px;
+	width: -moz-max-content;
+	width: max-content;
+}
+
+.nomarks {
+	margin: 5px;
+	padding: 0 15px;
+	/*list-style: none;*/
+	word-break: break-all;
+}
+
+.modal-bg {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: #00000070;
+	z-index: 4;
+}
+
+.modal {
+	display: flex;
+	flex-direction: column;
+	max-width: calc(100% - 10px);
+	max-height: calc(100% - 50px);
+	position: fixed;
+	top: 3em;
+	background-color: var(--post-color);
+	z-index: 5;
+	box-sizing: border-box;
+	border: 5px solid var(--post-color);
+	align-self: center;
+	overflow: auto;
+}
+
+details.actions div {
+	display: flex;
+	flex-direction: column;
+}
+
+.actions {
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	margin: 2px 0;
+	padding: 2px;
+}
+
+.action-wrapper {
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.actions label, .actions div {
+	padding: 2px 0;
+}
+
+.floatactions[open] {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: inline-flex;
+	flex-direction: column;
+	max-width: calc(100% - 10px);
+	max-height: calc(100% - 50px);
+	position: fixed;
+	background-color: var(--post-color);
+	z-index: 3;
+	box-sizing: border-box;
+	border: 5px solid var(--post-color);
+	align-self: center;
+	overflow: auto;
+}
+
+.floatactions[open] #action-menu {
+	list-style-type: none;
+	font-size: 0px;
+	font-weight: bold;
+	float: right;
+	overflow: hidden;
+	margin-right: 1px;
+	position: absolute;
+    right: 0;
+}
+
+.floatactions[open] #action-menu:hover {
+	color: var(--link-hover);
+}
+
+.floatactions[open] #action-menu::before {
+	content: "X";
+	font-size: 10pt!important;
+}
+
+div.captchafield {
+	padding: 0px;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	display: grid;
+	width: var(--captcha-w);
+	height: var(--captcha-w);
+	margin-left: 1px;
+	box-sizing: border-box;
+	border: 1px solid var(--font-color);
+}
+
+label.captchachecklabel {
+	border: 1px solid var(--font-color);
+	/*max-width: 50px;*/
+	padding: 0px;
+}
+
+label.captchachecklabel input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+label.captchachecklabel input:checked ~ .captchacheckbox {
+	background-color: var(--font-color);
+}
+
+span.captchacheckbox {
+	display: flex;
+	cursor: pointer;
+	height: 100%;
+}
+
+.collapse {
+	padding: 10px;
+	cursor: pointer;
+}
+
+.sfw {
+	float: left;
+	background-color: gray;
+}
+
+.help {
+	cursor: help;
+}
+
+#float {
+	box-shadow: 0 0 3px 1px var(--darken);
+	max-width: calc(100% - 10px);
+	z-index: 3;
+	position: fixed;
+}
+
+#postform:target + #action-menu {
+	visibility: hidden;
+}
+
+.toggle-label {
+	max-width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	flex-flow: column wrap;
+	width: -moz-max-content;
+	width: max-content;
+}
+
+.toggle, .togglable {
+	display: none;
+}
+
+.toggle:checked + * {
+	display: flex;
+}
+
+.user-id {
+	text-shadow: #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px;
+	color: white;
+	padding: 0px 2px;
+	border: 1px solid rgba(0, 0, 0, 0.4);
+	border-radius: 1px;
+	cursor: pointer;
+}
+
+.user-id:hover::after {
+	content: attr(data-count);
+}
+
+.post-check {
+	position: relative;
+	top: 2px;
+	margin: -3px 1px;
+}
+
+.post-files {
+	float: left;
+	margin: 0 .5em .5em .5em;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: start;
+}
+
+.fn {
+	float: none;
+}
+
+a, video, img, input, summary, select, option, textarea {
+	outline: 0;
+}
+
+option {
+	background: var(--post-color);
+}
+
+.post-data {
+	overflow: hidden;
+}
+
+.post-file {
+	display: flex;
+	flex-direction: column;
+	padding: .5em .5em 0 0;
+	align-items: center;
+}
+
+.post-file-info:hover {
+	word-break: break-all;
+}
+
+.post-file-info {
+	text-align: center;
+	margin: 2px;
+	margin-top: 0px;
+	max-width: var(--thumbnail-size);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: keep-all;
+	font-size: x-small;
+}
+
+video, img {
+	max-height: 90vh;
+}
+
+.mh-100 {
+	max-height: 100%;
+}
+
+.post-file-src {
+	justify-content: center;
+	display: flex;
+	image-orientation: from-image;
+	position:relative;
+	flex-direction: column;
+}
+
+.expanded {
+	max-width: unset!important;
+	max-height: unset!important;
+}
+
+.file-thumb {
+	object-fit: contain;
+	max-width: var(--thumbnail-size);
+	max-height: var(--thumbnail-size);
+}
+
+.spoilerimg, .attachmentimg, .audioimg {
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain; /* make it full */
+	height: var(--thumbnail-size);
+	width: var(--thumbnail-size);
+}
+.attachmentimg {
+	background-image: var(--attachment-img);
+}
+.spoilerimg {
+	cursor: help;
+	background-image: var(--spoiler-img);
+}
+.audioimg {
+	background-image: var(--audio-img);
+}
+
+input:invalid, textarea:invalid {
+	box-shadow: none;
+}
+
+.no-resize {
+	resize: none;
+}
+
+.container {
+	padding: 10px;
+}
+
+.board-title {
+	color: var(--board-title);
+	font: bolder 28px Tahoma,sans-serif;
+	letter-spacing: -2px;
+	text-align: center;
+	margin: 0;
+}
+
+.no-decoration {
+	text-decoration: none;
+}
+
+.board-banner {
+	margin: 10px;
+	max-width: 100%;
+	border: 1px solid var(--post-outline-color);
+	min-width: 300px;
+	min-height: 100px;
+}
+
+.asset-check {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+}
+
+.asset-banner {
+	margin: 0 5px;
+	max-width: 100%;
+	border: 1px solid var(--post-outline-color);
+	min-width: 300px;
+	min-height: 100px;
+}
+
+.asset-generic {
+	margin: 0 5px;
+	border: 1px solid var(--post-outline-color);
+	height: 100px;
+	width: 100px;
+	object-fit: scale-down;
+}
+
+.asset-flag {
+	margin: 0 5px;
+	max-width: 100%;
+	border: 1px solid var(--post-outline-color);
+	width: 32px;
+	height: 22px;
+}
+
+#selected-flag[src^='/'] {
+	border: 1px solid var(--post-outline-color);
+	height: 22px;
+	width: 32px;
+}
+
+.board-description {
+	text-align:center;
+	margin: 0;
+}
+
+.post-message {
+	text-align: left;
+}
+
+.post-container {
+	box-sizing: border-box;
+	padding: .5em;
+	max-width: 100%;
+	min-width: 30em;
+}
+
+.postmenu {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	cursor: pointer;
+	width: 0.5em;
+	height: 0.5em;
+	color: var(--font-color);
+	border: solid var(--font-color) ;
+	border-width: 0 2px 2px 0;  
+	background: transparent;
+	position: relative;
+	top: 2px;
+	font-size: 9pt;
+	/*border-bottom: .5em solid transparent;
+	border-right: .5em solid transparent;
+	border-left: calc(2 * .5em * 0.866) solid var(--font-color);
+	border-top: .5em solid transparent;*/
+	vertical-align: top;
+	margin-left: 3px;
+	padding: 3px; 
+	transform: rotate(45deg);
+}
+
+.catalog-tile.hidden {
+	height: min-content;
+}
+
+.catalog-tile.hidden .post-message, .catalog-tile.hidden .post-file-src {
+	display: none;
+}
+
+.catalog-tile.hidden .post-info {
+	opacity: .5;
+	margin-bottom: -6px;
+}
+
+.post-container.hidden .post-data {
+	display: none;
+}
+
+.post-container.hidden .post-info {
+	margin-bottom: -6px;
+	opacity: .5;
+	border: none;
+	background: none;
+}
+
+.anchor:target + .post-container,
+.anchor:target + .catalog-tile,
+.post-container.highlighted,
+.post-container.hoverhighlighted,
+.anchor:target + table tbody tr th,
+.anchor:target + table {
+	background-color: var(--highlighted-post-color) !important;
+	border-color: var(--highlighted-post-outline-color) !important;
+}
+
+.anchor {
+	height: 50px;
+	margin-top: -45px;
+}
+
+.post-container.op {
+	background: none;
+	border-color: transparent;
+	width: 100%;
+}
+
+.post-subject {
+	color: var(--subject-color)!important;
+	font-weight: bold;
+}
+
+.post-capcode {
+	font-weight: bold;
+	color:var(--capcode-color);
+}
+
+.post-icons {
+	filter:var(--icon-color);
+	vertical-align: middle;
+}
+
+.post-icons img {
+	image-rendering: auto;
+}
+
+.post-tripcode, .post-name {
+	color: var(--name-color);
+}
+
+.post-name {
+	font-weight: bold;
+}
+
+.you:after {
+	margin-left: 3px;
+	content: '(あなた)';
+	font-weight: lighter;
+	font-style: italic;
+}
+
+.noselect {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.post-info {
+	margin: -5px -5px 0 -5px;
+	padding: 5px;
+	padding-left: 3px;
+	display:block;
+	overflow-wrap: break-word;
+}
+
+.post-container.op .post-info {
+	background: none;
+	border: none;
+}
+
+.nav-item {
+	line-height: 3em;
+	text-decoration: none;
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px;
+	text-align: center;
+}
+
+.nav-item.short-nav {
+	line-height: 1.5em;
+}
+
+.left {
+	float: left;
+}
+.cb {
+	clear: both;
+}
+.right {
+	float: right;
+}
+
+.footer {
+	text-align: center;
+	flex-shrink: 0;
+	margin-top: auto;
+	line-height: 1.5em;
+}
+
+a.button {
+	-webkit-appearance: button;
+	-moz-appearance: button;
+	appearance: button;
+	text-decoration: none;
+	cursor: pointer;
+	color: black;
+}
+
+.button:hover {
+	color: initial!important;
+}
+
+input[type="button"][disabled] {
+	opacity: 0.5;
+}
+
+input[type="button"], input[type="range"], input[type="number"], input[type="text"], input[type="submit"], input[type="password"], input[type="file"], textarea, select {
+	border: 1px solid var(--input-borders);
+	background: var(--input-background);
+	color: var(--input-color);
+	font-size: inherit;
+	font-family: arial, helvetica, sans-serif;
+	margin: 0;
+	flex-grow: 1;
+	border-radius: 0px;
+}
+
+.nogrow * {
+	flex-grow: 0;
+}
+
+.nogrow input[type="submit"] {
+	width: min-content;
+}
+
+textarea {
+	max-height: 100%;
+	max-width: 100%;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type=number] {
+	-moz-appearance:textfield;
+	-webkit-appearance: textfield;
+	appearance:textfield;
+}
+
+input[type="submit"] {
+	min-height: 2.5em;
+	cursor: pointer;
+}
+
+input[type="file"] {
+	width: 220px;
+	background: var(--input-background);
+}
+
+#postform {
+	display: none;
+	max-width: calc(100% - 10px);
+	max-height: calc(100% - 50px);
+	position: fixed;
+	top: 3.5em;
+	right: 5px;
+	background-color: var(--post-color);
+	z-index: 2;
+	box-sizing: border-box;
+	border: 5px solid var(--post-color);
+	overflow-y: auto;
+}
+
+#postform:target {
+	display: flex;
+}
+
+.postform-style {
+	display: flex;
+	border: 1px solid var(--input-borders);
+	background: var(--input-background);
+	align-items: center;
+	box-sizing: border-box;
+}
+
+iframe.captcha, iframe.bypass {
+	/*dumb hack cos of noscript wrapping in unstyleable span*/
+	/*margin-bottom: -2px;*/
+}
+
+iframe.captcha {
+	/*width: 100%;*/
+}
+
+iframe.embed-video {
+	width: 500px;
+	height: 280px;
+	margin-top: 3px;
+}
+
+iframe.bypass {
+	height: var(--bypass-height);
+	width: 350px;
+}
+
+.captcha {
+	border: 1px solid var(--input-borders);
+	background: white;
+	margin-bottom: 1px;
+	min-width: var(--captcha-w);
+	height: var(--captcha-h);
+	box-sizing: border-box;
+	object-fit: contain;
+	overflow: hidden;
+	position: relative;
+}
+
+.captcharefresh {
+	line-height: 18px;
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+	font-size: 18px;
+	cursor: pointer;
+	text-shadow: rgb(0, 0, 0) 0px 0px 1px, rgb(0, 0, 0) 0px 0px 1px, rgb(0, 0, 0) 0px 0px 1px, rgb(0, 0, 0) 0px 0px 1px, rgb(0, 0, 0) 0px 0px 1px, rgb(0, 0, 0) 0px 0px 1px;
+	color: white;
+}
+
+.label, .rlabel {
+	padding: 3px;
+	border: 1px solid var(--box-border-color);
+	min-width: 80px;
+	background: var(--label-color);
+	display: flex;
+	font-weight: bold;
+	margin-right: 1px;
+	align-items: start;
+	flex-direction: column;
+	justify-content: center;
+}
+.rlabel {
+	margin-right: 0;
+	margin-left: 1px;
+}
+
+hr {
+	border-top: 1px solid var(--hr);
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+	margin: 6px 0 5px 0;
+}
+
+hr + .thread {
+	margin-top: -5px;
+}
+
+.scrolltable {
+	max-height: 160px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: 1px solid var(--box-border-color);
+}
+
+tr:nth-child(odd) {
+	 background: var(--post-color);
+}
+
+table.boardtable td:nth-child(3), table.boardtable th:nth-child(3),
+table.boardtable td:nth-child(4), table.boardtable th:nth-child(4),
+table.boardtable td:nth-child(5), table.boardtable th:nth-child(5),
+table.boardtable td:nth-child(6), table.boardtable th:nth-child(6) {
+	word-break: keep-all;
+	overflow-wrap: break-word;
+}
+
+table.boardtable.w900 th:last-child {
+	min-width: 100px;
+}
+table.boardtable.w900 td:last-child {
+	text-shadow: #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px;
+	color: white;
+}
+
+/* ^="f" means only where attachment is false, to prevent showing on attachment files with audio or video mime type */
+.post-file-src[data-type="audio"][data-attachment^="f"]::after,
+.post-file-src[data-type="video"][data-attachment^="f"]::after {
+	content: "▶";
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	background: #000;
+	color: #fff;
+	border-radius: 100%;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	text-align:center;
+	box-sizing:border-box;
+	font-size: 20px;
+	padding-left: 4px;
+	transform: translate(-50%, -50%);
+	opacity: 0.8;
+	box-shadow: 0 0 3px #fff;
+	pointer-events: none;
+}
+.post-file-src[data-attachment^="f"]:hover::after {
+	opacity: 1;
+}
+
+.post-file-src[data-type="image"][data-loading]::after,
+.post-file-src[data-type="image"][data-loading]::before {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 1.2em;
+	box-sizing: border-box;
+	transform: translate(-50%,-50%);
+	pointer-events: none;
+	z-index: 1;
+}
+.post-file-src[data-type="image"][data-loading]::before {
+	content:"";
+	background: black;
+	width: 100%;
+	border-left: var(--data-loading) solid darkgreen;
+	transition: all 0.3s;
+}
+.post-file-src[data-type="image"][data-loading]::after {
+	content: attr(data-loading) "%";
+	color: white;
+}
+
+.post-file-src * {
+	max-width: 100%;
+	visibility: visible;
+}
+
+.di {
+	display: inline;
+}
+
+table, .boardtable {
+	max-width: 100%;
+}
+
+.text-center {
+	text-align: center;
+}
+
+#settingsmodal{
+	min-width: 400px;
+}
+#settingsmodal .form-wrapper.flexleft.mt-10, #settingsmodal .form-wrapper.flexleft.mt-10 .row {
+	width: 100%
+}
+row.wrap.sb .col {
+	flex-basis: calc(50% - 5px);
+}
+
+@media only screen and (max-height: 400px) {
+	.modal {
+		top: 5px;
+		max-height: calc(100% - 10px);
+	}
+}
+
+/*fuck off with mobile chromeshit*/
+@media only screen and (max-width: 920px) {
+	.w900 {
+		width: 100%
+	}
+}
+
+
+@media only screen and (min-width: 600px) {
+	/* not-completely-shit way to "fix" short text squishing on single file posts */
+	.post-files:not(.fn) + .post-message {
+		min-width: 40em;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+
+	.ct-r2 .catalog-thumb.small {
+		max-width: 32px;
+		max-height: 32px;
+	}
+
+    .postmenu {
+        vertical-align: top;
+        margin-left: 3px;
+        float: right;
+        min-height: 0.5em;
+    }
+
+	#settings::after {
+		content: "\2699"!important;
+	}
+	#settingsmodal {
+		width: 100%;
+		min-width: unset;
+	}
+ 	[title] {
+		position:relative
+ 	}
+	[title]:hover:after {
+		color: white;
+		font-size: small;
+		border-radius: 2px;
+		background:black;
+		position:absolute;
+		top:-1.75em;
+		left:50%;
+		transform:translateX(-50%);
+		width:-moz-max-content;
+		width:max-content;
+		padding:1px 2px;
+ 	}
+	[title]:hover:after {
+		content:attr(title);
+	}
+	.user-id[title]:hover:after {
+		content:"Double tap to highlight" attr(data-count);
+	}
+	[title]:hover:before {
+		content: '';
+		position: absolute;
+		top: -6px;
+		left: calc(50% - 5px);
+		border-top: 5px solid black;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+	}
+
+	table.boardtable td:nth-child(3), table.boardtable th:nth-child(3),
+	table.boardtable td:nth-child(4), table.boardtable th:nth-child(4),
+	table.boardtable td:nth-child(5), table.boardtable th:nth-child(5),
+	table.boardtable td:nth-child(6), table.boardtable th:nth-child(6),
+	table.boardtable td:nth-child(7), table.boardtable th:nth-child(7) {
+		display: none;
+	}
+
+	table.newstable td:nth-child(2), table.newstable th:nth-child(2) {
+		display: none;
+	}
+
+	.board-banner {
+		object-fit: contain;
+		height: unset;
+	}
+
+	.modal {
+		top: 5px;
+		max-height: calc(100% - 10px);
+	}
+
+	.post-file-info {
+		max-width: 150px;
+	}
+
+	iframe.bypass {
+		height: 100vh;
+		width: 100vw;
+	}
+
+	iframe.embed-video {
+		height: unset;
+		width: 100%;
+		max-width: 300px;
+	}
+
+	.file-thumb {
+		max-width: 128px;
+		max-height: 128px;
+		object-fit: cover;
+	}
+
+	.post-info{
+		background: var(--darken);
+		margin: -6.5px -6.5px 5px -6.5px;
+		border-bottom: 1px solid var(--post-outline-color);
+	}
+
+	.anchor:target + .post-container .post-info,
+	.post-container.highlighted .post-info,
+	.post-container.hoverhighlighted .post-info {
+		border-bottom: 1px solid var(--highlighted-post-outline-color);
+	}
+
+	.close {
+		width: 2.25em;
+	}
+
+	input[type="range"], input[type="number"], input[type="text"], input[type="submit"], input[type="password"], input[type="file"], .postform-style, select, #dragHandle {
+		min-height: 2.25em;
+		box-sizing: border-box;
+	}
+
+	.filelabel {
+		min-width: 0;
+	}
+
+	.fh	{
+		height: 100%;
+	}
+
+	.form-post {
+		width: 100%;
+	}
+
+	.form-login {
+		width: 100%;
+	}
+
+	pre {
+		margin: 1em;
+	}
+
+	.post-check {
+		top: 1px;
+		margin-left: 2px;
+	}
+
+	.pages {
+		/*width:100%;*/
+	}
+
+	.pad-anchor {
+		width: 100%;
+	}
+
+	.post-container {
+		box-shadow: none;
+		width: 100%;
+		min-width: unset;
+	}
+
+	.catalog-tile {
+		width: calc(50% - 10px);
+		margin: 5px;
+	}
+
+	table {
+		width: 100%;
+	}
+
+	#postform {
+		width: 100%;
+	}
+
+	input#file {
+		width: 100%;
+	}
+
+	#filter-value-input {
+		width: 100%;
+	}
+
+}
+
+
+.catalog-tile:hover {
+    overflow-y: scroll
+}
+
+.customflag,.customflag::before,.flag {
+    display: inline-block;
+    width: unset;
+    height: unset;
+    background: url(/file/flags.png) no-repeat;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -webkit-optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+    vertical-align: top
+}
+
+.customflag {
+    background: 0 0;
+    max-width: 50px;
+    max-height: 30px
+}
+
+.customflag::before {
+    content: ' ';
+    background-position: -48px -165px
+}
+
+.flag.flag-xx {
+    background-position: -48px -165px
+}
+
+.flag.flag-t1,.flag.flag-tor {
+    background: url(/file/flags/onion.png) no-repeat;
+    width: 14px;
+    height: 19px
+}
+
+.flag.flag-loki {
+    background: url(/file/flags/lokinet.png) no-repeat;
+    width: 15px;
+    height: 15px
+}
+
+/*!
+ * Adapted to country balls, put them in the folder -
+ */
+.flag.flag-gu {
+    background: url(/file/flags/gu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mn {
+    background: url(/file/flags/mn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-va {
+    background: url(/file/flags/va.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tibet {
+    background-position: -32px -143px
+}
+
+.flag.flag-fo {
+    background: url(/file/flags/fo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-th {
+    background: url(/file/flags/th.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tr {
+    background: url(/file/flags/tr.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tl {
+    background: url(/file/flags/tl.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kz {
+    background: url(/file/flags/kz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-zm {
+    background: url(/file/flags/zm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-uz {
+    background: url(/file/flags/uz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-dk {
+    background: url(/file/flags/dk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-scotland {
+    background-position: -176px -121px
+}
+
+.flag.flag-gi {
+    background: url(/file/flags/gi.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gy {
+    background: url(/file/flags/gy.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bj {
+    background: url(/file/flags/bj.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-fr {
+    background: url(/file/flags/fr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mo {
+    background: url(/file/flags/mo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ir {
+    background: url(/file/flags/ir.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-io {
+    background: url(/file/flags/io.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tm {
+    background: url(/file/flags/tm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ch {
+    background: url(/file/flags/ch.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mt {
+    background: url(/file/flags/mt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-nl {
+    background: url(/file/flags/nl.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gp {
+    background: url(/file/flags/gp.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-im {
+    background: url(/file/flags/im.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tv {
+    background: url(/file/flags/tv.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mu {
+    background: url(/file/flags/mu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pe {
+    background: url(/file/flags/pe.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-vi {
+    background: url(/file/flags/vi.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-hn {
+    background: url(/file/flags/hn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ss {
+    background: url(/file/flags/ss.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ae {
+    background: url(/file/flags/ae.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-td {
+    background: url(/file/flags/td.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pw {
+    background: url(/file/flags/pw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-nu {
+    background: url(/file/flags/nu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bt {
+    background: url(/file/flags/bt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ms {
+    background: url(/file/flags/ms.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cv {
+    background: url(/file/flags/cv.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-es {
+    background: url(/file/flags/es.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mh {
+    background: url(/file/flags/mh.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-la {
+    background: url(/file/flags/la.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-vn {
+    background: url(/file/flags/vn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-py {
+    background: url(/file/flags/py.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-br {
+    background: url(/file/flags/br.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ye {
+    background: url(/file/flags/ye.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ie {
+    background: url(/file/flags/ie.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gh {
+    background: url(/file/flags/gh.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cg {
+    background: url(/file/flags/cg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cu {
+    background: url(/file/flags/cu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-hu {
+    background: url(/file/flags/hu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sg {
+    background: url(/file/flags/sg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-at {
+    background: url(/file/flags/at.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-lk {
+    background: url(/file/flags/lk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-vu {
+    background: url(/file/flags/vu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bo {
+    background: url(/file/flags/bo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-jo {
+    background: url(/file/flags/jo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-er {
+    background: url(/file/flags/er.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-za {
+    background: url(/file/flags/za.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-rs {
+    background: url(/file/flags/rs.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-nr {
+    background: url(/file/flags/nr.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ls {
+    background: url(/file/flags/ls.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-jm {
+    background: url(/file/flags/jm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tz {
+    background: url(/file/flags/tz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ki {
+    background: url(/file/flags/ki.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sj {
+    background: url(/file/flags/sj.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cz {
+    background: url(/file/flags/cz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pg {
+    background: url(/file/flags/pg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-lv {
+    background: url(/file/flags/lv.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-do {
+    background: url(/file/flags/do.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-lu {
+    background: url(/file/flags/lu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-no {
+    background: url(/file/flags/no.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kw {
+    background: url(/file/flags/kw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mx {
+    background: url(/file/flags/mx.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-yt {
+    background: url(/file/flags/yt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ly {
+    background: url(/file/flags/ly.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cy {
+    background: url(/file/flags/cy.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ph {
+    background: url(/file/flags/ph.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-my {
+    background: url(/file/flags/my.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sm {
+    background: url(/file/flags/sm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-et {
+    background: url(/file/flags/et.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ru {
+    background: url(/file/flags/ru.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tj {
+    background: url(/file/flags/tj.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ai {
+    background: url(/file/flags/ai.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pl {
+    background: url(/file/flags/pl.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kp {
+    background: url(/file/flags/kp.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-uy {
+    background: url(/file/flags/uy.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gb {
+    background: url(/file/flags/gb.png) no-repeat;
+    width: 17px;
+    height: 18px
+}
+
+.flag.flag-gs {
+    background: url(/file/flags/gs.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kurdistan {
+    background-position: -96px -77px
+}
+
+.flag.flag-rw {
+    background: url(/file/flags/rw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ec {
+    background: url(/file/flags/ec.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mm {
+    background: url(/file/flags/mm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pa {
+    background: url(/file/flags/pa.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-wales {
+    background-position: -160px -154px
+}
+
+.flag.flag-kg {
+    background: url(/file/flags/kg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ve {
+    background: url(/file/flags/ve.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tk {
+    background: url(/file/flags/tk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ca {
+    background: url(/file/flags/ca.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-is {
+    background: url(/file/flags/is.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ke {
+    background: url(/file/flags/ke.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ro {
+    background: url(/file/flags/ro.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gq {
+    background: url(/file/flags/gq.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pt {
+    background: url(/file/flags/pt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tf {
+    background: url(/file/flags/tf.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ad {
+    background: url(/file/flags/ad.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sk {
+    background: url(/file/flags/sk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pm {
+    background: url(/file/flags/pm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-om {
+    background: url(/file/flags/om.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-an {
+    background: url(/file/flags/an.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ws {
+    background: url(/file/flags/ws.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sh {
+    background: url(/file/flags/sh.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mp {
+    background: url(/file/flags/mp.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gt {
+    background: url(/file/flags/gt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cf {
+    background: url(/file/flags/cf.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-zanzibar {
+    background-position: 0 -165px
+}
+
+.flag.flag-mw {
+    background: url(/file/flags/mw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-catalonia {
+    background-position: -32px -22px
+}
+
+.flag.flag-ug {
+    background: url(/file/flags/ug.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-je {
+    background: url(/file/flags/je.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-km {
+    background: url(/file/flags/km.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-in {
+    background: url(/file/flags/in.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bf {
+    background: url(/file/flags/bf.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mc {
+    background: url(/file/flags/mc.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sy {
+    background: url(/file/flags/sy.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sn {
+    background: url(/file/flags/sn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kr {
+    background: url(/file/flags/kr.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-eu {
+    background: url(/file/flags/eu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bn {
+    background: url(/file/flags/bn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-st {
+    background: url(/file/flags/st.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-england {
+    background-position: -192px -33px
+}
+
+.flag.flag-lc {
+    background: url(/file/flags/lc.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-dm {
+    background: url(/file/flags/dm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-be {
+    background: url(/file/flags/be.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ni {
+    background: url(/file/flags/ni.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ua {
+    background: url(/file/flags/ua.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mz {
+    background: url(/file/flags/mz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pf {
+    background: url(/file/flags/pf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tn {
+    background: url(/file/flags/tn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ee {
+    background: url(/file/flags/ee.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-xk {
+    background: url(/file/flags/xk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sx {
+    background: url(/file/flags/sx.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sd {
+    background: url(/file/flags/sd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gd {
+    background: url(/file/flags/gd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ci {
+    background: url(/file/flags/ci.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sz {
+    background: url(/file/flags/sz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cl {
+    background: url(/file/flags/cl.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fi {
+    background: url(/file/flags/fi.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ga {
+    background: url(/file/flags/ga.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-jp {
+    background: url(/file/flags/jp.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-de {
+    background: url(/file/flags/de.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-np {
+    background: url(/file/flags/np.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-re {
+    background: url(/file/flags/re.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bg {
+    background: url(/file/flags/bg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sc {
+    background: url(/file/flags/sc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ng {
+    background: url(/file/flags/ng.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-qa {
+    background: url(/file/flags/qa.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mk {
+    background: url(/file/flags/mk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-aw {
+    background: url(/file/flags/aw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-kn {
+    background: url(/file/flags/kn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-al {
+    background: url(/file/flags/al.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bw {
+    background: url(/file/flags/bw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-um {
+    background: url(/file/flags/um.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ky {
+    background: url(/file/flags/ky.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tt {
+    background: url(/file/flags/tt.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-so {
+    background: url(/file/flags/so.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-lt {
+    background: url(/file/flags/lt.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-by {
+    background: url(/file/flags/by.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bb {
+    background: url(/file/flags/bb.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-us {
+    background: url(/file/flags/us.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-md {
+    background: url(/file/flags/md.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ag {
+    background: url(/file/flags/ag.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-hm {
+    background: url(/file/flags/hm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-as {
+    background: url(/file/flags/as.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-eg {
+    background: url(/file/flags/eg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sv {
+    background: url(/file/flags/sv.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sl {
+    background: url(/file/flags/sl.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fk {
+    background: url(/file/flags/fk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-am {
+    background: url(/file/flags/am.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ck {
+    background: url(/file/flags/ck.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tw {
+    background: url(/file/flags/tw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-kh {
+    background: url(/file/flags/kh.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-to {
+    background: url(/file/flags/to.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-se {
+    background: url(/file/flags/se.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cd {
+    background: url(/file/flags/cd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pn {
+    background: url(/file/flags/pn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gr {
+    background: url(/file/flags/gr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-id {
+    background: url(/file/flags/id.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-vc {
+    background: url(/file/flags/vc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-somaliland {
+    background-position: -96px -132px
+}
+
+.flag.flag-bi {
+    background: url(/file/flags/bi.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pk {
+    background: url(/file/flags/pk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pr {
+    background: url(/file/flags/pr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bd {
+    background: url(/file/flags/bd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-co {
+    background: url(/file/flags/co.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fm {
+    background: url(/file/flags/fm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bm {
+    background: url(/file/flags/bm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ar {
+    background: url(/file/flags/ar.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bv {
+    background: url(/file/flags/bv.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sb {
+    background: url(/file/flags/sb.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mq {
+    background: url(/file/flags/mq.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-eh {
+    background: url(/file/flags/eh.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bh {
+    background: url(/file/flags/bh.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-it {
+    background: url(/file/flags/it.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-hr {
+    background: url(/file/flags/hr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sa {
+    background: url(/file/flags/sa.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mv {
+    background: url(/file/flags/mv.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mg {
+    background: url(/file/flags/mg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-dz {
+    background: url(/file/flags/dz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gg {
+    background: url(/file/flags/gg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gm {
+    background: url(/file/flags/gm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-af {
+    background: url(/file/flags/af.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-li {
+    background: url(/file/flags/li.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sr {
+    background: url(/file/flags/sr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-vg {
+    background: url(/file/flags/vg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cr {
+    background: url(/file/flags/cr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tc {
+    background: url(/file/flags/tc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ao {
+    background: url(/file/flags/ao.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ma {
+    background: url(/file/flags/ma.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mr {
+    background: url(/file/flags/mr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gn {
+    background: url(/file/flags/gn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ne {
+    background: url(/file/flags/ne.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-nf {
+    background: url(/file/flags/nf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-wf {
+    background: url(/file/flags/wf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-hk {
+    background: url(/file/flags/hk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gf {
+    background: url(/file/flags/gf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ps {
+    background: url(/file/flags/ps.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ic {
+    background: url(/file/flags/ic.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cw {
+    background: url(/file/flags/cw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ml {
+    background: url(/file/flags/ml.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ax {
+    background: url(/file/flags/ax.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gl {
+    background: url(/file/flags/gl.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-dj {
+    background: url(/file/flags/dj.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cn {
+    background: url(/file/flags/cn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ht {
+    background: url(/file/flags/ht.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-lr {
+    background: url(/file/flags/lr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tg {
+    background: url(/file/flags/tg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ba {
+    background: url(/file/flags/ba.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ge {
+    background: url(/file/flags/ge.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bz {
+    background: url(/file/flags/bz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-au {
+    background: url(/file/flags/au.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-iq {
+    background: url(/file/flags/iq.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cm {
+    background: url(/file/flags/cm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gw {
+    background: url(/file/flags/gw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-az {
+    background: url(/file/flags/az.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-na {
+    background: url(/file/flags/na.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fj {
+    background: url(/file/flags/fj.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-zw {
+    background: url(/file/flags/zw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bs {
+    background: url(/file/flags/bs.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-il {
+    background: url(/file/flags/il.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-nz {
+    background: url(/file/flags/nz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-me {
+    background: url(/file/flags/me.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-si {
+    background: url(/file/flags/si.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-nc {
+    background: url(/file/flags/nc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-lb {
+    background: url(/file/flags/lb.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.logo {
+    display: block;
+    margin: auto;
+    max-width: 100%
+}
+
+.centerpiece {
+    display: block;
+    margin: auto;
+    max-width: 100%
+}
+
+span.title {
+	color: var(--title-color);
+}
+
+span.sorte {
+    background: linear-gradient(to right,red,#ffa600,#fff500,#06ff00,#00c9ff,#2300ff,#ff00fa,red);
+    background-size: 200% auto;
+    color: #000;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: title 1s linear infinite
+}
+
+@keyframes title {
+    to {
+        background-position: 200% center
+    }
+}
+
+[data-email=migi] {
+    align-self: flex-end
+}
+
+.upload-list {
+    max-height: none;
+}
+
+.upload-item p {
+    max-height: 2.5em;
+}
+
+.snowflake {
+    color: #fff;
+    font-size: 1em;
+    font-family: Arial;
+}
+
+@-webkit-keyframes snowflakes-fall {
+    0% {
+        top: -10%
+    }
+
+    100% {
+        top: 100%
+    }
+}
+
+@-webkit-keyframes snowflakes-shake {
+    0% {
+        -webkit-transform: translateX(0px);
+        transform: translateX(0px)
+    }
+
+    50% {
+        -webkit-transform: translateX(80px);
+        transform: translateX(80px)
+    }
+
+    100% {
+        -webkit-transform: translateX(0px);
+        transform: translateX(0px)
+    }
+}
+
+@keyframes snowflakes-fall {
+    0% {
+        top: -10%
+    }
+
+    100% {
+        top: 100%
+    }
+}
+
+@keyframes snowflakes-shake {
+    0% {
+        transform: translateX(0px)
+    }
+
+    50% {
+        transform: translateX(80px)
+    }
+
+    100% {
+        transform: translateX(0px)
+    }
+}
+
+.snowflake {
+    position: fixed;
+    top: -10%;
+    z-index: 9999;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+    -webkit-animation-name: snowflakes-fall,snowflakes-shake;
+    -webkit-animation-duration: 10s,3s;
+    -webkit-animation-timing-function: linear,ease-in-out;
+    -webkit-animation-iteration-count: infinite,infinite;
+    -webkit-animation-play-state: running,running;
+    animation-name: snowflakes-fall,snowflakes-shake;
+    animation-duration: 10s,3s;
+    animation-timing-function: linear,ease-in-out;
+    animation-iteration-count: infinite,infinite;
+    animation-play-state: running,running
+}
+
+.snowflake:nth-of-type(0) {
+    left: 1%;
+    -webkit-animation-delay: 0s,0s;
+    animation-delay: 0s,0s
+}
+
+.snowflake:nth-of-type(1) {
+    left: 10%;
+    -webkit-animation-delay: 1s,1s;
+    animation-delay: 1s,1s
+}
+
+.snowflake:nth-of-type(2) {
+    left: 20%;
+    -webkit-animation-delay: 6s,.5s;
+    animation-delay: 6s,.5s
+}
+
+.snowflake:nth-of-type(3) {
+    left: 30%;
+    -webkit-animation-delay: 4s,2s;
+    animation-delay: 4s,2s
+}
+
+.snowflake:nth-of-type(4) {
+    left: 40%;
+    -webkit-animation-delay: 2s,2s;
+    animation-delay: 2s,2s
+}
+
+.snowflake:nth-of-type(5) {
+    left: 50%;
+    -webkit-animation-delay: 8s,3s;
+    animation-delay: 8s,3s
+}
+
+.snowflake:nth-of-type(6) {
+    left: 60%;
+    -webkit-animation-delay: 6s,2s;
+    animation-delay: 6s,2s
+}
+
+.snowflake:nth-of-type(7) {
+    left: 70%;
+    -webkit-animation-delay: 2.5s,1s;
+    animation-delay: 2.5s,1s
+}
+
+.snowflake:nth-of-type(8) {
+    left: 80%;
+    -webkit-animation-delay: 1s,0s;
+    animation-delay: 1s,0s
+}
+
+.snowflake:nth-of-type(9) {
+    left: 90%;
+    -webkit-animation-delay: 3s,1.5s;
+    animation-delay: 3s,1.5s
+}

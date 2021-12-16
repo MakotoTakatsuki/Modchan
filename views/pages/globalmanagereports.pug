@@ -1,0 +1,28 @@
+extends ../layout.pug
+include ../mixins/post.pug
+include ../mixins/globalmanagenav.pug
+
+block head
+	title 管理
+
+block content
+	h1.board-title グローバルマネジメント
+	br
+	+globalmanagenav('reports')
+	form(action=`/forms/global/actions` method='POST' enctype='application/x-www-form-urlencoded')
+		if reports.length === 0
+			hr(size=1)
+			p レポートはありません。
+		else
+			input(type='hidden' name='_csrf' value=csrf)
+			hr(size=1)
+			if ip
+				h4.no-m-p に対して、または#{ip}によってレポートする。
+				hr(size=1)
+			for report in reports
+				.thread
+					+post(report, false, false, true)
+				hr(size=1)
+			.pages.mv-5
+				include ../includes/pages.pug
+			include ../includes/actionfooter_globalmanage.pug

@@ -1,0 +1,686 @@
+'use strict';
+
+const path = require('path')
+	, { createHash, randomBytes } = require('crypto')
+	, randomBytesAsync = require('util').promisify(randomBytes)
+	, { remove, pathExists, stat: fsStat } = require('fs-extra')
+	, uploadDirectory = require(__dirname+'/../../helpers/files/uploadDirectory.js')
+	, Mongo = require(__dirname+'/../../db/db.js')
+	, Socketio = require(__dirname+'/../../socketio.js')
+	, { Stats, Posts, Boards, Files, Bans } = require(__dirname+'/../../db/')
+	, cache = require(__dirname+'/../../redis.js')
+	, nameHandler = require(__dirname+'/../../helpers/posting/name.js')
+	, { prepareMarkdown } = require(__dirname+'/../../helpers/posting/markdown.js')
+	, messageHandler = require(__dirname+'/../../helpers/posting/message.js')
+	, moveUpload = require(__dirname+'/../../helpers/files/moveupload.js')
+	, mimeTypes = require(__dirname+'/../../helpers/files/mimetypes.js')
+	, imageThumbnail = require(__dirname+'/../../helpers/files/imagethumbnail.js')
+	, imageIdentify = require(__dirname+'/../../helpers/files/imageidentify.js')
+	, videoThumbnail = require(__dirname+'/../../helpers/files/videothumbnail.js')
+	, audioThumbnail = require(__dirname+'/../../helpers/files/audiothumbnail.js')
+	, ffprobe = require(__dirname+'/../../helpers/files/ffprobe.js')
+	, formatSize = require(__dirname+'/../../helpers/files/formatsize.js')
+	, deleteTempFiles = require(__dirname+'/../../helpers/files/deletetempfiles.js')
+	, fixGifs = require(__dirname+'/../../helpers/files/fixgifs.js')
+	, timeUtils = require(__dirname+'/../../helpers/timeutils.js')
+	, deletePosts = require(__dirname+'/deletepost.js')
+	, spamCheck = require(__dirname+'/../../helpers/checks/spamcheck.js')
+	, config = require(__dirname+'/../../config.js')
+	, { postPasswordSecret } = require(__dirname+'/../../configs/secrets.js')
+	, buildQueue = require(__dirname+'/../../queue.js')
+	, dynamicResponse = require(__dirname+'/../../helpers/dynamic.js')
+	, { buildThread } = require(__dirname+'/../../helpers/tasks.js');
+
+module.exports = async (req, res, next) => {
+
+	const { checkRealMimeTypes, thumbSize, thumbExtension, videoThumbPercentage,
+		strictFiltering, animatedGifThumbnails, audioThumbnails } = config.get;
+
+	//spam/flood check
+	const flood = await spamCheck(req, res);
+	if (flood) {
+		deleteTempFiles(req).catch(e => console.error);
+		return dynamicResponse(req, res, 429, 'message', {
+			'title': '洪水が検出されました',
+			'message': '別の投稿、または別のユーザーに類似した投稿を行う前にお待ちください',
+			'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
+		});
+	}
+
+	// check if this is responding to an existing thread
+	let redirect = `/${req.params.board}/`
+	let salt = null;
+	let thread = null;
+	const { filterBanDuration, filterMode, filters, blockedCountries, threadLimit, ids, userPostSpoiler,
+		lockReset, captchaReset, pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
+		maxFiles, sageOnlyEmail, forceAnon, replyLimit, disableReplySubject,
+		captchaMode, lockMode, allowedFileTypes, customFlags, geoFlags, fileR9KMode, messageR9KMode } = res.locals.board.settings;
+	if (res.locals.permLevel >= 4
+		&& res.locals.country
+		&& blockedCountries.includes(res.locals.country.code)) {
+		return dynamicResponse(req, res, 403, 'message', {
+			'title': '禁断',
+			'message': `あなたの国「${res.locals.country.name}」は、この掲示板への投稿が許可されていません。`,
+			'redirect': redirect
+		});
+	}
+	if ((lockMode === 2 || (lockMode === 1 && !req.body.thread)) //if board lock, or thread lock and its a new thread
+		&& res.locals.permLevel >= 4) { //and not staff
+		await deleteTempFiles(req).catch(e => console.error);
+		return dynamicResponse(req, res, 400, 'message', {
+			'title': '要求の形式が正しくありません',
+			'message': lockMode === 1 ? 'スレッド作成がロックされました' : '板がロックされていますた',
+			'redirect': redirect
+		});
+	}
+	if (req.body.thread) {
+		thread = await Posts.getPost(req.params.board, req.body.thread, true);
+		if (!thread || thread.thread != null) {
+			await deleteTempFiles(req).catch(e => console.error);
+			return dynamicResponse(req, res, 400, 'message', {
+				'title': '要求の形式が正しくありません',
+				'message': 'スレッドが存在しません',
+				'redirect': redirect
+			});
+		}
+		salt = thread.salt;
+		redirect += `thread/${req.body.thread}.html`
+		if (thread.locked && res.locals.permLevel >= 4) {
+			await deleteTempFiles(req).catch(e => console.error);
+			return dynamicResponse(req, res, 400, 'message', {
+				'title': '要求の形式が正しくありません',
+				'message': 'スレッドがロックされています',
+				'redirect': redirect
+			});
+		}
+		if (thread.replyposts >= replyLimit && !thread.cyclic) { //reply limit
+			await deleteTempFiles(req).catch(e => console.error);
+			return dynamicResponse(req, res, 400, 'message', {
+				'title': '要求の形式が正しくありません',
+				'message': 'スレッドが応答制限に達しました',
+				'redirect': redirect
+			});
+		}
+	}
+	//filters
+	if (res.locals.permLevel > 1) { //global staff bypass filters
+		const { filters: globalFilters, filterMode: globalFilterMode,
+			filterBanDuration: globalFilterBanDuration } = config.get;
+		let hitGlobalFilter = false
+			, hitLocalFilter = false
+			, ban;
+		let concatContents = `|${req.body.name}|${req.body.message}|${req.body.subject}|${req.body.email}|\
+${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).join('|') : ''}`.toLowerCase();
+		let allContents = concatContents;
+		if (strictFiltering || res.locals.board.settings.strictFiltering) { //strict filtering adds a few transformations of the text to try and match filters when sers use techniques like zalgo, ZWS, markdown, multi-line, etc.
+			allContents += concatContents.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); //removing diacritics
+			allContents += concatContents.replace(/[\u200B-\u200D\uFEFF]/g, ''); //removing ZWS
+			allContents += concatContents.replace(/[^a-zA-Z0-9.-]+/gm, ''); //removing anything thats not alphamnumeric or . and -
+			allContents += concatContents.split(/(\%[^\%]+)/).map(part => { try { return decodeURIComponent(part) } catch(e) { return '' } }).join(''); //catch pedophile spammers url-fu with encoding
+		}
+		//global filters
+		if (globalFilters && globalFilters.length > 0 && globalFilterMode > 0) {
+			hitGlobalFilter = globalFilters.some(filter => { return allContents.includes(filter.toLowerCase()) });
+		}
+		//board-specific filters (doesnt use strict filtering)
+		if (!hitGlobalFilter && res.locals.permLevel >= 4 && filterMode > 0 && filters && filters.length > 0) {
+			const localFilterContents = res.locals.board.settings.strictFiltering ? allContents : concatContents;
+			hitLocalFilter = filters.some(filter => { return localFilterContents.includes(filter.toLowerCase()) });
+		}
+		if (hitGlobalFilter || hitLocalFilter) {
+			await deleteTempFiles(req).catch(e => console.error);
+			const useFilterMode = hitGlobalFilter ? globalFilterMode : filterMode; //global override local filter
+			if (useFilterMode === 1) {
+				return dynamicResponse(req, res, 400, 'message', {
+					'title': '要求の形式が正しくありません',
+					'message': 'あなたの投稿はワードフィルターによってブロックされました',
+					'redirect': redirect
+				});
+			} else { //otherwise filter mode must be 2
+				const useFilterBanDuration = hitGlobalFilter ? globalFilterBanDuration : filterBanDuration;
+				const banBoard = hitGlobalFilter ? null : res.locals.board._id;
+				const banDate = new Date();
+				const banExpiry = new Date(useFilterBanDuration + banDate.getTime());
+				const ban = {
+					'ip': {
+						'single': res.locals.ip.single,
+						'raw': res.locals.ip.raw,
+					},
+					'type': 'single',
+					'reason': `${hitGlobalFilter ? 'グローバル ' :''}ワードフィルター自動禁止`,
+					'board': banBoard,
+					'posts': null,
+					'issuer': 'システム', //what should i call this
+					'date': banDate,
+					'expireAt': banExpiry,
+					'allowAppeal': true, //should i make this configurable if appealable?
+					'showUser': true,
+					'seen': false
+				};
+				const insertedResult = await Bans.insertOne(ban);
+				ban._id = insertedResult.insertedId;
+				return res.status(403).render('ban', {
+					bans: [ban]
+				});
+			}
+		}
+
+	}
+
+	//for r9k messages. usually i wouldnt process these if its not enabled e.g. flags and IDs but in this case I think its necessary
+	let messageHash = null;
+	if (req.body.message && req.body.message.length > 0) {
+		const noQuoteMessage = req.body.message.replace(/>>\d+/g, '').replace(/>>>\/\w+(\/\d*)?/gm, '').trim();
+		messageHash = createHash('sha256').update(noQuoteMessage).digest('base64');
+		if (res.locals.permLevel >= 4 && (req.body.thread && messageR9KMode === 1) || messageR9KMode === 2) {
+			const postWithExistingMessage = await Posts.checkExistingMessage(res.locals.board._id, (messageR9KMode === 2 ? null : req.body.thread), messageHash);
+			if (postWithExistingMessage != null) {
+				await deleteTempFiles(req).catch(e => console.error);
+				return dynamicResponse(req, res, 409, 'message', {
+					'title': '対立',
+					'message': `メッセージは一意でなければなりません ${messageR9KMode === 1 ? 'このスレッド内' : 'この掲示板'}. あなたのメッセージはユニークではありません。`,
+					'redirect': redirect
+				});
+			}
+		}
+	}
+
+	let files = [];
+	// if we got a file
+	if (res.locals.numFiles > 0) {
+
+		//unique files check
+		if (res.locals.permLevel >= 4 && (req.body.thread && fileR9KMode === 1) || fileR9KMode === 2) {
+			const filesHashes = req.files.file.map(f => f.sha256);
+			const postWithExistingFiles = await Posts.checkExistingFiles(res.locals.board._id, (fileR9KMode === 2 ? null : req.body.thread), filesHashes);
+			if (postWithExistingFiles != null) {
+				await deleteTempFiles(req).catch(e => console.error);
+				const conflictingFiles = req.files.file
+					.filter(f => postWithExistingFiles.files.some(fx => fx.hash === f.sha256))
+					.map(f => f.name)
+					.join(', ');
+				return dynamicResponse(req, res, 409, 'message', {
+					'title': '対立',
+					'message': `アップロードしたファイルが一意であること ${fileR9KMode === 1 ? 'このスレッド内' : 'この掲示板上'}. \少なくとも次のファイルが${conflictingFiles.length > 1 ? 's are': ' is'} 一意ではない： ${conflictingFiles} ... 続きを読む`,
+					'redirect': redirect
+				});
+			}
+		}
+
+		//basic mime type check
+		for (let i = 0; i < res.locals.numFiles; i++) {
+			if (!mimeTypes.allowed(req.files.file[i].mimetype, allowedFileTypes)) {
+				await deleteTempFiles(req).catch(e => console.error);
+				return dynamicResponse(req, res, 400, 'message', {
+					'title': '要求の形式が正しくありません',
+					'message': `${req.files.file[i].name} に対する MIME タイプ "${req.files.file[i].mimetype}" が許可されていない`,
+					'redirect': redirect
+				});
+			}
+		}
+
+		//validate mime type properly
+		if (checkRealMimeTypes) {
+			for (let i = 0; i < res.locals.numFiles; i++) {
+				if (!(await mimeTypes.realMimeCheck(req.files.file[i]))) {
+					deleteTempFiles(req).catch(e => console.error);
+					return dynamicResponse(req, res, 400, 'message', {
+						'title': '要求の形式が正しくありません',
+						'message': `ファイル "${req.files.file[i].name}" の MIME タイプが不一致です。"`,
+						'redirect': redirect
+					});
+				}
+			}
+		}
+
+		//upload, create thumbnails, get metadata, etc.
+		for (let i = 0; i < res.locals.numFiles; i++) {
+			const file = req.files.file[i];
+			file.filename = file.sha256 + file.extension;
+
+			//get metadata
+			let processedFile = {
+				filename: file.filename,
+				spoiler: (res.locals.permLevel >= 4 || userPostSpoiler) && req.body.spoiler && req.body.spoiler.includes(file.sha256),
+				hash: file.sha256,
+				originalFilename: req.body.strip_filename && req.body.strip_filename.includes(file.sha256) ? file.filename : file.name,
+				mimetype: file.mimetype,
+				size: file.size,
+				extension: file.extension,
+			};
+
+			//phash
+			if (file.phash) {
+				processedFile.phash = file.phash;
+			}
+
+			//type and subtype
+			let [type, subtype] = processedFile.mimetype.split('/');
+			//check if already exists
+			const existsFull = await pathExists(`${uploadDirectory}/file/${processedFile.filename}`);
+			processedFile.sizeString = formatSize(processedFile.size)
+			const saveFull = async () => {
+				await Files.increment(processedFile);
+				req.files.file[i].inced = true;
+				if (!existsFull) {
+					await moveUpload(file, processedFile.filename, 'file');
+				}
+			}
+			if (mimeTypes.other.has(processedFile.mimetype)) {
+				//"other" mimes from config, overrides main type to avoid codec issues in browser or ffmpeg for unsupported filetypes
+				processedFile.hasThumb = false;
+				processedFile.attachment = true;
+				await saveFull();
+			} else {
+				const existsThumb = await pathExists(`${uploadDirectory}/file/thumb/${processedFile.hash}${processedFile.thumbextension}`);
+				switch (type) {
+					case 'image': {
+						processedFile.thumbextension = thumbExtension;
+						///detect images with opacity for PNG thumbnails, set thumbextension before increment
+						let imageData;
+						try {
+							imageData = await imageIdentify(req.files.file[i].tempFilePath, null, true);
+						} catch (e) {
+							await deleteTempFiles(req).catch(e => console.error);
+							return dynamicResponse(req, res, 400, 'message', {
+								'title': '要求の形式が正しくありません',
+								'message': `サーバーは "${req.files.file[i].name}" の処理に失敗しました。サポートされていないファイルか破損している可能性があります。`,
+								'redirect': redirect
+							});
+						}
+						if (imageData['チャネル統計'] && imageData['チャネル統計']['不透明度']) {
+							//does this depend on GM version or anything?
+							const opacityMaximum = imageData['チャネル統計']['不透明度']['最大'];
+							if (opacityMaximum !== '0.00 (0.0000)') {
+								processedFile.thumbextension = '.png';
+							}
+						}
+						processedFile.geometry = imageData.size;
+						processedFile.geometryString = imageData.Geometry;
+						const lteThumbSize = (processedFile.geometry.height <= thumbSize
+							&& processedFile.geometry.width <= thumbSize);
+						processedFile.hasThumb = !(mimeTypes.allowed(file.mimetype, {image: true})
+							&& subtype !== 'png'
+							&& lteThumbSize);
+						let firstFrameOnly = true;
+						if (processedFile.hasThumb //if it needs thumbnailing
+							&& (file.mimetype === 'image/gif' //and its a gif
+//								&& !lteThumbSize //and its big enough -> why was this a thing originally?
+								&& (imageData['Delay'] != null || imageData['Iterations'] != null) //and its not a static gif (naive check)
+								&& animatedGifThumbnails === true)) { //and animated thumbnails for gifs are enabled
+							firstFrameOnly = false;
+							processedFile.thumbextension = '.gif';
+						}
+						await saveFull();
+						if (!existsThumb) {
+							await imageThumbnail(processedFile, firstFrameOnly);
+						}
+						processedFile = fixGifs(processedFile);
+						break;
+					}
+					case 'audio':
+					case 'video':
+						//video metadata
+						const audioVideoData = await ffprobe(req.files.file[i].tempFilePath, null, true);
+						processedFile.duration = audioVideoData.format.duration;
+						processedFile.durationString = timeUtils.durationString(audioVideoData.format.duration*1000);
+						const videoStreams = audioVideoData.streams.filter(stream => stream.width != null); //filter to only video streams or something with a resolution
+						if (videoStreams.length > 0) {
+							processedFile.thumbextension = thumbExtension;
+							processedFile.geometry = {width: videoStreams[0].coded_width, height: videoStreams[0].coded_height};
+							processedFile.geometryString = `${processedFile.geometry.width}x${processedFile.geometry.height}`
+							processedFile.hasThumb = true;
+							await saveFull();
+							if (!existsThumb) {
+								const numFrames = videoStreams[0].nb_frames;
+								if (numFrames === 'N/A' && subtype === 'webm') {
+									await videoThumbnail(processedFile, processedFile.geometry, videoThumbPercentage+'%');
+								} else {
+									await videoThumbnail(processedFile, processedFile.geometry, ((numFrames === 'N/A' || numFrames <= 1) ? 0 : videoThumbPercentage+'%'));
+								}
+								//check and fix bad thumbnails in all cases, helps prevent complaints from child molesters who want improper encoding handled better
+								let videoThumbStat = null;
+								try {
+									videoThumbStat = await fsStat(`${uploadDirectory}/file/thumb/${processedFile.hash}${processedFile.thumbextension}`);
+								} catch (err) { /*ENOENT probably, ignore*/}
+								if (!videoThumbStat || videoThumbStat.code === 'ENOENT' || videoThumbStat.size === 0) {
+									//create thumb again at 0 timestamp and lets hope it exists this time
+									await videoThumbnail(processedFile, processedFile.geometry, 0);
+								}
+							}
+						} else {
+							//audio file, or video with only audio streams
+							type = 'audio';
+							processedFile.mimetype = `audio/${subtype}`;
+							processedFile.thumbextension = '.png';
+							processedFile.hasThumb = audioThumbnails;
+							processedFile.geometry = { thumbwidth: thumbSize, thumbheight: thumbSize };
+							await saveFull();
+							if (!existsThumb) {
+								await audioThumbnail(processedFile);
+							}
+						}
+						break;
+					default:
+						throw new Error(`無効なファイルの MIME タイプ: ${processedFile.mimetype}.`);
+				}
+			}
+
+			if (processedFile.hasThumb === true && processedFile.geometry && processedFile.geometry.width != null) {
+				if (processedFile.geometry.width < thumbSize && processedFile.geometry.height < thumbSize) {
+					//dont scale up thumbnail for smaller images
+					processedFile.geometry.thumbwidth = processedFile.geometry.width;
+					processedFile.geometry.thumbheight = processedFile.geometry.height;
+				} else {
+					const ratio = Math.min(thumbSize/processedFile.geometry.width, thumbSize/processedFile.geometry.height);
+					processedFile.geometry.thumbwidth = Math.floor(Math.min(processedFile.geometry.width*ratio, thumbSize));
+					processedFile.geometry.thumbheight = Math.floor(Math.min(processedFile.geometry.height*ratio, thumbSize));
+				}
+			}
+
+			//delete the temp file
+			await remove(file.tempFilePath);
+
+			files.push(processedFile);
+		}
+	}
+	// because express middleware is autistic i need to do this
+	deleteTempFiles(req).catch(e => console.error);
+
+	let userId = null;
+	if (!salt) {
+		//thread salt for IDs
+		salt = (await randomBytesAsync(128)).toString('base64');
+	}
+	if (ids === true) {
+		const fullUserIdHash = createHash('sha256').update(salt + res.locals.ip.raw).digest('hex');
+		userId = fullUserIdHash.substring(fullUserIdHash.length-6);
+	}
+	let country = null;
+	if (geoFlags === true) {
+		country = res.locals.country;
+	}
+	if (customFlags === true) {
+		if (req.body.customflag && res.locals.board.flags[req.body.customflag] != null) {
+			//if customflags allowed, and its a valid selection
+			country = {
+				name: req.body.customflag,
+				code: req.body.customflag,
+				src: res.locals.board.flags[req.body.customflag],
+				custom: true, //this will help
+			};
+		}
+	}
+	let password = null;
+	if (req.body.postpassword) {
+		password = createHash('sha256').update(postPasswordSecret + req.body.postpassword).digest('base64');
+	}
+
+	//spoiler files only if board settings allow
+	const spoiler = (res.locals.permLevel >= 4 || userPostSpoiler) && req.body.spoiler_all ? true : false;
+
+	//forceanon and sageonlyemail only allow sage email
+	let email = (res.locals.permLevel < 4 || (!forceAnon && !sageOnlyEmail) || req.body.email === '下げる') ? req.body.email : null;
+	//disablereplysubject
+	let subject = (res.locals.permLevel >= 4 && req.body.thread && disableReplySubject) ? null : req.body.subject;
+
+	//get name, trip and cap
+	const { name, tripcode, capcode } = await nameHandler(req.body.name, res.locals.permLevel,
+		res.locals.board.settings, res.locals.board.owner, res.locals.user ? res.locals.user.username : null);
+	//get message, quotes and crossquote array
+	const nomarkup = prepareMarkdown(req.body.message, true);
+	const { message, quotes, crossquotes } = await messageHandler(nomarkup, req.params.board, req.body.thread, res.locals.permLevel);
+
+	//build post data for db. for some reason all the property names are lower case :^)
+	const now = Date.now()
+	const data = {
+		'date': new Date(now),
+		'u': now,
+		name,
+		country,
+		'board': req.params.board,
+		tripcode,
+		capcode,
+		subject,
+		'message': message || null,
+		'messagehash': messageHash || null,
+		'nomarkup': nomarkup || null,
+		'thread': req.body.thread || null,
+		password,
+		email,
+		spoiler,
+		'banmessage': null,
+		userId,
+		'ip': res.locals.ip,
+		files,
+		'reports': [],
+		'globalreports': [],
+		quotes, //posts this post replies to
+		crossquotes, //quotes to other threads in same board
+		'backlinks': [], //posts replying to this post
+	}
+
+	if (!req.body.thread) {
+		//if this is a thread, add thread specific properties
+		Object.assign(data, {
+			'replyposts': 0,
+			'replyfiles': 0,
+			//NOTE: sticky is a number, 0 = not sticky, higher numbers are a priority and will be sorted in descending order
+			'sticky': Mongo.NumberInt(0),
+			//NOTE: these are numbers because we XOR them for toggling in action handler
+			'locked': Mongo.NumberInt(0),
+			'bumplocked': Mongo.NumberInt(0),
+			'cyclic': Mongo.NumberInt(0),
+			'salt': salt
+		});
+	}
+
+	const { postId, postMongoId } = await Posts.insertOne(res.locals.board, data, thread, res.locals.anonymizer);
+
+	let enableCaptcha = false; //make this returned from some function, refactor and move the next section to another file
+	const pphTriggerActive = (pphTriggerAction > 0 && pphTrigger > 0);
+	const tphTriggerActive = (tphTriggerAction > 0 && tphTrigger > 0);
+	if (pphTriggerAction || tphTriggerActive) { //if a trigger is enabled
+		const triggerUpdate = {
+			'$set': {},
+		};
+		//and a setting needs to be updated
+		const pphTriggerUpdate = (pphTriggerAction < 3 && captchaMode < pphTriggerAction)
+			|| (pphTriggerAction === 3 && lockMode < 1)
+			|| (pphTriggerAction === 4 && lockMode < 2);
+		const tphTriggerUpdate = (tphTriggerAction < 3 && captchaMode < tphTriggerAction)
+			|| (tphTriggerAction === 3 && lockMode < 1)
+			|| (tphTriggerAction === 4 && lockMode < 2);
+		if (tphTriggerUpdate || pphTriggerUpdate) {
+			const hourPosts = await Stats.getHourPosts(res.locals.board._id);
+			const calcTriggerMode = (update, trigger, triggerAction, stat) => { //todo: move this somewhere else
+				if (trigger > 0 && stat >= trigger) {
+					//update in memory for other stuff done e.g. rebuilds
+					if (triggerAction < 3) {
+						res.locals.board.settings.captchaMode = triggerAction;
+						update['$set']['settings.captchaMode'] = triggerAction;
+						enableCaptcha = true; //todo make this also returned after moving/refactoring this
+					} else {
+						res.locals.board.settings.lockMode = triggerAction-2;
+						update['$set']['settings.lockMode'] = triggerAction-2;
+					}
+					return true;
+				}
+				return false;
+			}
+			const updatedPphTrigger = pphTriggerUpdate && calcTriggerMode(triggerUpdate, pphTrigger, pphTriggerAction, hourPosts.pph);
+			const updatedTphTrigger = tphTriggerUpdate && calcTriggerMode(triggerUpdate, tphTrigger, tphTriggerAction, hourPosts.tph);
+			if (updatedPphTrigger || updatedTphTrigger) {
+				//set it in the db
+				await Boards.updateOne(res.locals.board._id, triggerUpdate);
+				await cache.sadd('triggered', res.locals.board._id);
+			}
+		}
+	}
+
+	//for cyclic threads, delete posts beyond bump limit
+	if (thread && thread.cyclic && thread.replyposts > replyLimit) {
+		const cyclicOverflowPosts = await Posts.db.find({
+			'thread': data.thread,
+			'board': req.params.board
+		}).sort({
+			'postId': -1,
+		}).skip(replyLimit).toArray();
+		if (cyclicOverflowPosts.length > 0) {
+			await deletePosts(cyclicOverflowPosts, req.params.board);
+			const fileCount = cyclicOverflowPosts.reduce((acc, post) => {
+				return acc + (post.files ? post.files.length : 0);
+			}, 0);
+			//reduce amount counted in post by number of posts deleted
+			await Posts.db.updateOne({
+				'postId': thread.postId,
+				'board': res.locals.board._id
+			}, {
+				'$inc': { //negative increment
+					'replyposts': -cyclicOverflowPosts.length,
+					'replyfiles': -fileCount
+				}
+			});
+		}
+	}
+
+	const successRedirect = `/${req.params.board}/${req.path.endsWith('/modpost') ? 'manage/' : ''}thread/${req.body.thread || postId}.html#${postId}`;
+
+	const buildOptions = {
+		'threadId': data.thread || postId,
+		'board': res.locals.board
+	};
+
+	//let frontend script know if captcha is still enabled
+	res.set('x-captcha-enabled', captchaMode > 0);
+
+	if (req.headers['x-using-live'] != null && data.thread) {
+		//defer build and post will come live
+		res.json({
+			'postId': postId,
+			'redirect': successRedirect
+		});
+		buildQueue.push({
+			'task': 'buildThread',
+			'options': buildOptions
+		});
+	} else {
+		//build immediately and refresh when built
+		await buildThread(buildOptions);
+		if (req.headers['x-using-xhr'] != null) {
+			res.json({
+				'postId': postId,
+				'redirect': successRedirect
+			});
+		} else {
+			res.redirect(successRedirect);
+		}
+	}
+
+	const projectedPost = {
+		'_id': postMongoId,
+		'u': data.u,
+		'date': data.date,
+		'name': data.name,
+		'country': data.country,
+		'board': req.params.board,
+		'tripcode': data.tripcode,
+		'capcode': data.capcode,
+		'subject': data.subject,
+		'message': data.message,
+		'nomarkup': data.nomarkup,
+		'thread': data.thread,
+		'postId': postId,
+		'email': data.email,
+		'spoiler': data.spoiler,
+		'banmessage': null,
+		'userId': data.userId,
+		'files': data.files,
+		'reports': [],
+		'globalreports': [],
+		'quotes': data.quotes,
+		'backlinks': [],
+		'replyposts': 0,
+		'replyfiles': 0,
+		'sticky': data.sticky,
+		'locked': data.locked,
+		'bumplocked': data.bumplocked,
+		'cyclic': data.cyclic,
+	}
+	if (data.thread) {
+		//dont emit thread to this socket, because the room onyl exists when the thread is open
+		Socketio.emitRoom(`${res.locals.board._id}-${data.thread}`, 'newPost', projectedPost);
+	}
+	const { raw, single } = data.ip;
+	//but emit it to manage pages because they need to get all posts through socket including thread
+	Socketio.emitRoom('globalmanage-recent-hashed', 'newPost', { ...projectedPost, ip: { single: single.slice(-10), raw: null } });
+	Socketio.emitRoom('globalmanage-recent-raw', 'newPost', { ...projectedPost, ip: { single: single.slice(-10), raw } });
+	Socketio.emitRoom(`${res.locals.board._id}-manage-recent-hashed`, 'newPost', { ...projectedPost, ip: { single: single.slice(-10), raw: null } });
+	Socketio.emitRoom(`${res.locals.board._id}-manage-recent-raw`, 'newPost', { ...projectedPost, ip: { single: single.slice(-10), raw } });
+
+	//now add other pages to be built in background
+	if (enableCaptcha) {
+		if (res.locals.board.settings.captchaMode == 2) {
+			//only delete threads if all posts require threads, otherwise just build board pages for thread captcha
+			await remove(`${uploadDirectory}/html/${req.params.board}/thread/`); //not deleting json cos it doesnt need to be
+		}
+		const endPage = Math.ceil(threadLimit/10);
+		buildQueue.push({
+			'task': 'buildBoardMultiple',
+			'options': {
+				'board': res.locals.board,
+				'startpage': 1,
+				'endpage': endPage
+			}
+		});
+	} else if (data.thread) {
+		//refersh pages
+		const threadPage = await Posts.getThreadPage(req.params.board, thread);
+		if (data.email === '下げる' || thread.bumplocked) {
+			//refresh the page that the thread is on
+			buildQueue.push({
+				'task': 'buildBoard',
+				'options': {
+					'board': res.locals.board,
+					'page': threadPage
+				}
+			});
+		} else {
+			//if not saged, it will bump so we should refresh any pages above it as well
+			buildQueue.push({
+				'task': 'buildBoardMultiple',
+				'options': {
+					'board': res.locals.board,
+					'startpage': 1,
+					'endpage': threadPage
+				}
+			});
+		}
+	} else if (!data.thread) {
+		//new thread, prunes any old threads before rebuilds
+		const prunedThreads = await Posts.pruneThreads(res.locals.board);
+		if (prunedThreads.length > 0) {
+			await deletePosts(prunedThreads, req.params.board);
+		}
+		if (!enableCaptcha) {
+			const endPage = Math.ceil(threadLimit/10);
+			buildQueue.push({
+				'task': 'buildBoardMultiple',
+				'options': {
+					'board': res.locals.board,
+					'startpage': 1,
+					'endpage': endPage
+				}
+			});
+		}
+	}
+
+	//always rebuild catalog for post counts and ordering
+	buildQueue.push({
+		'task': 'buildCatalog',
+		'options': {
+			'board': res.locals.board,
+		}
+	});
+
+}
