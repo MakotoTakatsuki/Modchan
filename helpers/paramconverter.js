@@ -144,7 +144,7 @@ module.exports = (options) => {
 		if (processDateParam && req.params.date) {
 			let [ month, day, year ] = req.params.date.split('-');
 			month = month-1;
-			const date = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
+			const date = new Date(Date.JST(year, month, day, 0, 0, 0, 0));
 			if (date !== '無効な日付') {
 				res.locals.date = { month, day, year, date };
 			}

@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 
 	const startDate = res.locals.date.date;
 	const { year, month, day } = res.locals.date;
-	const endDate = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
+	const endDate = new Date(Date.JST(year, month, day, 23, 59, 59, 999));
 
 	let html;
 	try {

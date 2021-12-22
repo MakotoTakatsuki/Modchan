@@ -176,11 +176,11 @@ module.exports = {
 	buildModLog: async (options) => {
 		if (!options.startDate || !options.endDate) {
 			const d = new Date();
-			const month = d.getUTCMonth()
-				, day = d.getUTCDate()
-				, year = d.getUTCFullYear();
-			options.startDate = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
-			options.endDate = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
+			const month = d.getJSTMonth()
+				, day = d.getJSTDate()
+				, year = d.getJSTFullYear();
+			options.startDate = new Date(Date.JST(year, month, day, 0, 0, 0, 0));
+			options.endDate = new Date(Date.JST(year, month, day, 23, 59, 59, 999));
 		}
 		const day = ('0'+options.startDate.getDate()).slice(-2);
 		const month = ('0'+(options.startDate.getMonth()+1)).slice(-2);

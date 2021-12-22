@@ -19,7 +19,7 @@
 
 - Separate, non-root user to run the application
 - Basic security like ssh root login disabled, key login only, firewall (ufw works) deny all incoming on ports besides http/s and ssh.
-- Set the timezone to UTC
+- Set the timezone to JST
 - Clone the repo somewhere. The homedir for the user you setup or /var/www should work.
 
 **2. Install dependencies.**
