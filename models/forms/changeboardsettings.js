@@ -11,22 +11,7 @@ const { Boards, Posts, Accounts } = require(__dirname+'/../../db/')
 	, messageHandler = require(__dirname+'/../../helpers/posting/message.js')
 	, { countryCodes } = require(__dirname+'/../../helpers/countries.js')
 	, { trimSetting, numberSetting, booleanSetting, arraySetting } = require(__dirname+'/../../helpers/setting.js')
-	, { compareSettings } = require(__dirname+'/../../helpers/settingsdiff.js')
-	, validCountryCodes = new Set(countryCodes)
-	, settingChangeEntries = Object.entries({
-		'userPostDelete': ['board', 'catalog', 'threads'],
-		'userPostSpoiler': ['board', 'catalog', 'threads'],
-		'userPostUnlink': ['board', 'catalog', 'threads'],
-		'replyLimit': ['board', 'threads'],
-		'archiveLinks': ['board', 'threads'],
-		'reverseImageSearchLinks': ['board', 'threads'],
-		'name': ['board', 'threads', 'catalog', 'other'],
-		'description': ['board', 'threads', 'catalog', 'other'],
-		'theme': ['board', 'threads', 'catalog', 'other'],
-		'codetheme': ['board', 'threads', 'catalog', 'other'],
-		'announcement.raw': ['board', 'threads', 'catalog', 'other'],
-		'customCss': ['board', 'threads', 'catalog', 'other'],
-	});
+	, validCountryCodes = new Set(countryCodes);
 
 module.exports = async (req, res, next) => {
 
@@ -122,8 +107,6 @@ module.exports = async (req, res, next) => {
 		'fileR9KMode': numberSetting(req.body.file_r9k_mode, oldSettings.fileR9KMode),
 		'filterMode': numberSetting(req.body.filter_mode, oldSettings.filterMode),
 		'filterBanDuration': numberSetting(req.body.ban_duration, oldSettings.filterBanDuration),
-		'deleteProtectionAge': numberSetting(req.body.delete_protection_age, oldSettings.deleteProtectionAge),
-		'deleteProtectionCount': numberSetting(req.body.delete_protection_count, oldSettings.deleteProtectionCount),
 		'filters': arraySetting(req.body.filters, oldSettings.filters, 50),
 		'blockedCountries': req.body.countries || [],
 		'disableAnonymizerFilePosting': booleanSetting(req.body.disable_anonymizer_file_posting),
@@ -157,49 +140,77 @@ module.exports = async (req, res, next) => {
 	const oldMaxPage = Math.ceil(oldSettings.threadLimit/10);
 	const newMaxPage = Math.ceil(newSettings.threadLimit/10);
 
-	const rebuildTasks = compareSettings(settingChangeEntries, oldSettings, newSettings, 4);
+	let rebuildThreads = false
+		, rebuildBoard = false
+		, rebuildCatalog = false
+		, rebuildOther = false;
 
-	if (rebuildTasks.size < 4) {
-		//after that is stuff not direct equality comparisons calcluated by compareSettings()
-		if (newSettings.captchaMode > oldSettings.captchaMode) {
-			if (oldSettings.captchaMode === 0) {
-				rebuildTasks.add('board')
-					.add('catalog');
-			}
-			if (newSettings.captchaMode === 2) {
-				rebuildTasks.add('threads');
-			}
-		} else if (newSettings.captchaMode < oldSettings.captchaMode) {
-			if (oldSettings.captchaMode === 2) {
-				rebuildTasks.add('threads');
-			}
-			if (newSettings.captchaMode === 0) {
-				rebuildTasks.add('board')
-					.add('catalog')
-			}
+	if (newSettings.userPostDelete !== oldSettings.userPostDelete
+		|| newSettings.userPostSpoiler !== oldSettings.userPostSpoiler
+		|| newSettings.userPostUnlink !== oldSettings.userPostUnlink) {
+			rebuildThreads = true;
+			rebuildBoard = true;
+			rebuildCatalog = true;
+	}
+
+	if (newSettings.replyLimit !== oldSettings.replyLimit
+		|| newSettings.archiveLinks !== oldSettings.archiveLinks
+		|| newSettings.reverseImageSearchLinks !== oldSettings.reverseImageSearchLinks) {
+		rebuildBoard = true;
+		rebuildThreads = true;
+	}
+
+	if (newSettings.captchaMode > oldSettings.captchaMode) {
+		if (oldSettings.captchaMode === 0) {
+			rebuildBoard = true;
+			rebuildCatalog = true;
 		}
-		//do rebuilding and pruning if max number of pages is changed and any threads are pruned
-		if (newMaxPage < oldMaxPage) {
-			//prune old threads
-			const prunedThreads = await Posts.pruneThreads(res.locals.board);
-			if (prunedThreads.length > 0) {
-				await deletePosts(prunedThreads, req.params.board);
-				//remove board page html/json for pages > newMaxPage
-				for (let i = newMaxPage+1; i <= oldMaxPage; i++) {
-					promises.push(remove(`${uploadDirectory}/html/${req.params.board}/${i}.html`));
-					promises.push(remove(`${uploadDirectory}/json/${req.params.board}/${i}.json`));
-				}
-				//rebuild all board pages for page nav numbers, and catalog
-				rebuildTasks.add('board')
-					.add('catalog');
-			}
+		if (newSettings.captchaMode === 2) {
+			rebuildThreads = true;
+		}
+	} else if (newSettings.captchaMode < oldSettings.captchaMode) {
+		if (oldSettings.captchaMode === 2) {
+			rebuildThreads = true;
+		}
+		if (newSettings.captchaMode === 0) {
+			rebuildBoard = true;
+			rebuildCatalog = true;
 		}
 	}
 
-	if (rebuildTasks.has('threads')) {
+	//do rebuilding and pruning if max number of pages is changed and any threads are pruned
+	if (newMaxPage < oldMaxPage) {
+		//prune old threads
+		const prunedThreads = await Posts.pruneThreads(res.locals.board);
+		if (prunedThreads.length > 0) {
+			await deletePosts(prunedThreads, req.params.board);
+			//remove board page html/json for pages > newMaxPage
+			for (let i = newMaxPage+1; i <= oldMaxPage; i++) {
+				promises.push(remove(`${uploadDirectory}/html/${req.params.board}/${i}.html`));
+				promises.push(remove(`${uploadDirectory}/json/${req.params.board}/${i}.json`));
+			}
+			//rebuild all board pages for page nav numbers, and catalog
+			rebuildBoard = true;
+			rebuildCatalog = true;
+		}
+	}
+
+	if (newSettings.name !== oldSettings.name
+		|| newSettings.description !== oldSettings.description
+		|| newSettings.theme !== oldSettings.theme
+		|| newSettings.codeTheme !== oldSettings.codeTheme
+		|| newSettings.announcement.raw !== oldSettings.announcement.raw
+		|| newSettings.customCss !== oldSettings.customCss) {
+		rebuildThreads = true;
+		rebuildBoard = true;
+		rebuildCatalog = true;
+		rebuildOther = true;
+	}
+
+	if (rebuildThreads) {
 		promises.push(remove(`${uploadDirectory}/html/${req.params.board}/thread/`));
 	}
-	if (rebuildTasks.has('board')) {
+	if (rebuildBoard) {
 		buildQueue.push({
 			'task': 'buildBoardMultiple',
 			'options': {
@@ -209,7 +220,7 @@ module.exports = async (req, res, next) => {
 			}
 		});
 	}
-	if (rebuildTasks.has('catalog')) {
+	if (rebuildCatalog) {
 		buildQueue.push({
 			'task': 'buildCatalog',
 			'options': {
@@ -217,7 +228,7 @@ module.exports = async (req, res, next) => {
 			}
 		});
 	}
-	if (rebuildTasks.has('other')) {
+	if (rebuildOther) {
 		promises.push(remove(`${uploadDirectory}/html/${req.params.board}/logs/`));
 		promises.push(remove(`${uploadDirectory}/html/${req.params.board}/custompage/`));
 		buildQueue.push({

@@ -11,17 +11,17 @@ const Mongo = require(__dirname+'/../db/db.js')
 	, render = require(__dirname+'/render.js')
 	, buildQueue = require(__dirname+'/../queue.js')
 	, gulp = require('gulp')
-	, { buildTasks } = require(__dirname+'/../gulpfile.js')
+	, { rebuild } = require(__dirname+'/../gulpfile.js')
 	, timeDiffString = require(__dirname+'/timediffstring.js');
 
 module.exports = {
 
-	gulp: async (options) => {
+	gulp: async () => {
 		/* TODO: calculate differences in oldsettings vsnewsettings in globalmanagesettings model
 			and send task options with list of tasks instead of always doing all */
-		const label = `running gulp tasks [${options.tasks.join(', ')}] after global config change`;
+		const label = `gulp tasks [${rebuild.map(x => x.name).join(', ')}] after global config change`;
 		const start = process.hrtime();
-		gulp.series(options.tasks.map(t => buildTasks[t]), () => {
+		gulp.series(rebuild, () => {
 			const end = process.hrtime(start);
 			debugLogs && console.log(timeDiffString(label, end));
 		})();
@@ -236,13 +236,11 @@ module.exports = {
 		const { maxRecentNews } = config.get;
 		const label = '/index.html';
 		const start = process.hrtime();
-		const listedBoards = await Boards.getLocalListed();
-		let [ totalStats, boards, fileStats, recentNews, hotThreads ] = await Promise.all([
+		let [ totalStats, boards, fileStats, recentNews ] = await Promise.all([
 			Boards.totalStats(), //overall total posts ever made
 			Boards.boardSort(0, 20), //top 20 boards sorted by users, pph, total posts
-			Files.activeContent(), //size and number of files
+			Files.activeContent(), //size ans number of files
 			News.find(maxRecentNews), //some recent newsposts
-			Posts.db.find({'board': {$in: listedBoards}, 'thread': null, 'date': {$gte: (new Date(Date.now() - (7 * 24 * 60 * 60 * 1000)))}}).sort({'replyposts':-1}).limit(10).toArray(), //top 10 threads last 7 days
 		]);
 		const [ localStats, webringStats ] = totalStats;
 		const { html } = await render('index.html', 'home.pug', {
@@ -251,7 +249,6 @@ module.exports = {
 			boards,
 			fileStats,
 			recentNews,
-			hotThreads,
 		});
 		const end = process.hrtime(start);
 		debugLogs && console.log(timeDiffString(label, end));

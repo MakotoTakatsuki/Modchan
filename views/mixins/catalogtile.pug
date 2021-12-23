@@ -1,4 +1,3 @@
-include ./catalogfile.pug
 mixin catalogtile(post, index, overboard=false)
 	- let anchorSubject = post.subject;
 	if post.subject
@@ -28,35 +27,27 @@ mixin catalogtile(post, index, overboard=false)
 			if modview
 				a.left.ml-5.bold(href=`recent.html?postid=${post.postId}`) [+]
 			include ../includes/posticons.pug
-			if post.country && post.country.code
-				if post.country.custom === true
-					span(title=post.country.name)
-						img.customflag(src=`/flag/${post.board}/${post.country.src}` alt=' ' loading='lazy')
-					| 
-				else
-					span(class=`flag flag-${post.country.code.toLowerCase()}` title=post.country.name alt=post.country.name)
-					| 
 			a.no-decoration.post-subject(href=postURL) #{post.subject || 'No subject'}
-			|
-			select.jsonly.postmenu.right
-				option(value='single') Hide
-				if !overboard && !ban
-					option(value='moderate') Moderate
 			br 
 			span(title='Replies') R: #{post.replyposts}
 			|  / 
-			span(title='Files') F: #{post.replyfiles + post.files.length}
+			span(title='Files') F: #{post.replyfiles}
 			if !overboard
 				|  / 
 				span(title='Page') P: #{Math.ceil(index/10)}
 		if post.files.length > 0
-			.col
-				.row.ct-r1
+			.post-file-src
+				a(href=`${postURL}#${post.postId}`)
 					- const file = post.files[0]
-					+catalogfile(postURL, post, file, false)
-				if post.files.length > 1
-					.row.ct-r2.wrap
-						each file, fileindex in post.files.slice(1)
-							+catalogfile(postURL, post, file, true)
+					if post.spoiler || file.spoiler
+						div.spoilerimg.catalog-thumb
+					else if file.hasThumb
+						img.catalog-thumb(src=`/file/thumb/${file.hash}${file.thumbextension}` width=file.geometry.thumbwidth height=file.geometry.thumbheight loading='lazy')
+					else if file.attachment
+						div.attachmentimg.catalog-thumb(data-mimetype=file.mimetype)
+					else if file.mimetype.startsWith('audio')
+						div.audioimg.catalog-thumb
+					else
+						img.catalog-thumb(src=`/file/${file.filename}` width=file.geometry.width height=file.geometry.height loading='lazy')
 		if post.message
 			pre.no-m-p.post-message !{post.message}

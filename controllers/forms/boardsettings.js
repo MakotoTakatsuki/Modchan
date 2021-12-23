@@ -1,4 +1,3 @@
-
 'use strict';
 
 const changeBoardSettings = require(__dirname+'/../../models/forms/changeboardsettings.js')
@@ -13,12 +12,12 @@ const changeBoardSettings = require(__dirname+'/../../models/forms/changeboardse
 module.exports = {
 
 	paramConverter: paramConverter({
-		timeFields: ['ban_duration', 'delete_protection_age'],
+		timeFields: ['ban_duration'],
 		trimFields: ['filters', 'moderators', 'tags', 'announcement', 'description', 'name', 'custom_css'],
 		allowedArrays: ['countries'],
 		numberFields: ['lock_reset', 'captcha_reset', 'filter_mode', 'lock_mode', 'message_r9k_mode', 'file_r9k_mode', 'captcha_mode', 'tph_trigger', 'pph_trigger', 'pph_trigger_action',
 			'tph_trigger_action', 'bump_limit', 'reply_limit', 'max_files', 'thread_limit', 'max_thread_message_length', 'max_reply_message_length', 'min_thread_message_length',
-			'min_reply_message_length', 'delete_protection_count'],
+			'min_reply_message_length'],
 	}),
 
 	controller: async (req, res, next) => {
@@ -69,8 +68,6 @@ module.exports = {
 			{ result: numberBody(req.body.lock_reset, 0, 2), expected: true, error: 'Invalid trigger reset lock' },
 			{ result: numberBody(req.body.captcha_reset, 0, 2), expected: true, error: 'Invalid trigger reset captcha' },
 			{ result: numberBody(req.body.ban_duration, 0), expected: true, error: 'Invalid filter auto ban duration' },
-			{ result: numberBody(req.body.delete_protection_age, 0), expected: true, error: 'Invalid OP thread age delete protection' },
-			{ result: numberBody(req.body.delete_protection_count, 0), expected: true, error: 'Invalid OP thread reply count delete protection' },
 			{ result: inArrayBody(req.body.theme, themes), expected: true, error: 'Invalid theme' },
 			{ result: inArrayBody(req.body.code_theme, codeThemes), expected: true, error: 'Invalid code theme' },
 		], res.locals.permLevel);

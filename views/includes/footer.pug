@@ -1,19 +1,13 @@
 unless minimal
 	small.footer#bottom
-		| • 
-		a(href='/news.html') Notícias
-		|  • 
-		a(href='/rules.html') Regras
-		|  • 
-		a(href='/faq.html') FAQ
-		|  • 
-		a(href='/faq.html#legalDMCA') Legal/DMCA
-		|  • 
-		a(href='https://gitgud.io/l29utp0/ptchina' target='_blank') Source
-		|  • 
-		a(href='/faq.html#cripto') Doar
-		|  • 
+		| - 
+		a(href='/news.html') news
+		|  - 
+		a(href='/rules.html') rules
+		|  - 
+		a(href='/faq.html') faq
+		|  - 
 		div
-			p Todas as marcas registadas, direitos de autor, comentários e ficheiros neste site são propriedade e responsabilidade dos seus respectivos autores e proprietários. Só um louco levaria o que aqui é escrito a sério.
-
+			a(href='https://gitgud.io/fatchan/jschan/') jschan
+			|  #{version}
 script(src=`/js/render.js?v=${commit}`)
