@@ -19,8 +19,8 @@ module.exports = async (req, res, next) => {
 
 	if (oldPage === null) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'error': 'カスタムページが存在しません',
+			'title': 'Bad request',
+			'error': 'Custom page does not exist',
 			'redirect': req.headers.referer || '/${req.params.board}/manage/custompages.html'
 		});
 	}
@@ -50,8 +50,8 @@ module.exports = async (req, res, next) => {
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': 'カスタムページを更新',
+		'title': 'Success',
+		'message': 'Updated custom page',
 		'redirect': `/${req.params.board}/manage/custompages.html`,
 	});
 

@@ -10,12 +10,12 @@ module.exports = (posts) => {
 
 	if (filteredposts.length === 0) {
 		return {
-			message: 'ロックするスレッドがありません',
+			message: 'No thread(s) to lock',
 		};
 	}
 
 	return {
-		message: `ロックは ${filteredposts.length} 個のスレッドに対して行われました。`,
+		message: `Toggled Lock for ${filteredposts.length} thread(s)`,
 		action: '$bit',
 		query: {
 			'locked': {

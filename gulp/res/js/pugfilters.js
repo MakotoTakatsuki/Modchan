@@ -6,7 +6,7 @@ var pug_match_html=/["&<>]/;function filters(locals) {var pug_html = "", pug_mix
     (function (filterArr) {
       pug_mixins["filters"] = pug_interp = function(filterArr){
 var block = (this && this.block), attributes = (this && this.attributes) || {};
-const filterTypeMap = { single: 'シングル', fid: 'ID', fname: '名前', ftrip: 'トリップコード', fnamer: '名前', ftripr: 'トリップコード', fsub: '件名', fsubr: '件名', fmsg: 'Message', fmsgr: 'Message' }
+const filterTypeMap = { single: 'Single', fid: 'ID', fname: 'Name', ftrip: 'Tripcode', fnamer: 'Name', ftripr: 'Tripcode', fsub: 'Subject', fsubr: 'Subject', fmsg: 'Message', fmsgr: 'Message' }
 if (filterArr.length > 0) {
 // iterate filterArr
 ;(function(){

@@ -10,12 +10,12 @@ module.exports = (posts) => {
 
 	if (filteredposts.length === 0) {
 		return {
-			message: 'ロックを上げるためのスレッドはありません',
+			message: 'No thread(s) to bumplock',
 		};
 	}
 
 	return {
-		message: `${filteredposts.length}のスレッドのレイズロックがトグルされました。`,
+		message: `Toggled bumplock for ${filteredposts.length} thread(s)`,
 		action: '$bit',
 		query: {
 			'bumplocked': {

@@ -148,6 +148,6 @@ module.exports = async (posts, board, all=false) => {
 	}
 
 	//hooray!
-	return { action: deletedPosts > 0, message:`削除済み ${threads.length > 0 ? (threads.length + 'スレッド' + (threads.length > 1 ? 's' : '')) : ''} ${threads.length > 0 && deletedPosts-threads.length > 0 ? 'と' : ''} ${deletedPosts-threads.length > 0 ? (deletedPosts-threads.length + '投稿' + (deletedPosts-threads.length > 1 ? '(投稿)' : '')) : ''} 。` };
+	return { action: deletedPosts > 0, message:`Deleted ${threads.length > 0 ? (threads.length + ' thread' + (threads.length > 1 ? 's' : '')) : ''} ${threads.length > 0 && deletedPosts-threads.length > 0 ? 'and' : ''} ${deletedPosts-threads.length > 0 ? (deletedPosts-threads.length + ' post' + (deletedPosts-threads.length > 1 ? 's' : '')) : ''}` };
 
 }

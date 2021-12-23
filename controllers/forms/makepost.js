@@ -27,33 +27,33 @@ module.exports = {
 			//maybe add more duplicates here?
 
 		const errors = await checkSchema([
-			{ result: (lengthBody(req.body.message, 1) && res.locals.numFiles === 0), expected: false, error: '投稿にはメッセージまたはファイルを含める必要があります' },
+			{ result: (lengthBody(req.body.message, 1) && res.locals.numFiles === 0), expected: false, error: 'Posts must include a message or file' },
 			{ result: (res.locals.anonymizer && (disableAnonymizerFilePosting || res.locals.board.settings.disableAnonymizerFilePosting)
-				&& res.locals.numFiles > 0), expected: false, error: `アノニマイザーによるファイル投稿は無効になりました ${disableAnonymizerFilePosting ? 'グローバル' : 'この板で'}.` },
-			{ result: res.locals.numFiles > res.locals.board.settings.maxFiles, blocking: true, permLevel: 1, expected: true, error: `ファイル数が多すぎる。投稿ごとの最大ファイル数 ${res.locals.board.settings.maxFiles < globalLimits.postFiles.max ? 'この掲示板の' : ''}は ${res.locals.board.settings.maxFiles} です。` },
+				&& res.locals.numFiles > 0), expected: false, error: `Posting files through anonymizers has been disabled ${disableAnonymizerFilePosting ? 'globally' : 'on this board'}` },
+			{ result: res.locals.numFiles > res.locals.board.settings.maxFiles, blocking: true, permLevel: 1, expected: true, error: `Too many files. Max files per post ${res.locals.board.settings.maxFiles < globalLimits.postFiles.max ? 'on this board ' : ''}is ${res.locals.board.settings.maxFiles}` },
 			{ result: (lengthBody(req.body.subject, 1) && (!existsBody(req.body.thread)
-				&& res.locals.board.settings.forceThreadSubject)), expected: false, error: 'スレッドには件名が含まれている必要があります' },
+				&& res.locals.board.settings.forceThreadSubject)), expected: false, error: 'Threads must include a subject' },
 			{ result: lengthBody(req.body.message, 1) && (!existsBody(req.body.thread)
-				&& res.locals.board.settings.forceThreadMessage), expected: false, error: 'スレッドにはメッセージを含める必要があります' },
+				&& res.locals.board.settings.forceThreadMessage), expected: false, error: 'Threads must include a message' },
 			{ result: lengthBody(req.body.message, 1) && (existsBody(req.body.thread)
-				&& res.locals.board.settings.forceReplyMessage), expected: false, error: '返信にはメッセージを含める必要があります' },
-			{ result: hasNoMandatoryFile && !existsBody(req.body.thread) && res.locals.board.settings.forceThreadFile , expected: false, error: 'スレッドにはファイルが含まれている必要があります' },
+				&& res.locals.board.settings.forceReplyMessage), expected: false, error: 'Replies must include a message' },
+			{ result: hasNoMandatoryFile && !existsBody(req.body.thread) && res.locals.board.settings.forceThreadFile , expected: false, error: 'Threads must include a file' },
 			{ result: hasNoMandatoryFile && existsBody(req.body.thread) && res.locals.board.settings.forceReplyFile , expected: false, error: 'Replies must include a file' },
-			{ result: lengthBody(req.body.message, 0, globalLimits.fieldLength.message), expected: false, blocking: true, error: `メッセージは${globalLimits.fieldLength.message}文字以下である必要があります。` },
+			{ result: lengthBody(req.body.message, 0, globalLimits.fieldLength.message), expected: false, blocking: true, error: `Message must be ${globalLimits.fieldLength.message} characters or less` },
 			{ result: existsBody(req.body.message) && existsBody(req.body.thread) && lengthBody(req.body.message, res.locals.board.settings.minReplyMessageLength, res.locals.board.settings.maxReplyMessageLength),
-				expected: false, error: `返信メッセージは ${res.locals.board.settings.minReplyMessageLength}-${res.locals.board.settings.maxReplyMessageLength} 文字である必要があります。` },
+				expected: false, error: `Reply messages must be ${res.locals.board.settings.minReplyMessageLength}-${res.locals.board.settings.maxReplyMessageLength} characters` },
 			{ result: existsBody(req.body.message) && !existsBody(req.body.thread) && lengthBody(req.body.message, res.locals.board.settings.minThreadMessageLength, res.locals.board.settings.maxThreadMessageLength),
-				expected: false, error: `スレッドメッセージは ${res.locals.board.settings.minThreadMessageLength}-${res.locals.board.settings.maxThreadMessageLength} 文字でなければなりません。` },
-			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: `パスワードは ${globalLimits.fieldLength.postpassword} 文字以下でなければなりません。` },
-			{ result: lengthBody(req.body.name, 0, globalLimits.fieldLength.name), expected: false, error: `名前は${globalLimits.fieldLength.name}文字以下でなければならない。` },
-			{ result: lengthBody(req.body.subject, 0, globalLimits.fieldLength.subject), expected: false, error: `件名は${globalLimits.fieldLength.subject}文字以下である必要があります。` },
-			{ result: lengthBody(req.body.email, 0, globalLimits.fieldLength.email), expected: false, error: `電子メールは${globalLimits.fieldLength.email}文字以下である必要があります。` },
+				expected: false, error: `Thread messages must be ${res.locals.board.settings.minThreadMessageLength}-${res.locals.board.settings.maxThreadMessageLength} characters` },
+			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: `Password must be ${globalLimits.fieldLength.postpassword} characters or less` },
+			{ result: lengthBody(req.body.name, 0, globalLimits.fieldLength.name), expected: false, error: `Name must be ${globalLimits.fieldLength.name} characters or less` },
+			{ result: lengthBody(req.body.subject, 0, globalLimits.fieldLength.subject), expected: false, error: `Subject must be ${globalLimits.fieldLength.subject} characters or less` },
+			{ result: lengthBody(req.body.email, 0, globalLimits.fieldLength.email), expected: false, error: `Email must be ${globalLimits.fieldLength.email} characters or less` },
 		]);
 
 		if (errors.length > 0) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
 			});

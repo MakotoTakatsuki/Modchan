@@ -51,7 +51,7 @@ module.exports = async (req, res, next) => {
 		//no posts matched password, reject
 		if (passwordPosts.length === 0) {
 			return dynamicResponse(req, res, 403, 'message', {
-				'title': '禁断',
+				'title': 'Forbidden',
 				'error': 'Password did not match any selected posts',
 				redirect,
 			});
@@ -81,14 +81,14 @@ module.exports = async (req, res, next) => {
 	if (req.body.ban || req.body.global_ban || req.body.report_ban || req.body.global_report_ban) {
 		const { message, action, query } = await banPoster(req, res, next);
 		if (req.body.ban) {
-			modlogActions.push('禁止');
+			modlogActions.push('Ban');
 		} else if (req.body.global_ban) {
-			modlogActions.push('グローバル禁止');
+			modlogActions.push('Global Ban');
 		}
 		if (req.body.report_ban) {
-			modlogActions.push('禁止レポーター');
+			modlogActions.push('Ban reporter');
 		} else if (req.body.global_report_ban) {
-			modlogActions.push('グローバル禁止レポーター');
+			modlogActions.push('Global ban reporter');
 		}
 		if (action) {
 			combinedQuery[action] = { ...combinedQuery[action], ...query}
@@ -109,8 +109,8 @@ module.exports = async (req, res, next) => {
 					//alternatively, the above .some() could become a filter like some other options and silently not delete,
 					//but i think in this case it would be important to notify the user that their own thread(s) cant be deleted yet
 					return dynamicResponse(req, res, 403, 'message', {
-						'title': '禁断',
-						'error': '古いスレッドや返信が多すぎるスレッドは削除できません',
+						'title': 'Forbidden',
+						'error': 'You cannot delete old threads or threads with too many replies',
 						redirect,
 					});
 				}
@@ -164,11 +164,11 @@ module.exports = async (req, res, next) => {
 		messages.push(message);
 		if (action) {
 			if (req.body.delete) {
-				modlogActions.push('消去');
+				modlogActions.push('Delete');
 			} else if (req.body.delete_ip_board) {
-				modlogActions.push('IPで削除');
+				modlogActions.push('Delete by IP');
 			} else if (req.body.delete_ip_global) {
-				modlogActions.push('IPによるグローバル削除');
+				modlogActions.push('Global delete by IP');
 			}
 			aggregateNeeded = true;
 		}
@@ -185,7 +185,7 @@ module.exports = async (req, res, next) => {
 		}
 		const { message, action } = await movePosts(req, res);
 		if (action) {
-			modlogActions.push('移動');
+			modlogActions.push('Moved');
 			aggregateNeeded = true;
 		}
 		messages.push(message);
@@ -195,9 +195,9 @@ module.exports = async (req, res, next) => {
 			const { message, action, query } = await deletePostsFiles(res.locals.posts, req.body.unlink_file);
 			if (action) {
 				if (req.body.unlink_file) {
-					modlogActions.push('ファイルのリンクを解除する');
+					modlogActions.push('Unlink files');
 				} else if (req.body.delete_file) {
-					modlogActions.push('ファイルを削除する');
+					modlogActions.push('Delete files');
 				}
 				aggregateNeeded = true;
 				combinedQuery[action] = { ...combinedQuery[action], ...query}
@@ -206,7 +206,7 @@ module.exports = async (req, res, next) => {
 		} else if (req.body.spoiler) {
 			const { message, action, query } = spoilerPosts(res.locals.posts);
 			if (action) {
-				modlogActions.push('ネタバレファイル');
+				modlogActions.push('Spoiler files');
 				combinedQuery[action] = { ...combinedQuery[action], ...query}
 			}
 			messages.push(message);
@@ -215,7 +215,7 @@ module.exports = async (req, res, next) => {
 		if (req.body.bumplock) {
 			const { message, action, query } = bumplockPosts(res.locals.posts);
 			if (action) {
-				modlogActions.push('ロックを上げる');
+				modlogActions.push('Bumplock');
 				combinedQuery[action] = { ...combinedQuery[action], ...query}
 			}
 			messages.push(message);
@@ -223,7 +223,7 @@ module.exports = async (req, res, next) => {
 		if (req.body.lock) {
 			const { message, action, query } = lockPosts(res.locals.posts);
 			if (action) {
-				modlogActions.push('ロック');
+				modlogActions.push('Lock');
 				combinedQuery[action] = { ...combinedQuery[action], ...query}
 			}
 			messages.push(message);
@@ -231,7 +231,7 @@ module.exports = async (req, res, next) => {
 		if (req.body.sticky != null) {
 			const { message, action, query } = stickyPosts(res.locals.posts, req.body.sticky);
 			if (action) {
-				modlogActions.push('貼る');
+				modlogActions.push('Sticky');
 				combinedQuery[action] = { ...combinedQuery[action], ...query}
 			}
 			messages.push(message);
@@ -239,7 +239,7 @@ module.exports = async (req, res, next) => {
 		if (req.body.cyclic) {
 			const { message, action, query } = cyclePosts(res.locals.posts);
 			if (action) {
-				modlogActions.push('サイクル');
+				modlogActions.push('Cycle');
 				combinedQuery[action] = { ...combinedQuery[action], ...query}
 			}
 			messages.push(message);
@@ -256,9 +256,9 @@ module.exports = async (req, res, next) => {
 			const { message, action, query } = dismissReports(req, res);
 			if (action) {
 				if (req.body.dismiss) {
-					modlogActions.push('レポートを却下する');
+					modlogActions.push('Dismiss reports');
 				} else if (req.body.global_dismiss) {
-					modlogActions.push('グローバルレポートを却下する');
+					modlogActions.push('Dismiss global reports');
 				}
 				combinedQuery[action] = { ...combinedQuery[action], ...query}
 			}
@@ -299,7 +299,7 @@ module.exports = async (req, res, next) => {
 		if (res.locals.permLevel < 4) { //if staff
 			logUser = req.session.user;
 		} else {
-			logUser = '未登録ユーザー';
+			logUser = 'Unregistered User';
 		}
 		for (let i = 0; i < res.locals.posts.length; i++) {
 			const post = res.locals.posts[i];
@@ -310,7 +310,7 @@ module.exports = async (req, res, next) => {
 					postLinks: [],
 					actions: modlogActions,
 					date: logDate,
-					showUser: !req.body.hide_name || logUser === '未登録ユーザー' ? true : false,
+					showUser: !req.body.hide_name || logUser === 'Unregistered User' ? true : false,
 					message: message,
 					user: logUser,
 					ip: {
@@ -592,7 +592,7 @@ module.exports = async (req, res, next) => {
 	}
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
+		'title': 'Success',
 		'messages': messages,
 		redirect,
 	});

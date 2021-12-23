@@ -4,15 +4,15 @@ include ../mixins/overboardform.pug
 include ../mixins/announcements.pug
 
 block head
-	title オーバー板インデックス
+	title Overboard Index
 
 block content
 	.board-header
-		h1.board-title オーバー板インデックス
-		h4.board-description 複数の板から最近発生したスレッド
+		h1.board-title Overboard Index
+		h4.board-description Recently bumped threads from multiple boards
 			|  
 			| (
-			a(href=`/catalog.html?${cacheQueryString}`) カタログビュー
+			a(href=`/catalog.html?${cacheQueryString}`) Catalog View
 			| )
 	include ../includes/stickynav.pug
 	if allowCustomOverboard === true
@@ -20,9 +20,9 @@ block content
 	+announcements(true, true, false)
 	hr(size=1)
 	if threads.length === 0
-		p 投稿はありません。
+		p No posts.
 	for thread in threads
-		h4.no-m-p スレッド#[a(href=`/${thread.board}/index.html`) /#{thread.board}/]から。
+		h4.no-m-p Thread from #[a(href=`/${thread.board}/index.html`) /#{thread.board}/]
 		.thread
 			+post(thread, true, false, false, false, true)
 			for post in thread.replies

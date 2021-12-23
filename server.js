@@ -71,7 +71,7 @@ const config = require(__dirname+'/config.js')
 		app.cache = {};
 		app[cacheTemplates === true ? 'enable' : 'disable']('view cache');
 		//default settings
-		app.locals.authLevelNames = ['管理者', 'グローバルスタッフ', 'グローバル板所有者', 'グローバル板モデレーター', '通常ユーザー'];
+		app.locals.authLevelNames = ['Admin', 'Global Staff', 'Global Board Owner', 'Global Board Mod', 'Regular User'];
 		app.locals.enableUserAccountCreation = enableUserAccountCreation;
 		app.locals.enableUserBoardCreation = enableUserBoardCreation;
 		app.locals.defaultTheme = boardDefaults.theme;
@@ -134,7 +134,7 @@ const config = require(__dirname+'/config.js')
 					errMessage = 'Client aborted request';
 					break;
 				case 'entity.too.large':
-					errMessage = 'アップロードが大きすぎました';
+					errMessage = 'Your upload was too large';
 					break;
 				default:
 					break;
@@ -145,7 +145,7 @@ const config = require(__dirname+'/config.js')
 			console.error(err);
 		}
 		return dynamicResponse(req, res, errStatus, 'message', {
-			'title': errStatus === 500 ? 'Internal Server Error' : '要求の形式が正しくありません',
+			'title': errStatus === 500 ? 'Internal Server Error' : 'Bad Request',
 			'error': errMessage,
 			'redirect': req.headers.referer || '/'
 		});

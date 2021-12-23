@@ -11,8 +11,8 @@ module.exports = async (req, res, next) => {
 
 	if (deletedCount === 0) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': '無効なカスタムページが選択されました',
+			'title': 'Bad Request',
+			'message': 'Invalid custom pages selected',
 			'redirect': `/${req.params.board}/manage/custompages.html`
 		});
 	}
@@ -22,8 +22,8 @@ module.exports = async (req, res, next) => {
 	}));
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': 'カスタムページを削除',
+		'title': 'Success',
+		'message': 'Deleted custom pages',
 		'redirect': `/${req.params.board}/manage/custompages.html`
 	});
 

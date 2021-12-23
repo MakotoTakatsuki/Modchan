@@ -25,8 +25,8 @@ module.exports = async (req, res, next) => {
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': `削除されたアセット。`,
+		'title': 'Success',
+		'message': `Deleted assets.`,
 		'redirect': redirect
 	});
 }

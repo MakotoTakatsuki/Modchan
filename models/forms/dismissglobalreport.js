@@ -8,12 +8,12 @@ module.exports = (posts) => {
 
 	if (filteredposts.length === 0) {
 		return {
-			message: '却下するグローバルレポートはありません'
+			message: 'No global report(s) to dismiss'
 		}
 	}
 
 	return {
-		message: '却下されたグローバルレポート',
+		message: 'Dismissed global report(s)',
 		action: '$set',
 		query: {
 			'globalreports': []

@@ -43,8 +43,8 @@ todo: handle some more situations
 			if (hitGlobalFilter) {
 				if (globalSettings.filterMode === 1) {
 					return dynamicResponse(req, res, 400, 'message', {
-						'title': '要求の形式が正しくありません',
-						'message': 'あなたの編集はグローバルワードフィルターによってブロックされました',
+						'title': 'Bad request',
+						'message': 'Your edit was blocked by a global word filter',
 					});
 				} else {
 					const banDate = new Date();
@@ -55,10 +55,10 @@ todo: handle some more situations
 							'raw': res.locals.ip.raw,
 						},
 						'type': 'single',
-						'reason': 'グローバルワードフィルター自動禁止',
+						'reason': 'global word filter auto ban',
 						'board': null,
 						'posts': null,
-						'issuer': 'システム', //what should i call this
+						'issuer': 'system', //what should i call this
 						'date': banDate,
 						'expireAt': banExpiry,
 						'allowAppeal': true, //should i make this configurable if appealable?
@@ -133,7 +133,7 @@ todo: handle some more situations
 	}, {
 		'$set': {
 			edited: {
-				username: req.body.hide_name ? '非表示のユーザー' : req.session.user,
+				username: req.body.hide_name ? 'Hidden User' : req.session.user,
 				date: new Date(),
 			},
 			nomarkup,
@@ -157,7 +157,7 @@ todo: handle some more situations
 			postId: post.postId,
 			thread: post.thread,
 		}],
-		actions: '編集',
+		actions: 'Edit',
 		date: new Date(),
 		showUser: req.body.hide_name ? false : true,
 		message: req.body.log_message || null,
@@ -177,8 +177,8 @@ todo: handle some more situations
 	await buildThread(buildOptions);
 
 	dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': '投稿が正常に編集されました',
+		'title': 'Success',
+		'message': 'Post edited successfully',
 		'redirect': req.body.referer,
 	});
 	res.end();

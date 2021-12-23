@@ -1,68 +1,68 @@
 details.toggle-label#actionform
-	summary.collapse#action-menu 投稿アクションを表示
+	summary.collapse#action-menu Show Post Actions
 	.actions 
-		h4.no-m-p 行動：
+		h4.no-m-p Actions:
 		.row.wrap
 			.col.mr-5
 				label
 					input.post-check(type='checkbox', name='delete' value='1')
-					| 投稿を削除する
+					| Delete Posts
 				label
 					input.post-check(type='checkbox', name='unlink_file' value='1')
-					| ファイルのリンクを解除する
+					| Unlink Files
 				label
 					input.post-check(type='checkbox', name='delete_file' value='1')
-					| ファイルを削除する
+					| Delete Files
 				label
 					input.post-check(type='checkbox', name='delete_ip_thread' value='1')
-					| スレッドのIPから削除
+					| Delete from IP in thread
 				label
 					input.post-check(type='checkbox', name='delete_ip_board' value='1')
-					| 板上のIPから削除
+					| Delete from IP on board
 				label
 					input.post-check(type='checkbox', name='delete_ip_global' value='1')
-					| IPからグローバルに削除
+					| Delete from IP globally
 				label
 					input.post-check(type='checkbox', name='spoiler' value='1')
-					| ネタバレファイル
+					| Spoiler Files
 				label
 					input.post-check(type='checkbox', name='dismiss' value='1')
-					| レポートを却下する
+					| Dismiss Reports
 				label
 					input.post-check(type='checkbox', name='global_report' value='1')
-					| グローバルレポート
+					| Global Report
 				label
-					input#report(type='text', name='report_reason', placeholder='報告する reason' autocomplete='off')
+					input#report(type='text', name='report_reason', placeholder='Report reason' autocomplete='off')
 				label
 					input.post-check(type='checkbox', name='move' value='1')
-					| 動く
+					| Move
 				label
 					input(type='number', name='move_to_thread', placeholder='Destination thread No.' autocomplete='off')
 			.col.mr-5
 				label
 					input.post-check(type='checkbox', name='report_ban' value='1')
-					| 記者を禁止する
+					| Ban Reporters
 				label
 					input.post-check(type='checkbox', name='ban' value='1')
-					| 禁止ポスター
+					| Ban Poster
 				label
 					input.post-check(type='checkbox', name='global_ban' value='1')
-					| グローバル禁止ポスター
+					| Global Ban Poster
 				label
 					input.post-check(type='checkbox', name='ban_q' value='1')
-					| 狭い範囲
+					| Narrow Range
 				label
 					input.post-check(type='checkbox', name='ban_h' value='1')
-					| ワイドレンジ
+					| Wide Range
 				label
 					input.post-check(type='checkbox', name='no_appeal' value='1')
-					| 訴えられない禁止
+					| Non-appealable Ban
 				label
 					input.post-check(type='checkbox', name='preserve_post' value='1')
-					| 禁止の投稿を表示
+					| Show Post In Ban
 				label
-					input.post-check(type='checkbox', name='hide_name' value='1' checked)
-					| モデレートログでユーザー名を非表示にする
+					input.post-check(type='checkbox', name='hide_name' value='1')
+					| Hide Username In Modlog
 				label
 					input(type='text', name='ban_reason', placeholder='Ban reason' autocomplete='off')
 				label
@@ -72,16 +72,16 @@ details.toggle-label#actionform
 			.col
 				label
 					input.post-check(type='checkbox', name='edit' value='1')
-					| 投稿を編集
+					| Edit Post
 				label
 					input(type='text', name='sticky' placeholder='Sticky priority, 0 = unsticky')
 				label
 					input.post-check(type='checkbox', name='lock' value='1')
-					| トグルロック
+					| Toggle Lock
 				label
 					input.post-check(type='checkbox', name='bumplock' value='1')
-					| ロックを上げるトグル
+					| Toggle Bumplock
 				label
 					input.post-check(type='checkbox', name='cyclic' value='1')
-					| トグルサイクル
-	input(type='submit', value='送信')
+					| Toggle Cycle
+	input(type='submit', value='submit')

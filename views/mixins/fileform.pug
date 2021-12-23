@@ -2,7 +2,7 @@ include ./filelabel.pug
 
 mixin fileform(name, max, total, addPath, deletePath, checkName, fileList, nameList, filePath, imageClass, showName, showLink, formDescription)
 	- const capitalName = `${name.charAt(0).toUpperCase()}${name.substring(1)}`;
-	h4.no-m-p #{capitalName}を追加 (最大 #{total})
+	h4.no-m-p Add #{capitalName}s (Max #{total})
 	p #{formDescription}
 	.form-wrapper.flexleft.mt-10
 		form.form-post(action=addPath, enctype='multipart/form-data', method='POST')
@@ -14,14 +14,14 @@ mixin fileform(name, max, total, addPath, deletePath, checkName, fileList, nameL
 					if max > 1
 						|  
 						|  
-						small (最大 #{max})
+						small (Max #{max})
 				span.col
 					+filelabel(name, max)
 					input(id=name type='file', name='file' multiple required)
 					.upload-list(data-spoilers='false' data-strip-filenames='false')
-			input(type='submit', value='送信')
+			input(type='submit', value='submit')
 	if fileList.length > 0
-		h4.mv-5 #{capitalName}を削除する。
+		h4.mv-5 Delete #{capitalName}s:
 		.form-wrapper.flexleft.mt-10
 			form.form-post(action=deletePath, enctype='application/x-www-form-urlencoded', method='POST')
 				input(type='hidden' name='_csrf' value=csrf)
@@ -33,5 +33,5 @@ mixin fileform(name, max, total, addPath, deletePath, checkName, fileList, nameL
 							if showName
 								small #{nameList[index]}
 							if showLink
-								a(href=`${filePath}/${file}`) リンク
-				input(type='submit', value = '削除')
+								a(href=`${filePath}/${file}`) Link
+				input(type='submit', value='delete')

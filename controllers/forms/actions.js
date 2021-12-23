@@ -26,37 +26,37 @@ module.exports = {
 		res.locals.actions = actionChecker(req);
 
 		const errors = await checkSchema([
-			{ result: lengthBody(req.body.checkedposts, 1), expected: false, blocking: true, error: '少なくとも1つの投稿を選択する必要があります' },
-			{ result: lengthBody(res.locals.actions.validActions, 1), expected: false, blocking: true, error: 'アクションが選択されていません' },
-			{ result: lengthBody(req.body.checkedposts, 1, globalLimits.multiInputs.posts.anon), permLevel: 3, expected: false, error: `1回のリクエストで >${globalLimits.multiInputs.posts.anon} の投稿を選択してはならない。` },
-			{ result: lengthBody(req.body.checkedposts, 1, globalLimits.multiInputs.posts.staff), expected: false, error: `リクエストごとに >${globalLimits.multiInputs.posts.staff} の投稿を選択してはならない。` },
-			{ result: (existsBody(req.body.report_ban) && !req.body.checkedreports), expected: false, error: 'レポーターを禁止するには、投稿とレポートを選択する必要があります' },
-			{ result: (existsBody(req.body.checkedreports) && !req.body.report_ban), expected: false, error: 'チェックされたレポートの場合、レポートアクションを選択する必要があります' },
-			{ result: (existsBody(req.body.checkedreports) && !req.body.checkedposts), expected: false, error: 'レポートアクションのレポートをチェックする場合は、親の投稿をチェックする必要があります' },
-			{ result: (existsBody(req.body.checkedreports) && existsBody(req.body.checkedposts) && lengthBody(req.body.checkedreports, 1, req.body.checkedposts.length*5)), expected: false, error: 'チェックされたレポートの数が無効です' },
-			{ result: (res.locals.permLevel > res.locals.actions.authRequired), expected: false, blocking: true, error: '全く許可しません' },
-			{ result: (existsBody(req.body.delete) && !res.locals.board.settings.userPostDelete), permLevel: 3, expected: false, error: 'この板ではユーザー投稿の削除が無効になっています' },
-			{ result: (existsBody(req.body.spoiler) && !res.locals.board.settings.userPostSpoiler), permLevel: 3, expected: false, error: 'この板ではユーザーファイルのスポイリングが無効になっています' },
-			{ result: (existsBody(req.body.unlink_file) && !res.locals.board.settings.userPostUnlink), permLevel: 3, expected: false, error: 'この板ではユーザーファイルのリンク解除が無効になっています' },
-			{ result: (existsBody(req.body.edit) && lengthBody(req.body.checkedposts, 1, 1)), expected: false, error: '編集アクションには投稿を1つだけ選択する必要があります' },
-			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: `パスワードは ${globalLimits.fieldLength.postpassword} 文字以下でなければなりません。` },
-			{ result: lengthBody(req.body.report_reason, 0, globalLimits.fieldLength.report_reason), expected: false, error: `レポートは${globalLimits.fieldLength.report_reason}文字以下である必要があります。` },
-			{ result: lengthBody(req.body.ban_reason, 0, globalLimits.fieldLength.ban_reason), expected: false, error: `禁止理由は ${globalLimits.fieldLength.ban_reason} 文字以下でなければならない。` },
-			{ result: lengthBody(req.body.log_message, 0, globalLimits.fieldLength.log_message), expected: false, error: `ログメッセージは ${globalLimits.fieldLength.log_message} 文字以下である必要があります。` },
-			{ result: (existsBody(req.body.report || req.body.global_report) && lengthBody(req.body.report_reason, 1)), expected: false, blocking: true, error: 'レポートには理由が必要です' },
-			{ result: (existsBody(req.body.move) && !req.body.move_to_thread), expected: false, error: '投稿を移動するには、宛先スレッド番号を入力する必要があります' },
+			{ result: lengthBody(req.body.checkedposts, 1), expected: false, blocking: true, error: 'Must select at least one post' },
+			{ result: lengthBody(res.locals.actions.validActions, 1), expected: false, blocking: true, error: 'No actions selected' },
+			{ result: lengthBody(req.body.checkedposts, 1, globalLimits.multiInputs.posts.anon), permLevel: 3, expected: false, error: `Must not select >${globalLimits.multiInputs.posts.anon} posts per request` },
+			{ result: lengthBody(req.body.checkedposts, 1, globalLimits.multiInputs.posts.staff), expected: false, error: `Must not select >${globalLimits.multiInputs.posts.staff} posts per request` },
+			{ result: (existsBody(req.body.report_ban) && !req.body.checkedreports), expected: false, error: 'Must select post and reports to ban reporter' },
+			{ result: (existsBody(req.body.checkedreports) && !req.body.report_ban), expected: false, error: 'Must select a report action if checked reports' },
+			{ result: (existsBody(req.body.checkedreports) && !req.body.checkedposts), expected: false, error: 'Must check parent post if checking reports for report action' },
+			{ result: (existsBody(req.body.checkedreports) && existsBody(req.body.checkedposts) && lengthBody(req.body.checkedreports, 1, req.body.checkedposts.length*5)), expected: false, error: 'Invalid number of reports checked' },
+			{ result: (res.locals.permLevel > res.locals.actions.authRequired), expected: false, blocking: true, error: 'No permission' },
+			{ result: (existsBody(req.body.delete) && !res.locals.board.settings.userPostDelete), permLevel: 3, expected: false, error: 'User post deletion is disabled on this board' },
+			{ result: (existsBody(req.body.spoiler) && !res.locals.board.settings.userPostSpoiler), permLevel: 3, expected: false, error: 'User file spoiling is disabled on this board' },
+			{ result: (existsBody(req.body.unlink_file) && !res.locals.board.settings.userPostUnlink), permLevel: 3, expected: false, error: 'User file unlinking is disabled on this board' },
+			{ result: (existsBody(req.body.edit) && lengthBody(req.body.checkedposts, 1, 1)), expected: false, error: 'Must select only 1 post for edit action' },
+			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: `Password must be ${globalLimits.fieldLength.postpassword} characters or less` },
+			{ result: lengthBody(req.body.report_reason, 0, globalLimits.fieldLength.report_reason), expected: false, error: `Report must be ${globalLimits.fieldLength.report_reason} characters or less` },
+			{ result: lengthBody(req.body.ban_reason, 0, globalLimits.fieldLength.ban_reason), expected: false, error: `Ban reason must be ${globalLimits.fieldLength.ban_reason} characters or less` },
+			{ result: lengthBody(req.body.log_message, 0, globalLimits.fieldLength.log_message), expected: false, error: `Modlog message must be ${globalLimits.fieldLength.log_message} characters or less` },
+			{ result: (existsBody(req.body.report || req.body.global_report) && lengthBody(req.body.report_reason, 1)), expected: false, blocking: true, error: 'Reports must have a reason' },
+			{ result: (existsBody(req.body.move) && !req.body.move_to_thread), expected: false, error: 'Must input destinaton thread number to move posts' },
 			{ result: async () => {
 				if (req.body.move && req.body.move_to_thread) {
 					res.locals.destinationThread = await Posts.threadExists(req.params.board, req.body.move_to_thread);
 					return res.locals.destinationThread != null;
 				}
 				return true;
-			}, expected: true, error: '移動先のスレッドが存在しません' },
+			}, expected: true, error: 'Destination thread for move does not exist' },
 		], res.locals.permLevel);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.board}/`
 			})
@@ -69,9 +69,9 @@ module.exports = {
 		}
 
 		if (!res.locals.posts || res.locals.posts.length === 0) {
-			return dynamicResponse(req, res, 404, 'message', {  
-				'title': '見つかりません',
-				'error': '選択した投稿が見つかりません',
+			return dynamicResponse(req, res, 404, 'message', {
+				'title': 'Not found',
+				'error': 'Selected posts not found',
 				'redirect': `/${req.params.board}/`
 			})
 		}
@@ -90,8 +90,8 @@ module.exports = {
 			});
 			if (res.locals.posts.length === 0) {
 				return dynamicResponse(req, res, 409, 'message', {
-					'title': '対立',
-					'error': '移動アクションの宛先スレッドがソーススレッドと一致することはできません',
+					'title': 'Conflict',
+					'error': 'Destination thread cannot match source thread for move action',
 					'redirect': `/${req.params.board}/`
 				});
 			}

@@ -2,205 +2,95 @@ extends ../layout.pug
 include ../mixins/post.pug
 
 block head
-	title よくある質問
+	title Frequently Asked Questions
 
 block content
-	h1.board-title よくある質問
+	h1.board-title FAQ
 	include ../includes/stickynav.pug
 	.table-container.flex-center.mv-5
 		.anchor
 		table
 			tr
-				th よくある質問
+				th Frequently Asked Questions 
 			tr
 				td.post-message
-					b 一般情報
+					b General
 					ul.mv-0
-						li: a(href='#report') 投稿を報告するにはどうすればよいですか？
-						li: a(href='#crypto') モッドちゃんねるをどうやって手伝うことができますか？
-						li: a(href='#legalDMCA') 法的権利を侵害するコンテンツの削除。
-						li: a(href='#contact') どうすれば行政に連絡できますか？
-						li: a(href='#source') モッドちゃんねるは匿名ですか？ アカウントセクションがあるのはなぜですか？
-						
-					b 投稿
+						li: a(href='#whats-an-imageboard') What is an imageboard?
+						li: a(href='/rules.html') What are the rules?
+						li: a(href='#contact') How can I contact the administration?
+					b Making posts
 					ul.mv-0
-						li: a(href='#createthread') スレッドを作成するにはどうすればよいですか？
-						li: a(href='#reply') スレッドに応答するにはどうすればよいですか？
-						li: a(href='#replyu') 別のユーザーに応答するにはどうすればよいですか？
-						li: a(href='#sage') ウェブサイトで「下げる」とはどういう意味ですか？
-						li: a(href='#IDs') IDとは何ですか？
-						li: a(href='#captcha') CAPTCHAを解決するにはどうすればよいですか？
-						li: a(href='#name-formatting') 名前、トリップコード、キャップコードはどのように機能しますか？
-						li: a(href='#post-styling') テキストをフォーマットするにはどうすればよいですか？
-						li: a(href='#post-info') ファイル制限とは何ですか？
-						li: a(href='#moderation') モデレートはどのように機能しますか？
-						//li: a(href='#banned') 私は禁止されました、そして今?
-					b 板、ユーザー、権限
+						li: a(href='#captcha') How do I solve CAPTCHA?
+						li: a(href='#name-formatting') How do names, tripcodes and capcodes work?
+						li: a(href='#post-styling') What kind of styling options are available when making a post?
+						li: a(href='#post-info') What is the file size limit?
+						li: a(href='#moderation') How does moderation work?
+					b Boards, users & permissions
 					ul.mv-0
-						li: a(href='#make-a-board') 板を作るにはどうすればよいですか？
-						li: a(href='#staff-and-permissions') スタッフ、ユーザー、権限はどのように機能しますか？
-						li: a(href='#antispam') スパム対策の板設定は何をしますか？
-					b プライバシーポリシーとクッキー /ローカルストレージ。
-					ul.mv-0
-						li: a(href='#privacyandcookies') プライバシーポリシーとクッキー /ローカルストレージ。
-
+						li: a(href='#make-a-board') How do I make my own board?
+						li: a(href='#staff-and-permissions') How do staff, users and permissions work?
+						li: a(href='#antispam') What do the board settings for antispam do?
+						li: a(href='#archive-reverse-url-format') What is the archive/reverse image search link url format?
 	.table-container.flex-center.mv-5
-		.anchor#report
+		.anchor#whats-an-imageboard
 		table
 			tr
-				th: a(href='#report') 投稿を報告するにはどうすればよいですか？
-			tr
-				td.post-message
-					p
-						| ルールに違反する投稿を報告するには、投稿の上にある矢印をクリックして[レポート/モデレート]をクリックし、[レポート]または[グローバルレポート]をクリックして理由を入力し、CAPTCHAを入力して送信します。
-					p
-						| 複数の投稿を同時に報告するには、投稿のチェックボックスをクリックして、ページの下部にある[アクション]に移動します。
-	.table-container.flex-center.mv-5
-		.anchor#crypto
-		table
-			tr
-				th: a(href='#crypto') モッドちゃんねるをどうやって手伝うことができますか？
-			tr
-				td
-					ul
-						li(style='display: contents;'): img(src='/misc/btc.png' title='BTC' style='width: 15px; height: 15px; vertical-align: top;')
-						|   ビットコイン：
-						a.mono(href='bitcoin:36s47j8rZ5RaRz5gzjg8Br3FazH8DJDwNx') 36s47j8rZ5RaRz5gzjg8Br3FazH8DJDwNx
-					ul(style='word-break: break-all;')
-						li(style='display: contents;'): img(src='/misc/xmr.png' title='XMR' style='width: 16px; height: 16px; vertical-align: top;')
-						|   モネロ：
-						a.mono(href='monero:47gupNYZu7E9G8MXF7Jbvv1G16rf7DSC43gHBDzQheb9C2Rynp8TGQ1RMytJLbRyccJQvwuawTBCxNvF3mGwjq8W1j8KDms') 47gupNYZu7E9G8MXF7Jbvv1G16rf7DSC43gHBDzQheb9C2Rynp8TGQ1RMytJLbRyccJQvwuawTBCxNvF3mGwjq8W1j8KDms
-					ul
-						li(style='display: contents;'): img(src='/misc/eth.png' title='ETH' style='width: 15px; height: 15px; vertical-align: top;')
-						|   イーサリアム：
-						a.mono(href='ethereum:0xf4C9b05a73106fe8c687a60e1459F71dB41278b4') 0xf4C9b05a73106fe8c687a60e1459F71dB41278b4
-					p
-						| ビジネスや広告に関するお問い合わせは、
-						a(href='mailto:modadmin@protonmail.com') modadmin@protonmail.com
-						|までメールをお送りください。
-	.table-container.flex-center.mv-5
-		.anchor#legalDMCA
-		table
-			tr
-				th: a(href='#legalDMCA') 法的権利を侵害するコンテンツの削除。
-			tr
-				td.post-message
-					p
-						| このサイトとその管理者は、ユーザーが私たちのプラットフォームに投稿する内容について責任を負いません。 米国およびコロンビアの法律に従い、誠意を持って違法であると信じるコンテンツを削除するために誠意を持って努力します。 個人、特にアメリカ合衆国の法律に違反してコンテンツを投稿するために当サイトを使用することはできません。 このサイトを閲覧することにより、このページのすべての条項に同意し、サイトの規約を順守することに同意し、さらにこのサイトのスタッフ、所有者、管理者、およびボランティアを無害に保ち、可能な限り補償することに同意するものとします。 作成、投稿、共有、体験、ダウンロード、実行、またはその他の方法で公開されるすべてのコンテンツについて、法律で許可されている範囲。
-					p
-						| あなたは、このサイトがあなたのコンピュータのハードウェアまたはソフトウェアにリスクをもたらす可能性のあるクッキー、ジャバスクリプト、およびその他の機能を利用する可能性があることに同意します。 このサイトのスタッフ、ボランティア、および管理者は、通知の有無にかかわらず、理由の如何を問わず、上訴の有無にかかわらず、独自の裁量により、このWebサイトまたはそのサービスへのアクセスを個人または団体に拒否する権利を留保します。 このウェブサイト上のすべての商標および著作権は、このサイトの所有者または管理者からの請求なしに、それぞれの当事者によって所有されています。 アップロードされたメディアと投稿されたコメントは、投稿者の責任です。 このサイトに投稿された見解や意見は、サイト管理者やスタッフの見解や意見を表すものではありません。
-	.table-container.flex-center.mv-5
-		.anchor#contact
-		table
-			tr
-				th: a(href='#contact') どうすれば行政に連絡できますか？
-			tr
-				td.post-message
-					p
-						a(href='mailto:modadmin@protonmail.com') modadmin@protonmail.com
-	.table-container.flex-center.mv-5
-		.anchor#source
-		table
-			tr
-				th: a(href='#Source') モッドちゃんねるは匿名ですか？ アカウントセクションがあるのはなぜですか？
-			tr
-
-				td.post-message
-					p
-						| ウェブサイトへの投稿は完全に匿名です。 アカウントセクションは、独自の板を作成し、サイト管理セクションで利用可能なツールを使用してそれを管理したい人のためのものです。
-	.table-container.flex-center.mv-5
-		.anchor#createthread
-		table
-			tr
-				th: a(href='#createthread') スレッドを作成するにはどうすればよいですか？
+				th: a(href='#whats-an-imageboard') What is an imageboard?
 			tr
 				td
 					p
-						| スレッドを作成するには、板のページまたはカタログの上部にある[新しいスレッド]をクリックします。
-	.table-container.flex-center.mv-5
-		.anchor#reply
-		table
-			tr
-				th: a(href='#createthread') スレッドに応答するにはどうすればよいですか？
-			tr
-				td
+						| An imageboard is a type of discussion board where users share images and text about various topics. 
 					p
-						| スレッドに返信するには、最初に[返信]をクリックしてスレッドページの上部にある[返信]をクリックする必要があります。投稿番号をクリックして、スレッド/返信ボックスをすばやく開くこともできます。
-	.table-container.flex-center.mv-5
-		.anchor#replyu
-		table
-			tr
-				th: a(href='#replyu') 別のユーザーに応答するにはどうすればよいですか？
-			tr
-				td
-					p
-						| 別のユーザーに返信するには、投稿番号をクリックすると、返信ボックスに自動的に追加されます。
-	.table-container.flex-center.mv-5
-		.anchor#sage
-		table
-			tr
-				th: a(href='#sage') ウェブサイトで「下げる」とはどういう意味ですか？
-			tr
-				td
-					p
-						| メール/オプションボックスに「下げる」と書くことで、あなたの投稿はスレッドをページの一番上に上げません。
-	.table-container.flex-center.mv-5
-		.anchor#IDs
-		table
-			tr
-				th: a(href='#IDs') IDとは何ですか？
-			tr
-				td
-					p
-						| IDは、板上でアクティブな場合、スレッド内のユーザーを識別する方法です。
+						| The primary difference between imageboards and traditional forums is that anybody can make a post without registering 
+						| an account or providing any personal information. This lowers the barrier to entry, protects user identities and focuses on what is said, rather than who says it. 
 	.table-container.flex-center.mv-5
 		.anchor#captcha
 		table
 			tr
-				th: a(href='#captcha') CAPTCHAを解決するにはどうすればよいですか？
+				th: a(href='#captcha') How do I solve CAPTCHA?
 			tr
-				td
-					p
-						img.centerpiece(src='/misc/captcha.png' title='あなたの脳を使う')
+				td.post-message
+					p Select the boxes that correspond to each solid/filled icon in the grid. The image is shuffled and distorted, so use your brain.
 	.table-container.flex-center.mv-5
 		.anchor#name-formatting
 		table
 			tr
-				th: a(href='#name-formatting') 名前、トリップコード、キャップコードはどのように機能しますか？
+				th: a(href='#name-formatting') Name formatting
 			tr
 				td.post-message
-					p 投稿するときは、名前フィールドをフォーマットして、名前、トリップコード、キャップコード、または3つすべての組み合わせを含めることができます。 名前を空白のままにすることもでき、デフォルトの板が使用されます。
+					p When posting, you can format the name field to include a name, tripcode , capcode, any combination of the three including leaving the field completely blank. Instead of a blank name,  "Anonymous" is used, however this depends on board-specific configuration. The optional components are explained below.
 
-					b 名前の形式
+					b Format
 					p 
-						| 名前は次のように入力する必要があります。
-						input(disabled='true' spellcheck='false' type='text' value='おなまえ##トリップコード## キャップコード')
-						| .
-					p Exemplos válidos:: 
+						| Names should be input like: 
+						input(disabled='true' spellcheck='false' type='text' value='Name##Tripcode## Capcode')
+						| . Tripcode and capcode are optional components. Please note the whitespace before capcodes is significant. 
+					p Valid examples: 
 					ol.mv-0
-						li おなまえ
-						li #トリップコード
-						li ##トリップコード
-						li ## キャップコード
-						li おなまえ#トリップコード
-						li おなまえ##トリップコード
-						li おなまえ## キャップコード
-						li おなまえ#トリップコード## キャップコード
-						li おなまえ##トリップコード## キャップコード
-						li #トリップコード## キャップコード
-						li ##トリップコード## キャップコード
+						li name
+						li #tripcode
+						li ##tripcode
+						li ## capcode
+						li name#tripcode
+						li name##tripcode
+						li name## capcode
+						li name#tripcode## capcode
+						li name##tripcode## capcode
+						li #tripcode## capcode
+						li ##tripcode## capcode
 						li ##
-					p 最後の例は、あなたが所有者、modなどである場合、板上の自分の位置を示しています。
-					p 各要素は、組み合わせて使用​​することも、個別に使用することもできます。例番号9は次のようになります。
+					p The last example is considered a blank capcode and can be used as a shortcut to display your role. Additionally, if a user has multiple aplicable roles (e.g. a board owner, but the user is also global staff) capcodes will default to their lowest role. To show the higher role, you must be explicit and precede any capcode with the role name e.g. ## Global Staff or ## Global Staff capcode
+					p Each component can be used in combination or independently. In a post number 9 would look like:
 						-
 							const examplePost = {
-								"date" : new Date("2021-12-15T09:48:44.180Z"),
-								"name" : "おなまえ",
-								"board" : "例",
-								"tripcode" : "!!kTWFOxgJas",
-								"capcode" : "##板オーナーのキャップコード",
-								"message" : "こんにちは世界！",
-								"nomarkup" : "こんにちは世界！",
+								"date" : new Date("2019-08-02T09:48:44.180Z"),
+								"name" : "name",
+								"board" : "example",
+								"tripcode" : "!!X8NXmAS44=",
+								"capcode" : "##Board Owner capcode",
+								"message" : "Hello, world!",
+								"nomarkup" : "Hello, world!",
 								"thread" : 1,
 								"password" : null,
 								"email" : "",
@@ -214,71 +104,73 @@ block content
 								"postId" : 123
 							}	
 						+post(examplePost)
-					//p 名前は左上に太字で表示され、次にトリップコードが!プレフィックス付きのレギュラーウェイトで、そしてキャップコードが別の色で太字で##プレフィックス付きで表示されます。色はテーマによって異なる場合がありますが、一般的にはそれぞれ区別されています。
+					p The name appears bold in the top left, followed by the tripcode in regular weight with a !! prefix, then the capcode in a different color, bold and with a ## prefix. The colours may vary between themes but are generally distinct from each other
 
-					b おなまえ
-					p 名前は投稿の横に表示したいものです。他のユーザーは同じ名前を入力できるため、非個人化を止めることはできません。 アカウントとは関係ありません（登録ユーザーの場合）。
+					b Name
+					p The name is simply what name you want to be shown alongside your post. Other users can post with the same name so there is nothing preventing impersonation. This is not related to your username (for registered users).
 
-					b トリップコード
-					p トリップコードはアイデンティティの一形態です。
+					b Tripcode
+					p A tripcode is a password of sorts, which users can provide in the tripcode component of their name. This tripcode is used in conjunction with a server-known secret to generate a unique* tripcode portion of the name. Long, unique tripcodes can be used as a form of identity. It is important that you keep tripcodes secret if you use them for some form of identity. A compromised tripcode can be used for impersonation and cannot be revoked in any way. Single # before tripcodes will use the traditional (what is now sometimes known as "insecure") tripcode algorithm shared by many imageboard softwares and websites. Double # before tripcodes will use a sha256 hash with server-side secret for a more secure, non-portable tripcode.
 
-					b キャップコード
-					p キャップコードは、登録ユーザーのIDの形式であり、ある種の機能を備えています。 これには、管理者、グローバルスタッフ、取締役会の所有者、モデレーターが含まれます。
+					b Capcode
+					p A capcode is a component of the name field only available to authenticated users. This includes admins, global staff, board owners and board moderators. If there is no text after the ##, the role will be displayed alone. Leaving a space and putting custom text will be prefixed by the role name. This way, the role is always shown to prevent role impersonation.
 	.table-container.flex-center.mv-5
 		.anchor#post-styling
 		table
 			tr
-				th(colspan=2): a(href='#post-styling') テキストの書式設定
+				th(colspan=2): a(href='#post-styling') Post styling
 			tr
-				th 入力
-				th 出力
+				th Input
+				th Output
 			tr
-				td &gt;見積もり
+				td &gt;greentext
 				td
-					span.greentext &gt;見積もり
+					span.greentext &gt;greentext
 			tr
-				td &lt;赤い引用
+				td &lt;pinktext
 				td
-					span.pinktext &lt;赤い引用
+					span.pinktext &lt;pinktext
 			tr
-				td ==タイトル==
+				td ==title==
 				td
-					span.title タイトル
+					span.title title
 			tr
-				td ''太字''
+				td ''bold''
 				td
-					span.bold 太字
+					span.bold bold
 			tr
-				td __テキストに下線を引く__
+				td __underline__
 				td
-					span.underline テキストに下線を引く
+					span.underline underline
 			tr
-				td ~~取り消し線のテキスト~~
+				td ~~strikethrough~~
 				td
-					span.strike 取り消し線のテキスト
+					span.strike strikethrough
 			tr
-				td ||ネタバレ||
+				td ||spoiler text||
 				td
-					span.spoiler ネタバレ
+					span.spoiler spoiler text
 			tr
-				td **イタリック**
+				td **italic**
 				td
-					span.em イタリック
-			//tr
+					span.em italic
+			tr
 				td (((detected)))
 				td
-					span.detected (((detected)))
+					span.detected ((( detected )))
 			tr
 				td ##2d9+3
 				td
 					img(src='/file/dice.png' height='16' width='16')
-					span.dice (##2d9+3) 9個のサイコロ2個と修飾子+ 3 = 10
+					span.dice (##2d9+3) Rolled 2 dice with 9 sides and modifier +3 = 10
 			tr
 				td https://example.com
 				td: a(href='#!') https://example.com
 			tr
-				td [カスタムリンク](https://example.com)
-				td: a(href='#!') カスタムリンク
+				td
+					| [Board Rules](https://your.imageboard/a/custompage/rules.html)
+					small (staff only)
+				td: a(href='#!') Board Rules
 			tr
 				td &gt;&gt;123
 				td: a(class="quote" href="#!") &gt;&gt;123
@@ -289,9 +181,9 @@ block content
 				td &gt;&gt;&gt;/b/123
 				td: a(class="quote" href="#!") &gt;&gt;&gt;/b/123
 			tr
-				td `インラインモノスペース`
+				td `inline monospace`
 				td
-					span.mono インラインモノスペース
+					span.mono inline monospace
 			tr
 				td
 					| [code]language
@@ -306,260 +198,137 @@ block content
 					pre
 						| [code]aa
 						| ∧＿∧
-						| ( ・ω・) 猫はかわいいですね
+						| ( ・ω・) Let's try that again.
 						| [&#x2F;code]
 				td
 					pre.aa
 						| ∧＿∧
-						| ( ・ω・) 猫はかわいいですね
+						| ( ・ω・) Let's try that again.
 			tr
 				td(colspan=2)
-					| コードタグの「language」はオプションであり、自動コード検出は使用されません。
-					p
-					| 「プレーン」の場合、コード検出は無効になります。 「aa」を使用すると、フォントはASCIIアート/日本語シフトJISアートに設定されます。
-					| すべてのプログラミング言語がサポートされているわけではありません。
-					p
-					| サポートされている言語：#{codeLanguages.join(', ')}
+					| The "language" of code blocks is optional. Without it, automatic language detection is used. 
+					| If the language is "plain", highlighting is disabled for the code block. If "aa" is used, the font will be adjusted for Japanese Shift JIS art. 
+					| Not all programming languages are supported, a subset of popular languages is used. 
+					| If the language is not in the supported list, the code block will be rendered like "plain" with no highlighting.
+					| Languages supported: #{codeLanguages.join(', ')}
 	.table-container.flex-center.mv-5
 		.anchor#post-info
 		table
 			tr
-				th: a(href='#post-info') ファイル制限とは何ですか？
+				th: a(href='#post-info') What is the file size limit?
 			tr
 				td
-					p 1記事あたりのフォームデータの最大サイズは#{postFilesSize}です。名前、メッセージなど他のフィールドもこれに貢献するので、ファイルアップロードの最大サイズはこれよりごくわずかに小さくなります。	
+					p Max size of form data per-post is #{postFilesSize}. Because other fields e.g. name, message, etc contribute to this, the maximum size of file uploads will be very slightly smaller than this.
 	.table-container.flex-center.mv-5
 		.anchor#moderation
 		table
 			tr
-				th: a(href='#moderation') モデレートはどのように機能しますか？
+				th: a(href='#moderation') How does moderation work?
 			tr
 				td.post-message
-					b ジェネラル
+					b General
 					p
-						| モデレーションはとてもシンプルです。モデレーションの権限は、一般ユーザ、板スタッフ（板オーナーまたはモデレータ）、グローバル（グローバルスタッフまたは管理者）の間で異なります。 
-						| デフォルトでは、一般ユーザーは、一致する投稿パスワードが提供される限り、自分の投稿の削除、ネタバレ、ファイルの削除が可能です。また、投稿を報告したり、グローバル報告することもできます。 
-						| 板スタッフは、他のユーザーの投稿に対しても、パスワードなしで投稿の削除、スティッキー、ネタバレなど、自分の板上の投稿に対してほぼ全ての権限を持つことができます。また、掲示板固有の管理ページにアクセスすることもできます。
-						| グローバルスタッフは、すべての掲示板の投稿に対する全権限を持ち、どの掲示板の管理ページにもアクセスでき、さらにグローバル管理ページへのアクセスも可能です。
-					b ローカルとグローバルの区別
+						| Moderation is very simple. Moderation permissions are different between regular users, board staff (board owner or moderator) and globals (global staff or admin). 
+						| By default, regular users can delete, spoiler or remove the files from their own posts, provided a matching post password is supplied. They can also report or global report posts. 
+						| Board staff have near full power over posts on their board including removing posts, stickying, spoilering, etc. even for other users posts without the need for a password. They also have access to board specific management page.
+						| Global staff have full power over all posts on all boards, can access the board specific management page for any board and additionally have access to the global management page.
+						| More details on the specifics of permission levels is available 
+						a(href='#staff-and-permissions') here
+						| .
+					b Local vs. Global reports
 					p
-						| 「ローカル」レポートと「グローバル」レポートという概念があります。ローカルで投稿を報告すると、その投稿が報告とともにその掲示板の報告ページに表示され、その報告 
-						| 掲示板の担当者が対応することができます。グローバルに投稿を報告すると、グローバルスタッフのみが利用できるグローバル管理ページにレポートとともに投稿が表示され、グローバルスタッフによって処理される可能性があります。 
-						| グローバル報告は、違法なコンテンツやスパムなど、規約に違反する投稿にフラグを立てるために使用されるべきです。 
-						| 掲示板固有のルール（掲示板のスタッフが任意に設定することができる）。また、報告システムを悪用した場合、掲示板から追放されたり、世界的に追放される可能性もあります。
-					b 大量に投稿されたものを処理する
+						| There exists the concept of "local" and "global" reports. Reporting a post locally will show the post along with reports on the report page for that particular board, and the reports 
+						| may be actioned upon by the board staff. Reporting a post globally will show the post along with reports on the global manage page available only to global staff and may be actioned upon by global staff. 
+						| Global reports should be used to flag posts that violate global rules such as illegal content or spam, in contrast to local reports which are for posts that abide by global rules but break 
+						| board-specific rules (which may be made arbitrarily by board staff). It is also possible to be banned from a board or globally for abuse of the report system.
+					b Batch processing of posts
 					p
-						| 各投稿には、左上にチェックボックスがあり、モデレーションの対象として選択できます。複数の投稿を選択することで、一度のリクエストで複数の違反投稿を報告するなど、一括して処理することができます。 
-						| モデレーション・インターフェイスにも同じものがあります。いくつかのアクション、例えば禁止（IPに基づくもの）は、バッチで処理されるかもしれません。複数の投稿を選択して禁止アクションを使用すると、以下のようになります。 
-						| 選択された投稿のユニークなIPごとに1つの禁止を適用します。
-					b 禁止期間などの形式
+						| Each post has a checkbox in the top left to select it for moderation actions. Multiple posts may be selected to allow batch processing e.g. reporting multiple offending posts in one request. 
+						| The same is present in moderation interfaces. Some actions for example bans (which are based on IP) may also be handled in batches. Selecting multiple posts and using the ban action will 
+						| apply a single ban for each unique IP of the selected posts.
+					b Time format in moderation interfaces
 					p
-						| いくつかのモデレーションインターフェース、例えば投稿をモデレートする際の禁止期間や、投稿フィルタリングの禁止期間では、時間/長さの省略形が使われます。このフォーマットは年、月、週、日、時間、分、秒をサポートしています。
-						| 3mo」は3ヶ月、「1y2mo3w4d5h6m7s」は1年、2ヶ月、3週間、4日、5時間、6分、7秒を意味します。時間の単位は降順でなければならないので、"2w1mo "は無効である。
-						| ただし、6週間の場合は「6w」でよく、「1mo2w」である必要はありません。
-
+						| Some moderation interfaces, for example the ban duration when moderating posts, or the ban duration for post filtering use a shorthand for times/length. This format supports years, months, weeks, days, hours, minutes and seconds.
+						| An input of "3mo" would mean 3 months and "1y2mo3w4d5h6m7s" would mean 1 year, 2 months, 3 weeks, 4 days, 5 hours, 6 minutes and 7 seconds. Units of time should be in descending order, so "2w1mo" is invalid.
+						| However you may use "6w" for example to input 6 weeks, and are not required to use "1mo2w".
 	.table-container.flex-center.mv-5
 		.anchor#make-a-board
 		table
 			tr
-				th: a(href='#make-a-board') 板を作るにはどうすればよいですか？   
+				th: a(href='#make-a-board') How do I make my own board?
 			tr
 				td
 					p
-						|  アカウントを
-						a(href='/register.html') 登録
-						|、次に
-						a(href='/create.html') 板を作成します
-						|。過剰な板や既存の板を作成しないでください。
+						a(href='/register.html') Register
+						|  an account, then 
+						a(href='/create.html') create a board
+						|. Please avoid making excessive amounts of boards, duplicate or boards similar to an existing one unless you expect that many users will migrate to the new board for whatever reason e.g. tyrannical moderation.
 	.table-container.flex-center.mv-5
 		.anchor#staff-and-permissions
 		table
 			tr
-				th: a(href='#staff-and-permissions') スタッフ、ユーザー、権限はどのように機能しますか？
+				th: a(href='#staff-and-permissions') How do staff, users and permissions work?
 			tr
 				td
 					p
-						| サイトには5つの権限レベルがあり、0が最高、4が最低の権限です。このリストで「一般ユーザー」とは、ログインしていない人、または掲示板のオーナー/MODでない人のことを指します。例えば、あるユーザーが自分の板を作成した場合、他の板に対して「板オーナー」の権限を持つことはできません。各板には、一人のオーナーと複数のモデレーターを設定することができます。オーナーシップは譲渡することができます。
+						| There are 5 levels of permissions on the site with 0 being the highest level of privilege and 4 the lowest. In this list "Regular user" refers to somebody who is either not logged in or is not owner/mod of the board. For example if a user creates their own board, they do not have the "Board owner" permissions on other boards. Each board can have one owner and multiple moderators. Ownership can be transferred.
 						ol(start='0')
-							li 管理者：すべての権限
-							l グローバルスタッフ： アカウント管理とニュース更新を除く、すべての板に関するすべての権限
-							li 板オーナー：板固有の設定、レポート、バナー、禁止、一部の投稿アクションの権限
-							l 板モデレーター： 掲示板固有のレポート、禁止事項、一部の投稿アクションを管理するための権限
-							li 一般ユーザー： 報告/削除/ネタバレ投稿の権限
-						| 投稿アクションとは、報告、削除、付箋などのことです。これらのパーミッションの詳細はこちら
+							li Admin: All permissions
+							li Global staff: All permissions on all boards excluding account management and news updates
+							li Board owner: Permissions to board-specific settings, reports, banners and bans and some post actions
+							li Board moderator: Permissions to manage board-specific reports, bans and some post actions
+							li Regular user: Permissions to report/delete/spoiler posts
+						| Post actions refers to reporting, deleting, stickying, etc. More details on these permissions:
 						ol(start='0')
-							li 管理者： すべてのアクション
-							l グローバルスタッフ： 以下すべて、ファイルの削除、グローバル単位での削除、グローバル禁止令
-							li 板オーナー： 板モデレーターと同じです。
-							li 掲示板のモデレーター： 以下すべて、移動/マージ、禁止、IPごとの削除、スティッキー/セージ/ロック/サイクル
-							l 一般ユーザー： レポート、掲示板でネタバレ/削除/リンク解除が有効な場合、その投稿
-						| 管理者は、グローバル管理ページを通じて、ユーザーに直接権限レベルを割り当てることができます。通常、ユーザーはレベル4（一般ユーザー）、1（グローバルスタッフ）、0（管理者）です。
-						| レベル2と3は、通常、掲示板でユーザーがオーナーまたはモデレーターである場合にのみ適用されます。ただし、レベル2やレベル3は、グローバル板オーナーやグローバル板モデレーターを作成するために手動で割り当てることができます。
-						| すべての板で板オーナーまたはモデレーション権限を持つが、グローバル・モデレーション・インターフェイスへのアクセス権を持たない人。グローバル板オーナー(レベル2)を割り当てた場合、彼らは板設定
-						| と、板所有者の再割り当てを行うことができます。
+							li Admin: All actions
+							li Global staff: All below, delete files, delete-by-ip-global and global ban
+							li Board owner: Same as board moderator
+							li Board moderator: All below, move/merge, ban, delete-by-ip, sticky/sage/lock/cycle
+							li Regular user: Reports, and post spoiler/delete/unlink if the board has them enabled
+						| Administrators can set account types for users on the global management accounts page. Normally only Admin (level 0), Global Staff (level 1) and Regular User (level 4) are assigned here.
+						| Level 2 or 3 permission is handled internally for users on boards they own or moderate, while their account remains listed as "Regular User". However admins can manually assign Global Board Owner (level 2) and Global Board Mod (level 3)
+						| to grant an account board owner or moderation permissions on all boards, but without access to the global moderation interfaces. If assigning Global Board Owner (level 2), they will have access to the board settings
+						| and the ability to reassign board owners.
 	.table-container.flex-center.mv-5
 		.anchor#antispam
 		table
 			tr
-				th: a(href='#antispam') スパム対策の板設定は何をしますか？
+				th: a(href='#antispam') What do the board settings for antispam do?
 			tr
 				td
-					p ロックモード：新しいスレッドの投稿をロックするか、すべての投稿をロックするかを選択します。
-					p CAPTCHAモード：キャプチャモード）。スレッドまたはすべての投稿にキャプチャを適用するかどうかを選択します。
-					p PPHトリガー閾値： PPH が一定量に達すると、アクションをトリガーします。
-					p PPHトリガーアクション：トリガーするアクション。
-					p TPHトリガーしきい値：TPH トリガしきい値: 一定量の TPH の後にアクションをトリガします。
-					p TPHトリガーアクション：トリガーするアクション。
-					p トリガーリセットロックモード：トリガーしきい値に達した場合、時間終了時にロックモードをこの状態にリセットします。
-					p CAPTCHAモードのリセットをトリガーする：トリガーしきい値に達した場合、1時間後にCaptchaモードをこのモードにリセットします。
-					p 早期404：新しいスレッドが投稿されたとき、最初の1/#{early404Fraction}のスレッドを超えて#{early404Replies}以下の返信がある既存のスレッドを削除します。
-					p アノニマイザーによるファイル投稿を無効にする：Tor隠し Tor隠しサービス、lokinet SNApps、i2p eepsites などのアノニマイザーを使ってユーザーが画像を投稿できないようにします。
-					p ブロックされた国：国コード (ジオ Ip データに基づく) の投稿をブロックします。
-					p フィルタ：投稿にマッチする単語やフレーズを改行で区切ったリスト。名前、メッセージ、メール、件名、ファイル名などをチェックします。
-					p ストリクトフィルタリング：フィルタと比較される入力を正規化することで、より積極的にフィルタと一致させます。
-					p フィルタモード：投稿がフィルタにマッチしたときの処理。
-					p 自動禁止期間のフィルタリング：フィルタモードが禁止に設定されているときに、自動的に禁止する時間。
+					p Lock Mode: Choose to lock posting new threads or all posts.
+					p Captcha Mode: Choose to enforce captchas for posting threads or all posts.
+					p PPH Trigger Threshold: Trigger an action after a certain amount of PPH.
+					p PPH Trigger Action: The action to trigger.
+					p TPH Trigger Threshold: Trigger an action after a certain amount of TPH.
+					p TPH Trigger Action: The action to trigger.
+					p Trigger Reset Lock Mode: If a trigger threshold was reached, reset the lock mode to this at the end of the hour.
+					p Trigger Reset Captcha Mode: If a trigger threshold was reached, reset the captcha mode to this at the end of the hour.
+					p Early 404: When a new thread is posted, delete any existing threads with less than #{early404Replies} replies beyond the first 1/#{early404Fraction} of threads.
+					p Disable anonymizer file posting: Prevent users posting images through anonymizers such as Tor hidden services, lokinet SNApps or i2p eepsites.
+					p Blocked Countries: Block country codes (based on geo Ip data) from posting.
+					p Filters: Newline separated list of words or phrases to match in posts. Checks name, message, email, subject, and filenames.
+					p Strict Filtering: More aggressively match filters, by normalising the input compared against the filters.
+					p Filter Mode: What to do when a post matches a filter.
+					p Filter Auto Ban Duration: How long to automatically ban for when filter mode is set to ban. Input the duration in time format described in the #[a(href='#moderation') moderation section].
 	.table-container.flex-center.mv-5
-		.anchor#privacyandcookies
+		.anchor#archive-reverse-url-format
 		table
 			tr
-				th: a(href='#privacyandcookies') プライバシーポリシーとクッキー /ローカルストレージ。
+				th: a(href='#archive-reverse-url-format') What is the archive/reverse image search link url format?
 			tr
-				td.post-message
-					p 
-						| IPアドレスは匿名化されており、元の形式でのみ管理者が利用でき、パブリケーションに関連付けられ、パブリケーションが板を離れるとき、または7日後に自動的に削除されます。
+				td
 					p
-						| このサイトには、すべての人に言論の自由を認めることを誓約しています。 私たちは、見解やイデオロギーなどに関係なく、すべての人の言論の自由を尊重し、支持するために可能な限りのことを行います。 多くのストーリーや解説は、ジョークやパロディーなどである可能性があるため、文字通りに解釈されることは想定されていません。
-		.table-container.flex-center.mv-5
+						| Put a link with 
+						span.mono %s
+						|  where the url of the page/file should go for reverse image search or archive links. For example 
+						span.mono https://tineye.com/search?url=#[span.bold %s]
+						| .
+	.table-container.flex-center.mv-5
+		.anchor#contact
 		table
 			tr
-				th(colspan=3) ローカルストレージ内のクッキー
+				th: a(href='#contact') How can I contact the administration?
 			tr
-				th 名前
-				th 種類
-				th 関数
-			tr
-				td connect.sid
-				td クッキー
-				td アカウントセッション
-			tr
-				td captchaid
-				td クッキー
-				td CAPTCHA
-			tr
-				td wpcc
-				td クッキー
-				td 同意クッキー
-			tr
-				td /css/themes/*
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td 24
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td alwaysshowreplies
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td codetheme
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td crispimages
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td customcss
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td dragleft
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td dragtop
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td filters1
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td heightlimit
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td hiddenimages
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td hiddenrecursive
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td hiddenthumbnails
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td hiddenloadingbars
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td hidepoststubs
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td live
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td name
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td localtime
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td notifications-yous-only
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td noncolorids
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td notifications
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td postpassword
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td relative
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td scroll
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td theme
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td volume
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td yous-setting
-				td ローカルストレージ
-				td カスタマイズ
-			tr
-				td yous
-				td ローカルストレージ
-				td カスタマイズ
-			tr
+				td
+					p Example						

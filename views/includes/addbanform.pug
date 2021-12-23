@@ -1,22 +1,22 @@
 .row
-	.label IP /ハッシュ
+	.label IP/Hash
 	input(type='text' name='ip' required)
 .row
-	.label 禁止理由
+	.label Ban Reason
 	input(type='text' name='ban_reason')
 .row
-	.label モデレートログメッセージ
+	.label Modlog Message
 	input(type='text' name='log_message')
 .row
-	.label 禁止期間
+	.label Ban Duration
 	input(type='text' name='ban_duration' placeholder='e.g. 7d')
 .row
-	.label 訴えられない禁止
+	.label Non-appealable Ban
 	label.postform-style.ph-5
 		input(type='checkbox', name='no_appeal' value='1')
 .row
-	.label モデレートログでユーザー名を非表示にする
+	.label Hide Username In Modlog
 	label.postform-style.ph-5
-		input(type='checkbox', name='hide_name' value='1' checked)
-input(type='submit', value='送信')
+		input(type='checkbox', name='hide_name' value='1')
+input(type='submit', value='submit')
 

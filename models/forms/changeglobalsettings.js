@@ -348,8 +348,8 @@ module.exports = async (req, res, next) => {
 	}
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': '設定を更新しました。',
+		'title': 'Success',
+		'message': 'Updated settings.',
 		'redirect': '/globalmanage/settings.html'
 	});
 

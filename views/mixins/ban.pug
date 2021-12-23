@@ -8,7 +8,7 @@ mixin ban(ban, banpage)
 			if ban.board
 				a(href=`/${ban.board}/`) /#{ban.board}/
 			else
-				| グローバル
+				| Global
 		td= ban.reason
 		- const ip = permLevel > ipHashPermLevel ? ban.ip.single.slice(-10) : ban.ip.raw;
 		td #{ip}
@@ -20,12 +20,12 @@ mixin ban(ban, banpage)
 		td: time.right.reltime(datetime=expireDate.toISOString()) #{expireDate.toLocaleString(undefined, {hourCycle:'h23'})}
 		td.banposts
 			if ban.posts && ban.posts.length > 0
-				| 表示するにはホバーします
+				| Hover to view
 				.thread
 					each p in ban.posts
 						+post(p, false, false, false, true)
 			else
-				投稿は表示されていません
+				Posts not shown
 		td
 			if ban.seen
 				| &#10003;
@@ -40,6 +40,6 @@ mixin ban(ban, banpage)
 			if ban.appeal
 				textarea(rows=1 disabled='true') #{ban.appeal}
 			else if ban.allowAppeal
-				| 申し立ては提出されていません
+				| No appeal submitted
 			else 
 				| -

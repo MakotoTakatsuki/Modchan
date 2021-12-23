@@ -26,26 +26,26 @@ module.exports = {
 		res.locals.actions = actionChecker(req);
 
 		const errors = await checkSchema([
-			{ result: lengthBody(req.body.globalcheckedposts, 1), expected: false, blocking: true, error: '少なくとも1つの投稿を選択する必要があります' },
-			{ result: lengthBody(res.locals.actions.validActions, 1), expected: false, blocking: true, error: 'アクションが選択されていません' },
-			{ result: lengthBody(req.body.globalcheckedposts, 1, globalLimits.multiInputs.posts.staff), expected: false, error: `リクエストごとに >${globalLimits.multiInputs.posts.staff} の投稿を選択してはならない。` },
-			{ result: (existsBody(req.body.global_report_ban) && !req.body.checkedreports), expected: false, error: 'レポーターを禁止するには、投稿とレポートを選択する必要があります' },
-			{ result: (existsBody(req.body.checkedreports) && !req.body.global_report_ban), expected: false, error: 'チェックされたレポートの場合、レポートアクションを選択する必要があります' },
-			{ result: (existsBody(req.body.checkedreports) && !req.body.globalcheckedposts), expected: false, error: 'レポートアクションのレポートをチェックする場合は、親の投稿をチェックする必要があります' },
+			{ result: lengthBody(req.body.globalcheckedposts, 1), expected: false, blocking: true, error: 'Must select at least one post' },
+			{ result: lengthBody(res.locals.actions.validActions, 1), expected: false, blocking: true, error: 'No actions selected' },
+			{ result: lengthBody(req.body.globalcheckedposts, 1, globalLimits.multiInputs.posts.staff), expected: false, error: `Must not select >${globalLimits.multiInputs.posts.staff} posts per request` },
+			{ result: (existsBody(req.body.global_report_ban) && !req.body.checkedreports), expected: false, error: 'Must select post and reports to ban reporter' },
+			{ result: (existsBody(req.body.checkedreports) && !req.body.global_report_ban), expected: false, error: 'Must select a report action if checked reports' },
+			{ result: (existsBody(req.body.checkedreports) && !req.body.globalcheckedposts), expected: false, error: 'Must check parent post if checking reports for report action' },
 			{ result: (existsBody(req.body.checkedreports) && req.body.globalcheckedposts
-				&& lengthBody(req.body.checkedreports, 1, req.body.globalcheckedposts.length*5)), expected: false, error: 'チェックされたレポートの数が無効です' },
-			{ result: (res.locals.actions.numGlobal > 0 && res.locals.actions.validActions.length <= res.locals.actions.numGlobal), expected: true, blocking: true, error: '無効なアクションが選択されました' },
-			{ result: (res.locals.permLevel > res.locals.actions.authRequired), expected: false, blocking: true, error: '全く許可しません' },
-			{ result: (existsBody(req.body.edit) && lengthBody(req.body.globalcheckedposts, 1, 1)), expected: false, error: '編集アクションには投稿を1つだけ選択する必要があります' },
-			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: `パスワードは ${globalLimits.fieldLength.postpassword} 文字以下でなければなりません。` },
-			{ result: lengthBody(req.body.ban_reason, 0, globalLimits.fieldLength.ban_reason), expected: false, error: `禁止理由は ${globalLimits.fieldLength.ban_reason} 文字以下でなければならない。` },
-			{ result: lengthBody(req.body.log_message, 0, globalLimits.fieldLength.log_message), expected: false, error: `ログメッセージは ${globalLimits.fieldLength.log_message} 文字以下である必要があります。` },
+				&& lengthBody(req.body.checkedreports, 1, req.body.globalcheckedposts.length*5)), expected: false, error: 'Invalid number of reports checked' },
+			{ result: (res.locals.actions.numGlobal > 0 && res.locals.actions.validActions.length <= res.locals.actions.numGlobal), expected: true, blocking: true, error: 'Invalid actions selected' },
+			{ result: (res.locals.permLevel > res.locals.actions.authRequired), expected: false, blocking: true, error: 'No permission' },
+			{ result: (existsBody(req.body.edit) && lengthBody(req.body.globalcheckedposts, 1, 1)), expected: false, error: 'Must select only 1 post for edit action' },
+			{ result: lengthBody(req.body.postpassword, 0, globalLimits.fieldLength.postpassword), expected: false, error: `Password must be ${globalLimits.fieldLength.postpassword} characters or less` },
+			{ result: lengthBody(req.body.ban_reason, 0, globalLimits.fieldLength.ban_reason), expected: false, error: `Ban reason must be ${globalLimits.fieldLength.ban_reason} characters or less` },
+			{ result: lengthBody(req.body.log_message, 0, globalLimits.fieldLength.log_message), expected: false, error: `Modlog message must be ${globalLimits.fieldLength.log_message} characters or less` },
 		], res.locals.permLevel);
 
 		//return the errors
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/globalmanage/reports.html'
 			})
@@ -59,8 +59,8 @@ module.exports = {
 		}
 		if (!res.locals.posts || res.locals.posts.length === 0) {
 			return dynamicResponse(req, res, 404, 'message', {
-				'title': '見つかりません',
-				'errors': '選択した投稿が見つかりません',
+				'title': 'Not found',
+				'errors': 'Selected posts not found',
 				'redirect': '/globalmanage/reports.html'
 			})
 		}

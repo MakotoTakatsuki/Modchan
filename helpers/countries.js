@@ -1,9 +1,9 @@
 'use strict';
 
 const countries = require('i18n-iso-countries')
-	, countryNamesMap = countries.getNames('pt')
-	, extraCountryCodes = ['EU', 'XX']
-	, anonymizerCountryCodes = ['TOR', 'LOKI', 'T1']
+	, countryNamesMap = countries.getNames('en')
+	, extraCountryCodes = ['EU', 'XX', 'T1']
+	, anonymizerCountryCodes = ['TOR', 'LOKI']
 	, anonymizerCountryCodesSet = new Set(anonymizerCountryCodes)
 	, countryCodes = Object.keys(countryNamesMap)
 		.concat(extraCountryCodes, anonymizerCountryCodes);
@@ -13,10 +13,10 @@ Object.entries(countryNamesMap)
 	.filter(e => Array.isArray(e[1])) //for any country with an array of names,
 	.forEach(c => countryNamesMap[c[0]] = c[1][0]) //use the first name
 
-countryNamesMap['EU'] = 'ヨーロッパ';
-countryNamesMap['XX'] = '不明';
+countryNamesMap['EU'] = 'Europe';
+countryNamesMap['XX'] = 'Unknown';
 countryNamesMap['T1'] = 'Tor Exit Node';
-countryNamesMap['TOR'] = 'Tor隠れサービス';
+countryNamesMap['TOR'] = 'Tor Hidden Service';
 countryNamesMap['LOKI'] = 'Lokinet SNApp';
 
 module.exports = {

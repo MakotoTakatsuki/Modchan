@@ -2,12 +2,12 @@ extends ../layout.pug
 include ../mixins/newspost.pug
 
 block head
-	title ニュース
+	title News
 
 block content
-	h1.board-title ニュース
+	h1.board-title News
 	if news.length === 0
-		p.text-center ニュースはありません。	
+		p.text-center No news.	
 	else 
 		include ../includes/stickynav.pug
 		each post in news

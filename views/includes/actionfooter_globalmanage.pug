@@ -1,53 +1,53 @@
 details.toggle-label#actionform
-	summary.collapse#action-menu 投稿アクションを表示
+	summary.collapse#action-menu Show Post Actions
 	.actions 
-		h4.no-m-p 行動：
+		h4.no-m-p Actions:
 		label
 			input.post-check(type='checkbox', name='delete' value='1')
-			| 投稿を削除する
+			| Delete Posts
 		label
 			input.post-check(type='checkbox', name='unlink_file' value='1')
-			| ファイルのリンクを解除する
+			| Unlink Files
 		label
 			input.post-check(type='checkbox', name='delete_file' value='1')
-			| ファイルを削除する
+			| Delete Files
 		label
 			input.post-check(type='checkbox', name='spoiler' value='1')
-			| ネタバレファイル
+			| Spoiler Files
 		label
 			input.post-check(type='checkbox', name='edit' value='1')
-			| 投稿を編集
+			| Edit Post
 		label
 			input.post-check(type='checkbox', name='delete_ip_global' value='1')
-			| IPからグローバルに削除
+			| Delete from IP globally
 		label
 			input.post-check(type='checkbox', name='global_dismiss' value='1')
-			| グローバルレポートを却下する
+			| Dismiss Global Reports
 		label
 			input.post-check(type='checkbox', name='global_report_ban' value='1')
-			| グローバル禁止レポーター
+			| Global Ban Reporters
 		label
 			input.post-check(type='checkbox', name='global_ban' value='1')
-			| グローバル禁止ポスター
+			| Global Ban Poster
 		label
 			input.post-check(type='checkbox', name='ban_q' value='1')
-			| 狭い範囲
+			| Narrow Range
 		label
 			input.post-check(type='checkbox', name='ban_h' value='1')
-			| ワイドレンジ
+			| Wide Range
 		label
 			input.post-check(type='checkbox', name='no_appeal' value='1')
-			| 訴えられない禁止
+			| Non-appealable Ban
 		label
 			input.post-check(type='checkbox', name='preserve_post' value='1')
-			| 禁止の投稿を表示
+			| Show Post In Ban
 		label
-			input.post-check(type='checkbox', name='hide_name' value='1' checked)
-			| モデレートログでユーザー名を非表示にする
+			input.post-check(type='checkbox', name='hide_name' value='1')
+			| Hide Username In Modlog
 		label
 			input(type='text', name='ban_reason', placeholder='Ban reason' autocomplete='off')
 		label
 			input(type='text', name='ban_duration', placeholder='Ban duration e.g. 7d' autocomplete='off')
 		label
 			input(type='text', name='log_message', placeholder='Modlog message' autocomplete='off')
-	input(type='submit', value='送信')
+	input(type='submit', value='submit')

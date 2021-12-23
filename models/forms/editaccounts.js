@@ -60,8 +60,8 @@ module.exports = async (req, res, next) => {
 	}
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': `${req.body.delete_account ? '削除' : '編集済み'} ${amount} アカウント`,
+		'title': 'Success',
+		'message': `${req.body.delete_account ? 'Deleted' : 'Edited'} ${amount} accounts`,
 		'redirect': '/globalmanage/accounts.html'
 	});
 

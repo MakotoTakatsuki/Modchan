@@ -20,19 +20,19 @@ module.exports = {
 
 		const errors = await checkSchema([
 			{ result: (enableUserAccountCreation === true), blocking: true, permLevel: 1, expected: true, error: 'Account creation is currently disabled' },
-			{ result: existsBody(req.body.username), expected: true, error: 'ユーザー名がありません' },
-			{ result: lengthBody(req.body.username, 0, 50), expected: false, error: 'ユーザー名は50文字以下である必要があります' },
-			{ result: alphaNumericRegex.test(req.body.username), expected: true, error: 'ユーザー名にはa-z0-9のみを含める必要があります'},
-			{ result: existsBody(req.body.password), expected: true, error: 'パスワードがありません' },
-			{ result: lengthBody(req.body.password, 0, 50), expected: false, error: 'パスワードは50文字以下である必要があります' },
-			{ result: existsBody(req.body.passwordconfirm), expected: true, error: 'パスワードがありません confirmation' },
-			{ result: lengthBody(req.body.passwordconfirm, 0, 100), expected: false, error: 'パスワードの確認は100文字以下である必要があります' },
-			{ result: (req.body.password === req.body.passwordconfirm), expected: true, error: 'パスワードとパスワードの確認は一致する必要があります' },
+			{ result: existsBody(req.body.username), expected: true, error: 'Missing username' },
+			{ result: lengthBody(req.body.username, 0, 50), expected: false, error: 'Username must be 50 characters or less' },
+			{ result: alphaNumericRegex.test(req.body.username), expected: true, error: 'Username must contain a-z 0-9 only'},
+			{ result: existsBody(req.body.password), expected: true, error: 'Missing password' },
+			{ result: lengthBody(req.body.password, 0, 50), expected: false, error: 'Password must be 50 characters or less' },
+			{ result: existsBody(req.body.passwordconfirm), expected: true, error: 'Missing password confirmation' },
+			{ result: lengthBody(req.body.passwordconfirm, 0, 100), expected: false, error: 'Password confirmation must be 100 characters or less' },
+			{ result: (req.body.password === req.body.passwordconfirm), expected: true, error: 'Password and password confirmation must match' },
 		], res.locals.permLevel);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/register.html'
 			})

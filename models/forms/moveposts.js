@@ -175,7 +175,7 @@ module.exports = async (req, res) => {
 	}
 
 	return {
-		message: '投稿を移動',
+		message: 'Moved posts',
 		action: movedPosts > 0,
 	};
 

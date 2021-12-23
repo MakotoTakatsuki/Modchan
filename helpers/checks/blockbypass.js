@@ -22,12 +22,12 @@ module.exports = async (req, res, next) => {
 	if (!res.locals.solvedCaptcha && (!bypassId || bypassId.length !== 24)) {
 		deleteTempFiles(req).catch(e => console.error);
 		return dynamicResponse(req, res, 403, 'message', {
-			'title': '禁断',
-			'message': '続行するには、ブロックバイパスを完了してください',
+			'title': 'Forbidden',
+			'message': 'Please complete a block bypass to continue',
 			'frame': '/bypass_minimal.html',
 			'link': {
 				'href': '/bypass.html',
-				'text': 'ブロックバイパスを取得',
+				'text': 'Get block bypass',
 			},
 		});
 	}
@@ -67,12 +67,12 @@ module.exports = async (req, res, next) => {
 
 	deleteTempFiles(req).catch(e => console.error);
 	return dynamicResponse(req, res, 403, 'message', {
-		'title': '禁断',
-		'message': 'ブロックバイパスの有効期限が切れているか、最大使用量を超えています',
+		'title': 'Forbidden',
+		'message': 'Block bypass expired or exceeded max uses',
 		'frame': '/bypass_minimal.html',
 		'link': {
 			'href': '/bypass.html',
-			'text': 'ブロックバイパスを取得',
+			'text': 'Get block bypass',
 		},
 	});
 

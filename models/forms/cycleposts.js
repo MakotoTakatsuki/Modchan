@@ -10,12 +10,12 @@ module.exports = (posts) => {
 
 	if (filteredposts.length === 0) {
 		return {
-			message: '循環するスレッドがありません',
+			message: 'No thread(s) to cycle',
 		};
 	}
 
 	return {
-		message: `循環モードが${filteredposts.length}のスレッドでトグルされました。`,
+		message: `Toggled Cyclical mode for ${filteredposts.length} thread(s)`,
 		action: '$bit',
 		query: {
 			'cyclic': {

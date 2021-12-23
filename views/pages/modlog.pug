@@ -3,7 +3,7 @@ include ../mixins/boardheader.pug
 include ../mixins/boardnav.pug
 
 block head
-	title /#{board._id}/ - #{startDate.toDateString()}のログ
+	title /#{board._id}/ - Logs for #{startDate.toDateString()}
 
 block content
 	+boardheader('Logs')
@@ -15,16 +15,16 @@ block content
 	.table-container.flex-center.mv-10.text-center
 		table
 				tr
-					th 日にち
-					th ユーザー
-					th 行動
-					th 投稿
-					th ログメッセージ
+					th Date
+					th User
+					th Actions
+					th Posts
+					th Log Message
 				for log in logs
 					tr
 						- const logDate = new Date(log.date);
 						td: time.reltime(datetime=logDate.toISOString()) #{logDate.toLocaleString(undefined, {hourCycle:'h23'})}
-						td(class=(!log.showUser ? 'em' : '')) #{log.showUser ? log.user : '非表示のユーザー'}
+						td(class=(!log.showUser ? 'em' : '')) #{log.showUser ? log.user : 'Hidden User'}
 						td #{log.actions}
 						td
 							if log.showLinks

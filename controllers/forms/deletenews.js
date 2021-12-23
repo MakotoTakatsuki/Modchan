@@ -16,12 +16,12 @@ module.exports = {
 	controller: async (req, res, next) => {
 
 		const errors = await checkSchema([
-			{ result: lengthBody(req.body.checkednews, 1), expected: false, error: '削除するには、少なくとも1つのニュース投稿を選択する必要があります' },
+			{ result: lengthBody(req.body.checkednews, 1), expected: false, error: 'Must select at least one newspost to delete' },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/globalmanage/news.html'
 			})

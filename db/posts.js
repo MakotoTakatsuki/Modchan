@@ -198,7 +198,7 @@ module.exports = {
 					'bumped': {
 						'$max': {
 							'$cond': [
-								{ '$ne': [ '$email', '下げる' ] },
+								{ '$ne': [ '$email', 'sage' ] },
 								'$date',
 								0 //still need to improve this to ignore bump limitthreads
 							]
@@ -438,7 +438,7 @@ module.exports = {
 	},
 
 	insertOne: async (board, data, thread, tor) => {
-		const sageEmail = data.email === '下げる';
+		const sageEmail = data.email === 'sage';
 		const bumpLocked = thread && thread.bumplocked === 1;
 		const bumpLimited = thread && thread.replyposts >= board.settings.bumpLimit;
 		const cyclic = thread && thread.cyclic === 1;

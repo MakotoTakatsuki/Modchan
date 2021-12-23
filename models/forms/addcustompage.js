@@ -36,8 +36,8 @@ module.exports = async (req, res, next) => {
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': 'カスタムページを追加',
+		'title': 'Success',
+		'message': 'Added custom page',
 		'redirect': `/${req.params.board}/manage/custompages.html`
 	});
 

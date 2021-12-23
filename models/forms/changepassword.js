@@ -16,8 +16,8 @@ module.exports = async (req, res, next) => {
 	//if the account doesnt exist, reject
 	if (!account) {
 		return dynamicResponse(req, res, 403, 'message', {
-			'title': '禁断',
-			'message': 'ユーザーネームまたはパスワードが違います',
+			'title': 'Forbidden',
+			'message': 'Incorrect username or password',
 			'redirect': '/changepassword.html'
 		});
 	}
@@ -28,8 +28,8 @@ module.exports = async (req, res, next) => {
 	//if hashes matched
 	if (passwordMatch === false) {
 		return dynamicResponse(req, res, 403, 'message', {
-			'title': '禁断',
-			'message': 'ユーザーネームまたはパスワードが違います',
+			'title': 'Forbidden',
+			'message': 'Incorrect username or password',
 			'redirect': '/changepassword.html'
 		});
 	}
@@ -38,8 +38,8 @@ module.exports = async (req, res, next) => {
 	await Accounts.changePassword(username, newPassword);
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': 'パスワードを変更しました',
+		'title': 'Success',
+		'message': 'Changed password',
 		'redirect': '/login.html'
 	});
 

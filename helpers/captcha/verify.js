@@ -36,7 +36,7 @@ module.exports = async (req, res, next) => {
 		}
 		const page = (req.body.minimal || req.path === '/blockbypass' ? 'bypass' : 'message');
 		return dynamicResponse(req, res, 403, page, {
-			'title': '禁断',
+			'title': 'Forbidden',
 			'message': err,
 			'redirect': req.headers.referer,
 		});

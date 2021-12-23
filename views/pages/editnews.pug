@@ -1,10 +1,10 @@
 extends ../layout.pug
 
 block head
-	title ニュースを編集
+	title Edit News
 
 block content
-	h1.board-title ニュースを編集
+	h1.board-title Edit News
 	include ../includes/stickynav.pug
 	.form-wrapper.flex-center.mv-10
 		form.form-post(action='/forms/global/editnews' method='POST')
@@ -19,5 +19,5 @@ block content
 							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(undefined, {hourCycle:'h23'})}
 					tr
 						td
-							textarea.edit.fw(name='message' rows='10' placeholder='ポストスタイリングをサポート' required) #{news.message.raw}
-			input(type='submit', value='保存')
+							textarea.edit.fw(name='message' rows='10' placeholder='Supports post styling' required) #{news.message.raw}
+			input(type='submit', value='save')

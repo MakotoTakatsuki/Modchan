@@ -1,10 +1,10 @@
 extends ../layout.pug
 
 block head
-	title カスタムページの編集
+	title Edit Custom Page
 
 block content
-	h1.board-title カスタムページの編集
+	h1.board-title Edit Custom Page
 	include ../includes/stickynav.pug
 	.form-wrapper.flex-center.mv-10
 		form.form-post(action=`/forms/board/${board._id}/editcustompage` method='POST')
@@ -12,7 +12,7 @@ block content
 			input(type='hidden' name='page_id' value=page._id)
 			.row
 				.label .html name
-				input(type='text' name='page' pattern='[a-zA-Z0-9-_]+' title='a-zA-Z0-9-_のみ' value=page.page required)
+				input(type='text' name='page' pattern='[a-zA-Z0-9-_]+' title='a-zA-Z0-9-_ only' value=page.page required)
 			.table-container.flex-center.mv-5
 				table
 					tr
@@ -23,5 +23,5 @@ block content
 					tr
 						td
 
-							textarea.edit.fw(name='message' rows='10' placeholder='ポストスタイリングをサポート' required) #{page.message.raw}
-			input(type='submit', value='保存')
+							textarea.edit.fw(name='message' rows='10' placeholder='Supports post styling' required) #{page.message.raw}
+			input(type='submit', value='save')

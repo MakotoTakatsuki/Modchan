@@ -21,7 +21,7 @@ module.exports = async (captchaInput, captchaId) => {
 	//make sure they have captcha cookie and its 24 chars
 	if ((captchaOptions.type !== 'google' && captchaOptions.type !== 'hcaptcha')
 		&& (!captchaId || captchaId.length !== 24)) {
-		throw 'CAPTCHA expired';
+		throw 'Captcha expired';
 	}
 
 	captchaInput = Array.isArray(captchaInput) ? captchaInput : [captchaInput];
@@ -66,7 +66,7 @@ module.exports = async (captchaInput, captchaId) => {
 					body: form,
 				}).then(res => res.json());
 			} catch (e) {
-				throw 'CAPTCHA error occurred';
+				throw 'Captcha error occurred';
 			}
 			if (!recaptchaResponse || !recaptchaResponse.success) {
 				throw 'Incorrect captcha answer';
@@ -84,14 +84,14 @@ module.exports = async (captchaInput, captchaId) => {
 					body: form,
 				}).then(res => res.json());
 			} catch (e) {
-				throw 'CAPTCHA error occurred';
+				throw 'Captcha error occurred';
 			}
 			if (!hcaptchaResponse || !hcaptchaResponse.success) {
 				throw 'Incorrect captcha answer';
 			}
 			break;
 		default:
-			throw 'CAPTCHA config error';
+			throw 'Captcha config error';
 			break;
 	}
 

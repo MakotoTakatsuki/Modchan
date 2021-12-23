@@ -21,8 +21,8 @@ module.exports = async (req, res, next) => {
 
 	return dynamicResponse(req, res, 200, 'message', {
 		'minimal': req.body.minimal,
-		'title': '成功',
-		'message': 'ブロックバイパスが完了したら、戻って投稿できます。',
+		'title': 'Success',
+		'message': 'Completed block bypass, you may go back and make your post.',
 	});
 
 }

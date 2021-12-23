@@ -22,10 +22,10 @@ module.exports = async (req, res, next) => {
 		if (isBlacklisted) {
 			deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 403, 'message', {
-				'title': '禁断',
-				'message': `あなたのIPアドレスがブラックリストに登録されているため、リクエストがブロックされました。${blockBypass.bypassDnsbl ? '「ブロックバイパス」を解決して、ブラックリストを一時的に回避することができます。' : ''}`,
+				'title': 'Forbidden',
+				'message': `Your request was blocked because your IP address is listed on a blacklist.${blockBypass.bypassDnsbl ? ' You can solve a "block bypass" to temporarily circumvent blacklisting.' : ''}`,
 				'redirect': req.headers.referer || '/',
-				'link': blockBypass.bypassDnsbl ? { text: 'ブロックバイパスを解決する', href: '/bypass.html' } : null,
+				'link': blockBypass.bypassDnsbl ? { text: 'Solve block bypass', href: '/bypass.html' } : null,
 			});
 		}
 	}

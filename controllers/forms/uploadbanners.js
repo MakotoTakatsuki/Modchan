@@ -17,17 +17,17 @@ module.exports = {
 		const errors = [];
 
 		if (res.locals.numFiles === 0) {
-			errors.push('ファイルを提供する必要があります');
+			errors.push('Must provide a file');
 		} else if (res.locals.numFiles > globalLimits.bannerFiles.max) {
-			errors.push(`1回のリクエストでアップロードできるバナーの最大値が${globalLimits.bannerFiles.max}を超えました。`);
+			errors.push(`Exceeded max banner uploads in one request of ${globalLimits.bannerFiles.max}`);
 		} else if (res.locals.board.banners.length+res.locals.numFiles > globalLimits.bannerFiles.total) {
-			errors.push(`バナーの合計数がグローバルリミットの${globalLimits.bannerFiles.total}を超えてしまう。`);
+			errors.push(`Total number of banners would exceed global limit of ${globalLimits.bannerFiles.total}`);
 		}
 
 		if (errors.length > 0) {
 			await deleteTempFiles(req).catch(e => console.error);
-			return dynamicResponse(req, res, 400, 'message', { 
-				'title': '要求の形式が正しくありません',
+			return dynamicResponse(req, res, 400, 'message', {
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.board}/manage/assets.html`
 			})

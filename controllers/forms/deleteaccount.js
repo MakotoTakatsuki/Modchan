@@ -15,13 +15,13 @@ module.exports = {
 		const { modBoards, ownedBoards } = res.locals.user;
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.confirm), expected: true, error: '確認がありません' },
-			{ result: (numberBody(ownedBoards.length, 0, 0) && numberBody(modBoards.length, 0, 0)), expected: true, error: 'どの板でもスタッフのポジションを保持している間は、アカウントを削除することはできません' },
+			{ result: existsBody(req.body.confirm), expected: true, error: 'Missing confirmation' },
+			{ result: (numberBody(ownedBoards.length, 0, 0) && numberBody(modBoards.length, 0, 0)), expected: true, error: 'You cannot delete your account while you hold staff position on any board' },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/account.html',
 			});
@@ -34,8 +34,8 @@ module.exports = {
 		}
 
 		return dynamicResponse(req, res, 200, 'message', {
-			'title': '成功',
-			'message': 'アカウントが削除されました',
+			'title': 'Success',
+			'message': 'Account deleted',
 			'redirect': '/',
 		});
 

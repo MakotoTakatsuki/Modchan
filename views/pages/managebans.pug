@@ -4,13 +4,13 @@ include ../mixins/managenav.pug
 include ../mixins/boardheader.pug
 
 block head
-	title /#{board._id}/ -禁止と上訴を管理する
+	title /#{board._id}/ - Manage Bans & Appeals
 
 block content
-	+boardheader('禁止')
+	+boardheader('Bans')
 	br
 	+managenav('bans')
 	hr(size=1)
-	h4.no-m-p 禁止と上訴：
+	h4.no-m-p Bans & Appeals:
 	form(action=`/forms/board/${board._id}/editbans` method='POST' enctype='application/x-www-form-urlencoded')
 		include ../includes/managebanform.pug

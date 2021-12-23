@@ -9,8 +9,8 @@ module.exports = async (req, res, next) => {
 
 	if (!newOwner) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': '存在しないアカウントに転送できません',
+			'title': 'Bad request',
+			'message': 'Cannot transfer to account that does not exist',
 			'redirect': `/${req.params.board}/manage/settings.html`
 		});
 	}
@@ -31,8 +31,8 @@ module.exports = async (req, res, next) => {
 	await Accounts.addOwnedBoard(newOwner._id, req.params.board);
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': '所有権の譲渡',
+		'title': 'Success',
+		'message': 'Transferred ownership',
 		'redirect': `/${req.params.board}/index.html`
 	});
 

@@ -14,8 +14,8 @@ module.exports = async (req, res, next) => {
 	// if the account exists reject
 	if (account != null) {
 		return dynamicResponse(req, res, 409, 'message', {
-			'title': '対立',
-			'message': 'このユーザー名のアカウントはすでに存在します',
+			'title': 'Conflict',
+			'message': 'Account with this username already exists',
 			'redirect': '/register.html'
 		});
 	}

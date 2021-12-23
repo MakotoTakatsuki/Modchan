@@ -27,7 +27,7 @@ module.exports = async (posts, unlinkOnly) => {
 
 	if (files.length == 0) {
 		return {
-			 message: 'ファイルが見つかりません'
+			 message: 'No files found'
 		};
 	}
 
@@ -41,7 +41,7 @@ module.exports = async (posts, unlinkOnly) => {
 
 	if (unlinkOnly) {
 		return {
-			message:`ポスト(複数可)にまたがるリンクされていない${files.length}ファイル`,
+			message:`Unlinked ${files.length} file(s) across ${posts.length} post(s)`,
 			action:'$set',
 			query: {
 				'files': []
@@ -51,7 +51,7 @@ module.exports = async (posts, unlinkOnly) => {
 		//delete all the files
 		await deletePostFiles(files);
 		return {
-			message:`サーバーから${files.length}のファイルを削除しました。`,
+			message:`Deleted ${files.length} file(s) from server`,
 			//NOTE: only deletes from selected posts. other posts with same image will 404
 			action:'$set',
 			query: {

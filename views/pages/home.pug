@@ -5,25 +5,20 @@ block head
 	title #{meta.siteName}
 
 block content
-	//h1.board-title #{meta.siteName}
-	img.logo(src='/misc/marutanew.png' title='モッドちゃんねる')
+	h1.board-title #{meta.siteName}
 	.table-container.flex-center.mv-10.text-center
-	
 		table
 			tr
-				th.alt サイトについて
+				th.alt Welcome
 			tr
 				td
 					pre.no-m-p
-						| 無限に広がる無限の画像掲示板、モッドちゃんねるへようこそ
-						| モッドちゃんねるでは、経験やプログラミングの知識がなくても、独自の画像掲示板や掲示板を無料で作成できます。
-						
-						a(href='/faq.html#make-a-board') 板を作る
+						| The site administrator should edit views/pages/home.pug, then run "pm2 reload all" and "gulp html" to customise this page.
 	if recentNews && recentNews.length > 0
 		.table-container.flex-center.mv-5
 			table.newstable
 				tr
-					th(colspan=3) ニュース
+					th(colspan=3) Latest News
 				each post in recentNews
 					tr
 						td
@@ -33,22 +28,7 @@ block content
 						td
 							- const newsDate = new Date(post.date);
 							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(undefined, {hourCycle:'h23'})}
-	if hotThreads && hotThreads.length > 0
-		.table-container.flex-center.mv-5
-			table.posttable
-				tr(colspan=3) 
-				each post in hotThreads
-					tr
-						td 🔥#{post.replyposts + post.replyfiles}
-						td 
-							if post.nomarkup != null
-								a.quote(href=`/${post.board}/thread/${post.postId}.html#${post.postId}`) #{`${post.subject.substring(0,30)}${post.subject && post.subject.length > 30 ? '...' : ''} ${post.nomarkup && post.nomarkup.substring(0,50)}${post.nomarkup && post.nomarkup.length > 50 ? '...' : ''}`}
-							if post.nomarkup === null
-								a.quote(href=`/${post.board}/thread/${post.postId}.html#${post.postId}`) （テキストなし）
 
-						td
-							- const newsDate = new Date(post.bumped);
-							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(undefined, {hourCycle:'h23'})}
 	if boards && boards.length > 0
 		+boardtable(true, false)
 			each board in boards
@@ -56,7 +36,7 @@ block content
 					td 
 						if board.settings.sfw === true
 							span.left
-								span.help(title='わいせつではない') &#x1F4BC;
+								span.help(title='SFW') &#x1F4BC;
 								|  
 						a(href=`/${board._id}/index.html`) /#{board._id}/ - #{board.settings.name}
 					td #{board.settings.description}
@@ -67,20 +47,16 @@ block content
 			if localStats.total-localStats.unlisted > boards.length
 				tr
 					td(colspan=6)
-						a.bold(href='/boards.html') より多くの板
+						a.bold(href='/boards.html') More Boards
 		.table-container.flex-center.mv-10.text-center
 			table(style='max-width:450px')
 				tr
-					th 情報
+					th Local Stats
 				tr
 					td
 						pre.no-m-p
-							| 公開されている掲示板は、#[span.bold #{localStats.total-localStats.unlisted}]で、全部で#[span.bold #{localStats.total}]となります。最近1日の間に#[span.bold #{localStats.ppd}]出版物#{localStats.ppd === 1 ? ' ' : ''}、 最近1時間の間に#[span.bold #{localStats.pph}]、合計#[span.bold #{localStats.posts}]がありました。
-							| #[span.bold #{fileStats.count}] #{fileStats.count === 1 ? '' : ''}ファイル#[span.bold #{fileStats.totalSizeString}].
-							| 
-							a(href='http://jieq75a6uwqbj5sjzaxlnd7xwgs35audjmkk4g3gfjwosfrz7cp47xid.onion') Tor
-							| 
-							a(href='http://yg8tt1wnsgmkjxkhm5oxc4h3tgtch1q3yycngx8h8xwg3ef7bjco.loki') Loki
+							| There are currently #[span.bold #{localStats.total-localStats.unlisted}] public boards, #[span.bold #{localStats.total}] in total. Sitewide, #[span.bold #{localStats.ppd}] post#{localStats.ppd === 1 ? ' has' : 's have'} been made in the last day, #[span.bold #{localStats.pph}] in the last hour, #[span.bold #{localStats.posts}] in total.
+							| #[span.bold #{fileStats.count}] file#{fileStats.count === 1 ? ' is' : 's are'} being served, totaling #[span.bold #{fileStats.totalSizeString}].
 		if enableWebring === true && webringStats != null
 			.table-container.flex-center.mv-10.text-center
 				table(style='max-width:450px')

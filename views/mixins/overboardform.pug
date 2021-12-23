@@ -5,13 +5,13 @@ mixin overboardform(overboardFormAction)
 			form.mt-5.form-post#overboardform(action=overboardFormAction method='GET')
 				.col
 					.row
-						.label デフォルトの板を含める
+						.label Include Default Boards
 						label.postform-style.ph-5
 							input(type='checkbox', name='include_default', value='true' checked=includeDefault)
 					.row
-						.label 板を追加
+						.label Add Boards
 						input(type='text' name='add' value=addBoards.join(',') placeholder='comma separated')
 					.row
-						.label 板を削除します
+						.label Remove Boards
 						input(type='text' name='rem' value=removeBoards.join(',') placeholder='comma separated')
-				input(type='submit', value='フィルター')
+				input(type='submit', value='Filter')

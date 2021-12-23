@@ -2,25 +2,25 @@ extends ../layout.pug
 include ../mixins/globalmanagenav.pug
 
 block head
-	title 管理
+	title Manage
 
 block content
-	h1.board-title グローバルマネジメント
+	h1.board-title Global Management
 	br
 	+globalmanagenav('accounts')
 	hr(size=1)
 	.form-wrapper.flexleft
-		h4.no-m-p 検索：
+		h4.no-m-p Search:
 		form.form-post.mv-5(action=`/globalmanage/accounts.html` method='GET')
 			input(type='hidden' value=page)
 			.row
-				.label ユーザー名
+				.label Username
 				input(type='text' name='username' value=username)
 			.row
-				.label 板URI
+				.label Board URI
 				input(type='text' name='uri' value=uri)
-			input(type='submit', value='フィルター')
-		h4.no-m-p アカウント：
+			input(type='submit', value='Filter')
+		h4.no-m-p Accounts:
 		if accounts && accounts.length > 0
 			form.form-post.nogrow(action=`/forms/global/editaccounts` method='POST' enctype='application/x-www-form-urlencoded')
 				input(type='hidden' name='_csrf' value=csrf)
@@ -28,11 +28,11 @@ block content
 					table
 						tr
 							th
-							th ユーザー名
-							th アカウントの種類
-							th 自分の板
-							th モデレーター板
-							th 最後にログインした時
+							th Username
+							th Account Type
+							th Own Boards
+							th Mod Boards
+							th Last Active
 						for account in accounts
 							tr
 								td: input(type='checkbox', name='checkedaccounts' value=account._id)
@@ -60,18 +60,18 @@ block content
 				.pages.mv-5
 					include ../includes/pages.pug
 				.row
-					.label アカウントタイプの設定
+					.label Set Account Type
 					select(name='auth_level')
 						option(value='')
-						option(value='0') 管理者
-						option(value='1') グローバルスタッフ
-						option(value='2') グローバル板オーナー
-						option(value='3') グローバルモデレーター
-						option(value='4') 通常のユーザー
+						option(value='0') Admin
+						option(value='1') Global Staff
+						option(value='2') Global Board Owner
+						option(value='3') Global Mod
+						option(value='4') Regular User
 				.row
-					.label アカウントを削除する
+					.label Delete Accounts
 					label.postform-style.ph-5
 						input(type='checkbox', name='delete_account', value='true')
-				input(type='submit', value='保存')
+				input(type='submit', value='apply')
 		else
 			p No results.

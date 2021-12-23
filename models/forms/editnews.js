@@ -15,8 +15,8 @@ module.exports = async (req, res, next) => {
 
 	if (updated === 0) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'errors': 'ニュース投稿は存在しません',
+			'title': 'Bad request',
+			'errors': 'News post does not exist',
 			'redirect': req.headers.referer || '/globalmanage/news.html'
 		});
 	}
@@ -27,8 +27,8 @@ module.exports = async (req, res, next) => {
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': '更新されたニュース投稿',
+		'title': 'Success',
+		'message': 'Updated newspost',
 		'redirect': '/globalmanage/news.html'
 	});
 

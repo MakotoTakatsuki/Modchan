@@ -4,10 +4,10 @@ include ../mixins/globalmanagenav.pug
 include ../mixins/boardtable.pug
 
 block head
-	title 管理
+	title Manage
 
 block content
-	h1.board-title グローバルマネジメント
+	h1.board-title Global Management
 	br
 	+globalmanagenav('boards')
 	hr(size=1)
@@ -18,47 +18,47 @@ block content
 			.row.wrap.sb
 				.col.mr-5
 					.row
-						.label 検索
+						.label Search
 						input(type='text' name='search' value=search placeholder='Uri or tags')
 					.row
-						.label 選別
+						.label Sort
 						select(name='sort')
-							option(value='popularity') 人気
-							option(value='activity' selected=query.sort === 'activity') 最新のアクティビティ
+							option(value='popularity') Popularity
+							option(value='activity' selected=query.sort === 'activity') Latest Activity
 					.row
 						.label Order
 						select(name='direction')
-							option(value='desc') 降順
-							option(value='asc' selected=query.direction === 'asc') 上昇
+							option(value='desc') Descending
+							option(value='asc' selected=query.direction === 'asc') Ascending
 				.col
 					.row
-						.label 非公開
+						.label Unlisted
 						label.postform-style.ph-5
 							input(type='checkbox', name='filter_unlisted', value='1' checked=(query.filter_unlisted != null))
 					.row
-						.label わいせつではない
+						.label SFW
 						label.postform-style.ph-5
 							input(type='checkbox', name='filter_sfw', value='1' checked=(query.filter_sfw != null))
 					.row
-						.label 放棄された
+						.label Abandoned
 						label.postform-style.ph-5
 							input(type='checkbox', name='filter_abandoned', value='1' checked=(query.filter_abandoned != null))
-			input(type='submit', value='フィルター')
+			input(type='submit', value='Filter')
 	if localBoards && localBoards.length > 0
-		h4.text-center.mv-10 板リスト：
+		h4.text-center.mv-10 Board List:
 		+boardtable(true, true)
 			each board in localBoards
 				tr
 					td 
 						span.left
 							if board.settings.sfw === true
-								span.help(title='わいせつではない') &#x1F4BC;
+								span.help(title='SFW') &#x1F4BC;
 								|  
 							if board.settings.unlistedLocal === true
-								span.help(title='非公開') &#x1F441;&#xFE0F;
+								span.help(title='Unlisted') &#x1F441;&#xFE0F;
 								|  
 							if !board.owner && board.settings.moderators.length === 0
-								span.help(title='放棄された') &#x1F3DA;&#xFE0F;
+								span.help(title='Abandoned') &#x1F3DA;&#xFE0F;
 								|  
 						a(href=`/${board._id}/index.html`) /#{board._id}/ - #{board.settings.name}
 					td #{board.settings.description}

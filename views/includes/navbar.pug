@@ -1,12 +1,12 @@
 unless minimal
 	nav.navbar
-		a.nav-item(href='/index.html') ホーム
+		a.nav-item(href='/index.html') Home
 		a(href='/boards.html' class=`nav-item ${enableWebring ? 'short-nav' : ''}`)
-			| 板 
+			| Boards 
 			if enableWebring
-				.rainbow +ウェブリング
-		a.nav-item#overboardlink(href='/overboard.html') オーバー板
-		a.nav-item(href='/account.html') アカウント
+				.rainbow +Webring
+		a.nav-item#overboardlink(href='/overboard.html') Overboard
+		a.nav-item(href='/account.html') Account
 		if board
-			a.nav-item(href=`/${board._id}/manage/reports.html`) 管理
+			a.nav-item(href=`/${board._id}/manage/reports.html`) Manage
 		a.jsonly.nav-item.right#settings

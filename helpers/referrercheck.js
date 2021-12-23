@@ -26,8 +26,8 @@ module.exports = (req, res, next) => {
 	}
 	if (refererCheck === true && (!req.headers.referer || !validReferer)) {
         return dynamicResponse(req, res, 403, 'message', {
-			'title': '禁断',
-			'message': '「リファラー」ヘッダーが無効または欠落しています。 正しいURLから投稿していますか？'
+			'title': 'Forbidden',
+			'message': 'Invalid or missing "Referer" header. Are you posting from the correct URL?'
 		});
 	}
 	next();

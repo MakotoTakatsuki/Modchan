@@ -9,12 +9,12 @@ module.exports = (posts) => {
 
 	if (filteredPosts.length === 0) {
 		return {
-			message:'ネタバレへの投稿はありません'
+			message:'No post(s) to spoiler'
 		};
 	}
 
 	return {
-		message: `スポイルされた${filteredPosts.length}の投稿(複数可)`,
+		message: `Spoilered ${filteredPosts.length} post(s)`,
 		action: '$set',
 		query: {
 			'spoiler': true

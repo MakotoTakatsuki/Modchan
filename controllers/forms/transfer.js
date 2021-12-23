@@ -16,15 +16,15 @@ module.exports = {
 	controller: async (req, res, next) => {
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.username), expected: true, error: '新しい所有者のユーザー名がありません' },
-			{ result: lengthBody(req.body.username, 1, 50), expected: false, error: '新しいオーナー ユーザー名は50文字以下でなければなりません。' },
-			{ result: (req.body.username === res.locals.board.owner), expected: false, error: '新しい所有者は現在の所有者とは異なる必要があります' },
-			{ result: alphaNumericRegex.test(req.body.username), expected: true, error: '新しい所有者のユーザー名には、a-z 0〜9のみを含める必要があります' },
+			{ result: existsBody(req.body.username), expected: true, error: 'Missing new owner username' },
+			{ result: lengthBody(req.body.username, 1, 50), expected: false, error: 'New owner username must be 50 characters or less' },
+			{ result: (req.body.username === res.locals.board.owner), expected: false, error: 'New owner must be different from current owner' },
+			{ result: alphaNumericRegex.test(req.body.username), expected: true, error: 'New owner username must contain a-z 0-9 only' },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.board}/manage/settings.html`
 			});

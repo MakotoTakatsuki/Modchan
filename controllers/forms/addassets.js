@@ -19,17 +19,17 @@ module.exports = {
 		const errors = [];
 
 		if (res.locals.numFiles === 0) {
-			errors.push('ファイルを提供する必要があります');
+			errors.push('Must provide a file');
 		} else if (res.locals.numFiles > globalLimits.assetFiles.max) {
-			errors.push(`1回のリクエストでアップロードできるアセットファイルの最大値が ${globalLimits.assetFiles.max} を超えました。`);
+			errors.push(`Exceeded max asset uploads in one request of ${globalLimits.assetFiles.max}`);
 		} else if (res.locals.board.assets.length+res.locals.numFiles > globalLimits.assetFiles.total) {
-			errors.push(`アセット数の合計がグローバルリミットの${globalLimits.assetFiles.total}を超える可能性があります。`);
+			errors.push(`Total number of assets would exceed global limit of ${globalLimits.assetFiles.total}`);
 		}
 
 		if (errors.length > 0) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.board}/manage/assets.html`
 			})

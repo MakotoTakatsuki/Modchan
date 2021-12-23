@@ -176,11 +176,11 @@ module.exports = {
 	buildModLog: async (options) => {
 		if (!options.startDate || !options.endDate) {
 			const d = new Date();
-			const month = d.getJSTMonth()
-				, day = d.getJSTDate()
-				, year = d.getJSTFullYear();
-			options.startDate = new Date(Date.JST(year, month, day, 0, 0, 0, 0));
-			options.endDate = new Date(Date.JST(year, month, day, 23, 59, 59, 999));
+			const month = d.getUTCMonth()
+				, day = d.getUTCDate()
+				, year = d.getUTCFullYear();
+			options.startDate = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
+			options.endDate = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
 		}
 		const day = ('0'+options.startDate.getDate()).slice(-2);
 		const month = ('0'+(options.startDate.getMonth()+1)).slice(-2);
@@ -236,13 +236,11 @@ module.exports = {
 		const { maxRecentNews } = config.get;
 		const label = '/index.html';
 		const start = process.hrtime();
-		const listedBoards = await Boards.getLocalListed();
-		let [ totalStats, boards, fileStats, recentNews, hotThreads ] = await Promise.all([
+		let [ totalStats, boards, fileStats, recentNews ] = await Promise.all([
 			Boards.totalStats(), //overall total posts ever made
 			Boards.boardSort(0, 20), //top 20 boards sorted by users, pph, total posts
 			Files.activeContent(), //size and number of files
 			News.find(maxRecentNews), //some recent newsposts
-			Posts.db.find({'board': {$in: listedBoards}, 'thread': null, 'date': {$gte: (new Date(Date.now() - (7 * 24 * 60 * 60 * 1000)))}}).sort({'replyposts':-1}).limit(10).toArray(), //top 10 threads last 7 days
 		]);
 		const [ localStats, webringStats ] = totalStats;
 		const { html } = await render('index.html', 'home.pug', {
@@ -251,7 +249,6 @@ module.exports = {
 			boards,
 			fileStats,
 			recentNews,
-			hotThreads,
 		});
 		const end = process.hrtime(start);
 		debugLogs && console.log(timeDiffString(label, end));

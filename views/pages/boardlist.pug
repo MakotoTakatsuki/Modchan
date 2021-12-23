@@ -2,37 +2,37 @@ extends ../layout.pug
 include ../mixins/boardtable.pug
 
 block head
-	title 板リスト
+	title Board List
 
 block content
-	h1.board-title 板リスト
+	h1.board-title Board List
 	.flexcenter.mv-10
 		form.form-post(action='/boards.html' method='GET')
 			input(type='hidden' value=page)
 			.row.wrap.sb
 				div(class=`col${enableWebring ? ' mr-5' : ''}`)
 					.row
-						.label 検索 
-						input(type='text' name='search' value=search placeholder='Uriまたはタグ')
+						.label Search
+						input(type='text' name='search' value=search placeholder='Uri or tags')
 					.row
-						.label 選別
+						.label Sort
 						select(name='sort')
-							option(value='popularity') 人気
-							option(value='activity' selected=query.sort === 'activity') 最新のアクティビティ
+							option(value='popularity') Popularity
+							option(value='activity' selected=query.sort === 'activity') Latest Activity
 					.row
-						.label 注文
+						.label Order
 						select(name='direction')
-							option(value='desc') 降順
-							option(value='asc' selected=query.direction === 'asc') 上昇
+							option(value='desc') Descending
+							option(value='asc' selected=query.direction === 'asc') Ascending
 					if enableWebring
 						.row
-							.label ローカルファースト
+							.label Local First
 							label.postform-style.ph-5
 								input(type='checkbox', name='local_first', value='true' checked=localFirst)
 				if enableWebring
 					.col
 						.row
-							.label サイト
+							.label Sites
 							select(name='sites' size='5' multiple)
 								optgroup(label='Shown')
 									each site in shown
@@ -40,7 +40,7 @@ block content
 								optgroup(label='Not Shown')
 									each site in notShown
 										option(value=site) #{site}
-			input(type='submit', value='フィルター')
+			input(type='submit', value='Filter')
 	if boards && boards.length > 0
 		+boardtable(true, true)
 			each board in boards

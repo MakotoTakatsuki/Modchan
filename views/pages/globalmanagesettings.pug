@@ -2,25 +2,25 @@ extends ../layout.pug
 include ../mixins/globalmanagenav.pug
 
 block head
-	title 管理
+	title Manage
 
 block content
-	h1.board-title グローバルマネジメント
+	h1.board-title Global Management
 	br
 	+globalmanagenav('settings')
 	hr(size=1)
-	h4.no-m-p 板を削除：
+	h4.no-m-p Delete board:
 	.form-wrapper.flexleft.mt-10
 		form.form-post(action=`/forms/global/deleteboard`, enctype='application/x-www-form-urlencoded', method='POST')
 			input(type='hidden' name='_csrf' value=csrf)
 			.row
-				.label 板URI
+				.label Board URI
 				input(type='text' name='uri' required)
 			.row
-				.label 私は確信しています
+				.label I'm sure
 				label.postform-style.ph-5
 					input(type='checkbox', name='confirm', value='true' required)
-			input(type='submit', value='送信')
+			input(type='submit', value='submit')
 	hr(size=1)
 	h4.no-m-p Settings:
 	.form-wrapper.flexleft.mt-10
@@ -55,7 +55,7 @@ block content
 						.label IP Header
 						input(type='text' name='ip_header' value=settings.ipHeader)
 					.row
-						.label Meta Site 名前
+						.label Meta Site Name
 						input(type='text' name='meta_site_name' value=settings.meta.siteName)
 					.row
 						.label Meta URL
@@ -157,7 +157,7 @@ block content
 								option(value='3', selected=settings.permLevels.markdown[markdownName] === 3) Board Mod
 								option(value='4', selected=settings.permLevels.markdown[markdownName] === 4) Everybody
 					.row
-						.label Default 禁止期間
+						.label Default Ban Duration
 						input(type='text', name='default_ban_duration',  placeholder='e.g. 1w', value=settings.defaultBanDuration)
 					.row
 						.label Quote Limit
@@ -181,7 +181,7 @@ block content
 				.col.mr-5
 
 					.row
-						h4.mv-5 CAPTCHA
+						h4.mv-5 Captcha
 					.row
 						.label Type
 						select(name='captcha_options_type')
@@ -248,7 +248,7 @@ block content
 							option(value='1', selected=settings.filterMode === 1) Block post
 							option(value='2', selected=settings.filterMode === 2) Ban
 					.row
-						.label Filter Auto 禁止期間
+						.label Filter Auto Ban Duration
 						input(type='text' name='ban_duration' placeholder='e.g. 1w' value=settings.filterBanDuration)
 					.row
 						.label Same Content Same IP/ID
@@ -276,13 +276,13 @@ block content
 					.row
 						h4.mv-5 Ratelimit Costs
 					.row
-						.label Generate CAPTCHA
+						.label Generate Captcha
 						input(type='number' name='rate_limit_cost_captcha' value=settings.rateLimitCost.captcha)
 					.row
 						.label Change Board Settings
 						input(type='number' name='rate_limit_cost_board_settings' value=settings.rateLimitCost.boardSettings)
 					.row
-						.label 投稿を編集
+						.label Edit Post
 						input(type='number' name='rate_limit_cost_edit_post' value=settings.rateLimitCost.editPost)
 
 				.col.mr-5
@@ -341,13 +341,13 @@ block content
 					.row
 						h4.mv-5 Field Length Limits
 					.row
-						.label 名前
+						.label Name
 						input(type='number', name='global_limits_field_length_name' value=settings.globalLimits.fieldLength.name)
 					.row
 						.label Email
 						input(type='number', name='global_limits_field_length_email' value=settings.globalLimits.fieldLength.email)
 					.row
-						.label 件名
+						.label Subject
 						input(type='number', name='global_limits_field_length_subject' value=settings.globalLimits.fieldLength.subject)
 					.row
 						.label Post Password
@@ -356,10 +356,10 @@ block content
 						.label Message
 						input(type='number', name='global_limits_field_length_message' value=settings.globalLimits.fieldLength.message)
 					.row
-						.label 報告する Reason
+						.label Report Reason
 						input(type='number', name='global_limits_field_length_report_reason' value=settings.globalLimits.fieldLength.report_reason)
 					.row
-						.label 禁止理由
+						.label Ban Reason
 						input(type='number', name='global_limits_field_length_ban_reason' value=settings.globalLimits.fieldLength.ban_reason)
 					.row
 						.label Log Messages
@@ -368,7 +368,7 @@ block content
 						.label Board URI
 						input(type='number', name='global_limits_field_length_uri' value=settings.globalLimits.fieldLength.uri)
 					.row
-						.label Board 名前
+						.label Board Name
 						input(type='number', name='global_limits_field_length_boardname' value=settings.globalLimits.fieldLength.boardname)
 					.row
 						.label Board Description
@@ -496,7 +496,7 @@ block content
 						label.postform-style.ph-5
 							input(type='checkbox', name='allow_mime_no_match', value='true' checked=settings.allowMimeNoMatch)
 					.row
-						.label Space File 名前 Replacement
+						.label Space File Name Replacement
 						input(type='text', name='space_file_name_replacement', value=settings.spaceFileNameReplacement)
 
 				.col.mr-5
@@ -630,11 +630,11 @@ block content
 							option(value='1', selected=settings.boardDefaults.lockMode === 1) Lock Thread Creation
 							option(value='2', selected=settings.boardDefaults.lockMode === 2) Board Locked
 					.row
-						.label CAPTCHA Mode
+						.label Captcha Mode
 						select(name='board_defaults_captcha_mode')
-							option(value='0', selected=settings.boardDefaults.captchaMode === 0) No CAPTCHA
-							option(value='1', selected=settings.boardDefaults.captchaMode === 1) CAPTCHA for new thread
-							option(value='2', selected=settings.boardDefaults.captchaMode === 2) CAPTCHA for all posts
+							option(value='0', selected=settings.boardDefaults.captchaMode === 0) No Captcha
+							option(value='1', selected=settings.boardDefaults.captchaMode === 1) Captcha for new thread
+							option(value='2', selected=settings.boardDefaults.captchaMode === 2) Captcha for all posts
 					.row
 						.label PPH Trigger Threshold
 						input(type='number', name='board_defaults_pph_trigger', value=settings.boardDefaults.pphTrigger)
@@ -664,13 +664,13 @@ block content
 							option(value='1', selected=settings.boardDefaults.lockReset === 1) Unlock board
 							option(value='2', selected=settings.boardDefaults.lockReset === 2) Lock thread creation
 					.row
-						.label Trigger Reset CAPTCHA Mode
+						.label Trigger Reset Captcha Mode
 						select(name='board_defaults_captcha_reset')
 							option(value='0', selected=settings.boardDefaults.captchaReset === 0) No change
-							option(value='1', selected=settings.boardDefaults.captchaReset === 1) CAPTCHA disabled
-							option(value='2', selected=settings.boardDefaults.captchaReset === 2) CAPTCHA for new thread
+							option(value='1', selected=settings.boardDefaults.captchaReset === 1) Captcha disabled
+							option(value='2', selected=settings.boardDefaults.captchaReset === 2) Captcha for new thread
 					.row
-						.label Anon 名前
+						.label Anon Name
 						input(type='text' name='board_defaults_default_name' value=settings.boardDefaults.defaultName)
 					.row
 						.label Force Anon
@@ -721,7 +721,7 @@ block content
 						.label Max Files
 						input(type='number' name='board_defaults_max_files' value=settings.boardDefaults.maxFiles)
 					.row
-						.label Force Thread 件名
+						.label Force Thread Subject
 						label.postform-style.ph-5
 							input(type='checkbox', name='board_defaults_force_thread_subject', value='true' checked=settings.boardDefaults.forceThreadSubject)
 					.row
@@ -741,7 +741,7 @@ block content
 						label.postform-style.ph-5
 							input(type='checkbox', name='board_defaults_force_reply_file', value='true' checked=settings.boardDefaults.forceReplyFile)
 					.row
-						.label Disable Reply 件名
+						.label Disable Reply Subject
 						label.postform-style.ph-5
 							input(type='checkbox', name='board_defaults_disable_reply_subject', value='true' checked=settings.boardDefaults.disableReplySubject)
 					.row
@@ -777,7 +777,7 @@ block content
 							option(value='1', selected=settings.boardDefaults.filterMode === 1) Block post
 							option(value='2', selected=settings.boardDefaults.filterMode === 2) Ban
 					.row
-						.label Filter Auto 禁止期間
+						.label Filter Auto Ban Duration
 						input(type='text' name='board_defaults_filter_ban_duration' placeholder='e.g. 1w' value=settings.boardDefaults.filterBanDuration)
 					.row
 						.label Allow Video Files

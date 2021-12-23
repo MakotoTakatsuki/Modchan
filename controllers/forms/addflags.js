@@ -17,17 +17,17 @@ module.exports = {
 		const errors = [];
 
 		if (res.locals.numFiles === 0) {
-			errors.push('ファイルを提供する必要があります');
+			errors.push('Must provide a file');
 		} else if (res.locals.numFiles > globalLimits.flagFiles.max) {
-			errors.push(`1回のリクエストでフラグアップロードの最大値 ${globalLimits.flagFiles.max} を超えました。`);
+			errors.push(`Exceeded max flag uploads in one request of ${globalLimits.flagFiles.max}`);
 		} else if (res.locals.board.flags.length+res.locals.numFiles > globalLimits.flagFiles.total) {
-			errors.push(`フラグの総数がグローバルリミットの${globalLimits.flagFiles.total}を超えてしまう。`);
+			errors.push(`Total number of flags would exceed global limit of ${globalLimits.flagFiles.total}`);
 		}
 
 		if (errors.length > 0) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.board}/manage/assets.html`
 			})

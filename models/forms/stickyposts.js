@@ -10,14 +10,14 @@ module.exports = (posts, sticky) => {
 
 	if (filteredposts.length === 0) {
 		return {
-			message: '粘着性のある糸はありません',
+			message: 'No thread(s) to sticky',
 		};
 	}
 
 	const stickyValue = NumberInt(sticky);
 
 	return {
-		message: `${filteredposts.length}のスレッドの付箋を${sticky}に設定する。`,
+		message: `Set sticky for ${filteredposts.length} thread(s) to ${sticky}`,
 		action: '$set',
 		query: {
 			'sticky': stickyValue,

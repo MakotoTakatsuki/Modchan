@@ -1,10 +1,10 @@
 extends ../layout.pug
 
 block head
-	title 投稿を編集
+	title Edit Post
 
 block content
-	h1.board-title 投稿を編集
+	h1.board-title Edit Post
 	.form-wrapper.flex-center.mv-10
 		form.form-post(action='/forms/editpost' method='POST')
 			input(type='hidden' name='_csrf' value=csrf)
@@ -19,9 +19,9 @@ block content
 						label
 							if !post.thread
 								include ../includes/posticons.pug
-							input.edit.post-subject(value=post.subject placeholder='件名' type='text' name='subject' maxlength=globalLimits.fieldLength.subject)
+							input.edit.post-subject(value=post.subject placeholder='Subject' type='text' name='subject' maxlength=globalLimits.fieldLength.subject)
 							input.edit.post-name(value=post.email type='text' name='email' placeholder='Email' maxlength=globalLimits.fieldLength.email)
-							input.edit.post-name(type='text' name='name' placeholder='名前' maxlength=globalLimits.fieldLength.name value=post.name+(post.capcode || ''))
+							input.edit.post-name(type='text' name='name' placeholder='Name' maxlength=globalLimits.fieldLength.name value=post.name+(post.capcode || ''))
 						if post.country && post.country.code
 							span(class=`flag flag-${post.country.code.toLowerCase()}` title=post.country.name alt=post.country.name)
 							| 
@@ -43,15 +43,15 @@ block content
 							a.no-decoration(href=`${postURL}#postform`) #{post.postId}
 				.post-data
 					pre.post-message
-						textarea.edit.fw(name='message' rows='15' placeholder='コメント') #{post.nomarkup}
+						textarea.edit.fw(name='message' rows='15' placeholder='Message') #{post.nomarkup}
 					if post.banmessage
 						p.ban
-							span.message ユーザーはこの投稿で禁止されました
+							span.message USER WAS BANNED FOR THIS POST
 							|  
 							span.reason(data-reason=post.banmessage) #{post.banmessage}
 			label.mt-5
-				input.post-check(type='checkbox', name='hide_name' value='1' checked)
+				input.post-check(type='checkbox', name='hide_name' value='1')
 				| Hide Username
 			label.mv-5
 				input(type='text', name='log_message', placeholder='Modlog message' autocomplete='off')
-			input(type='submit', value='保存')
+			input(type='submit', value='save')

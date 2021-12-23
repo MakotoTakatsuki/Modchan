@@ -1,25 +1,25 @@
 extends ../layout.pug
 
 block head
-	title 登録
+	title Register
 
 block content
-	h1.board-title 登録
+	h1.board-title Register
 	.form-wrapper.flex-center.mv-10
 		form.form-post(action='/forms/register' method='POST' data-captcha-preload='true')
 			.row
-				.label ユーザー名
-				input(type='text', name='username', maxlength='50' pattern='[a-zA-Z0-9]+' required title='英数字のみ')
+				.label Username
+				input(type='text', name='username', maxlength='50' pattern='[a-zA-Z0-9]+' required title='alphanumeric only')
 			.row
-				.label パスワード
+				.label Password
 				input(type='password', name='password', maxlength='100' required)
 			.row
-				.label パスワードを認証する
+				.label Confirm Password
 				input(type='password', name='passwordconfirm', maxlength='100' required)
 			if captchaType === 'text'
 				include ../includes/captchasidelabel.pug
 			else
 				include ../includes/captchafieldrow.pug
-			input(type='submit', value='登録')
-		p: a(href='/login.html') ログイン
-		p: a(href='/changepassword.html') パスワードを変更する
+			input(type='submit', value='Register')
+		p: a(href='/login.html') Login
+		p: a(href='/changepassword.html') Change Password

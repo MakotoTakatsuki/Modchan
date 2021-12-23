@@ -15,20 +15,20 @@ module.exports = {
 	controller: async (req, res, next) => {
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.username), expected: true, error: 'ユーザー名がありません' },
-			{ result: lengthBody(req.body.username, 0, 50), expected: false, error: 'ユーザー名は50文字以下である必要があります' },
-			{ result: existsBody(req.body.password), expected: true, error: 'パスワードがありません' },
-			{ result: lengthBody(req.body.password, 0, 50), expected: false, error: 'パスワードは50文字以下である必要があります' },
-			{ result: existsBody(req.body.newpassword), expected: true, error: '新しいパスワードがありません' },
-			{ result: lengthBody(req.body.newpassword, 0, 100), expected: false, error: '新しいパスワードは100文字以下である必要があります' },
-			{ result: existsBody(req.body.newpasswordconfirm), expected: true, error: '新しいパスワードの確認がありません' },
-			{ result: lengthBody(req.body.newpasswordconfirm, 0, 100), expected: false, error: '新しいパスワードの確認は100文字以下である必要があります' },
-			{ result: (req.body.newpassword === req.body.newpasswordconfirm), expected: true, error: '新しいパスワードとパスワードの確認は一致する必要があります' },
+			{ result: existsBody(req.body.username), expected: true, error: 'Missing username' },
+			{ result: lengthBody(req.body.username, 0, 50), expected: false, error: 'Username must be 50 characters or less' },
+			{ result: existsBody(req.body.password), expected: true, error: 'Missing password' },
+			{ result: lengthBody(req.body.password, 0, 50), expected: false, error: 'Password must be 50 characters or less' },
+			{ result: existsBody(req.body.newpassword), expected: true, error: 'Missing new password' },
+			{ result: lengthBody(req.body.newpassword, 0, 100), expected: false, error: 'New pasword must be 100 characters or less' },
+			{ result: existsBody(req.body.newpasswordconfirm), expected: true, error: 'Missing new password confirmation' },
+			{ result: lengthBody(req.body.newpasswordconfirm, 0, 100), expected: false, error: 'New password confirmation must be 100 characters or less' },
+			{ result: (req.body.newpassword === req.body.newpasswordconfirm), expected: true, error: 'New password and password confirmation must match' },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/changepassword.html'
 			})

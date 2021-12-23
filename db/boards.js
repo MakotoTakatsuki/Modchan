@@ -383,7 +383,7 @@ module.exports = {
 		const board = await module.exports.findOne(req.body.board);
 		if (!board) {
 			return dynamicResponse(req, res, 404, '404', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'message': 'Board does not exist',
 			});
 		}

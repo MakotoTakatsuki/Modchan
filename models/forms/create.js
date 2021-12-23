@@ -18,8 +18,8 @@ module.exports = async (req, res, next) => {
 
 	if (restrictedURIs.has(uri)) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': 'そのURIは板の作成には使用できません',
+			'title': 'Bad Request',
+			'message': 'That URI is not available for board creation',
 			'redirect': '/create.html'
 		});
 	}
@@ -29,8 +29,8 @@ module.exports = async (req, res, next) => {
 	// if board exists reject
 	if (board != null) {
 		return dynamicResponse(req, res, 409, 'message', {
-			'title': '対立',
-			'message': 'このURIを持つ板はすでに存在します',
+			'title': 'Conflict',
+			'message': 'Board with this URI already exists',
 			'redirect': '/create.html'
 		});
 	}

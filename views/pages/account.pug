@@ -1,126 +1,126 @@
 extends ../layout.pug
 
 block head
-	title アカウント
+	title Account
 
 block content
 	.board-header
-		h1.board-title ようこそ、#{user.username}
-		h4.board-description アカウントの種類：#{authLevelNames[user.authLevel]}
+		h1.board-title Welcome, #{user.username}
+		h4.board-description Account type: #{authLevelNames[user.authLevel]}
 	br
 	hr(size=1)
-	h4.no-m-p 全般的：
+	h4.no-m-p General:
 	ul
 		if user.authLevel <= 1
 			li
-				a(href='/globalmanage/recent.html') グローバルマネジメント
+				a(href='/globalmanage/recent.html') Global management
 				|  -  
-				a(href=`/globalmanage/reports.html`) レポート
+				a(href=`/globalmanage/reports.html`) Reports
 					if globalReportCount > 0
 						b  (#{globalReportCount})
 				| ,  
-				a(href=`/globalmanage/bans.html`) 禁止
+				a(href=`/globalmanage/bans.html`) Bans
 				| ,  
-				a(href=`/globalmanage/recent.html`) 最近
+				a(href=`/globalmanage/recent.html`) Recent
 				| ,  
-				a(href=`/globalmanage/boards.html`) 板
+				a(href=`/globalmanage/boards.html`) Boards
 				| ,  
-				a(href=`/globalmanage/globallogs.html`) ログ
+				a(href=`/globalmanage/globallogs.html`) Logs
 				if user.authLevel < 1
 					| ,  
-					a(href=`/globalmanage/accounts.html`) アカウント
+					a(href=`/globalmanage/accounts.html`) Accounts
 					| ,  
-					a(href=`/globalmanage/news.html`) ニュース
+					a(href=`/globalmanage/news.html`) News
 					| ,  
-					a(href=`/globalmanage/settings.html`) 設定
+					a(href=`/globalmanage/settings.html`) Settings
 		if enableUserBoardCreation || user.authLevel <= 1
-			li: a(href='/create.html') 板を作成する
+			li: a(href='/create.html') Create a board
 		if !enableUserAccountCreation && user.authLevel <= 1
-			li: a(href='/register.html') アカウントを登録
-		li: a(href='/changepassword.html') パスワードを変更する
+			li: a(href='/register.html') Register an account
+		li: a(href='/changepassword.html') Change password
 	form(action='/forms/logout' method='post')
-		input(type='submit' value='ログアウト')
+		input(type='submit' value='Log out')
 	hr(size=1)
-	h4.no-m-p あなたが所有する板：
+	h4.no-m-p Boards you own:
 	if user.ownedBoards && user.ownedBoards.length > 0
 		ul
 			for b in user.ownedBoards
 				li
 					a(href=`/${b}/index.html`) /#{b}/
 					|  -  
-					a(href=`/${b}/manage/index.html`) モデレーターインデックス
+					a(href=`/${b}/manage/index.html`) Mod Index
 					| ,  
-					a(href=`/${b}/manage/catalog.html`) モデレーターカタログ
+					a(href=`/${b}/manage/catalog.html`) Mod Catalog
 					| ,  
-					a(href=`/${b}/manage/recent.html`) 最近
+					a(href=`/${b}/manage/recent.html`) Recent
 					| ,  
-					a(href=`/${b}/manage/reports.html`) レポート
+					a(href=`/${b}/manage/reports.html`) Reports
 						if boardReportCountMap[b]
 							b  (#{boardReportCountMap[b]})
 					| ,  
-					a(href=`/${b}/manage/bans.html`) 禁止
+					a(href=`/${b}/manage/bans.html`) Bans
 					| ,  
-					a(href=`/${b}/manage/logs.html`) ログ
+					a(href=`/${b}/manage/logs.html`) Logs
 					| ,  
-					a(href=`/${b}/manage/settings.html`) 設定
+					a(href=`/${b}/manage/settings.html`) Settings
 					| ,  
-					a(href=`/${b}/manage/assets.html`) 資産
+					a(href=`/${b}/manage/assets.html`) Assets
 					| ,  
-					a(href=`/${b}/manage/custompages.html`) カスタムページ
+					a(href=`/${b}/manage/custompages.html`) Custom Pages
 	else
-		p なし
+		p None
 	hr(size=1)
-	h4.no-m-p モデレートする板：
+	h4.no-m-p Boards you moderate:
 	if user.modBoards && user.modBoards.length > 0
 		ul
 			for b in user.modBoards
 				li
 					a(href=`/${b}/index.html`) /#{b}/
 					|  -  
-					a(href=`/${b}/manage/index.html`) モデレーターインデックス
+					a(href=`/${b}/manage/index.html`) Mod Index
 					| ,  
-					a(href=`/${b}/manage/catalog.html`) モデレーターカタログ
+					a(href=`/${b}/manage/catalog.html`) Mod Catalog
 					| ,  
-					a(href=`/${b}/manage/recent.html`)  最近
+					a(href=`/${b}/manage/recent.html`) Recent
 					| ,  
-					a(href=`/${b}/manage/reports.html`) レポート
+					a(href=`/${b}/manage/reports.html`) Reports
 						if boardReportCountMap[b]
 							b  (#{boardReportCountMap[b]})
 					| ,  
-					a(href=`/${b}/manage/bans.html`) 禁止
+					a(href=`/${b}/manage/bans.html`) Bans
 					| ,  
-					a(href=`/${b}/manage/logs.html`) ログ
+					a(href=`/${b}/manage/logs.html`) Logs
 	else
-		p なし
+		p None
 	if user.modBoards.length > 0 ||  user.ownedBoards.length > 0
 		hr(size=1)
-		h4.no-m-p スタッフのポジションを辞任する：
+		h4.no-m-p Resign from a staff position:
 		.form-wrapper.flexleft.mt-10
 			form.form-post(action=`/forms/resign`, enctype='application/x-www-form-urlencoded', method='POST')
 				input(type='hidden' name='_csrf' value=csrf)
 				.row
-					.label 板
+					.label Boards
 					select(name='board' size='5')
-						optgroup(label='自分のもの')
+						optgroup(label='You own')
 							each board in user.ownedBoards
 								option(value=board) #{board}
-						optgroup(label='あなたはモデレートします')
+						optgroup(label='You moderate')
 							each board in user.modBoards
 								option(value=board) #{board}
 				.row
-					.label 私は確信しています
+					.label I'm sure
 					label.postform-style.ph-5
 						input(type='checkbox', name='confirm', value='true' required)
-				input(type='submit', value='送信')
+				input(type='submit', value='submit')
 
 	hr(size=1)
-	h4.no-m-p アカウントを削除します。
+	h4.no-m-p Delete your account:
 	.form-wrapper.flexleft.mt-10
 		form.form-post(action=`/forms/deleteaccount`, enctype='application/x-www-form-urlencoded', method='POST')
 			input(type='hidden' name='_csrf' value=csrf)
 			.row
-				.label 私は確信しています
+				.label I'm sure
 				label.postform-style.ph-5
 					input(type='checkbox', name='confirm', value='true' required)
-			input(type='submit', value='送信')
+			input(type='submit', value='submit')
 	

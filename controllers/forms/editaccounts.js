@@ -16,14 +16,14 @@ module.exports = {
 	controller: async (req, res, next) => {
 
 		const errors = await checkSchema([
-			{ result: lengthBody(req.body.checkedaccounts, 1), expected: false, error: '少なくとも1つのアカウントを選択する必要があります' },
-			{ result: !existsBody(req.body.auth_level) || numberBody(req.body.auth_level, 0, 4), expected: true, error: '無効なアカウントタイプ' },
-			{ result: existsBody(req.body.auth_level) || existsBody(req.body.delete_account), expected: true, error: 'アカウントの種類がないか、アクションを削除してください' }
+			{ result: lengthBody(req.body.checkedaccounts, 1), expected: false, error: 'Must select at least one account' },
+			{ result: !existsBody(req.body.auth_level) || numberBody(req.body.auth_level, 0, 4), expected: true, error: 'Invalid account type' },
+			{ result: existsBody(req.body.auth_level) || existsBody(req.body.delete_account), expected: true, error: 'Missing account type or delete action' }
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/globalmanage/accounts.html'
 			})

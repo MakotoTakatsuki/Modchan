@@ -5,14 +5,14 @@ include ../mixins/managenav.pug
 include ../mixins/boardheader.pug
 
 block head
-	title /#{board._id}/ - 管理
+	title /#{board._id}/ - Manage
 
 block content
-	+boardheader('レポート')
+	+boardheader('Reports')
 	br
 	+managenav('reports')
 	hr(size=1)
-	h4.no-m-p レポート:
+	h4.no-m-p Reports:
 	form(action=`/forms/board/${board._id}/modactions` method='POST' enctype='application/x-www-form-urlencoded')
 		if reports.length === 0
 			p No reports.

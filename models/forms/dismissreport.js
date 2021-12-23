@@ -9,12 +9,12 @@ module.exports = (req, res) => {
 
 	if (filteredposts.length === 0) {
 		return {
-			message: '却下するレポートはありません'
+			message: 'No report(s) to dismiss'
 		}
 	}
 
 	const ret = {
-		message: '却下されたレポート',
+		message: 'Dismissed reports',
 		action: '$set',
 		query: {}
 	};

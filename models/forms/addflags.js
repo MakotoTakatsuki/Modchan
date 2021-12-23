@@ -29,8 +29,8 @@ module.exports = async (req, res, next) => {
 			})) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': `${req.files.file[i].name} のファイル形式が無効です。Mimetype ${req.files.file[i].mimetype} は許可されません。`,
+				'title': 'Bad request',
+				'message': `Invalid file type for ${req.files.file[i].name}. Mimetype ${req.files.file[i].mimetype} not allowed.`,
 				'redirect': redirect
 			});
 		}
@@ -42,8 +42,8 @@ module.exports = async (req, res, next) => {
 			if (!(await mimeTypes.realMimeCheck(req.files.file[i]))) {
 				deleteTempFiles(req).catch(e => console.error);
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': '要求の形式が正しくありません',
-					'message': `ファイル "${req.files.file[i].name}" の MIME タイプが不一致です。"`,
+					'title': 'Bad request',
+					'message': `Mime type mismatch for file "${req.files.file[i].name}"`,
 					'redirect': redirect
 				});
 			}
@@ -96,8 +96,8 @@ module.exports = async (req, res, next) => {
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': `新しいフラグ${res.locals.numFiles}をアップロードしました。`,
+		'title': 'Success',
+		'message': `Uploaded ${res.locals.numFiles} new flags.`,
 		'redirect': redirect
 	});
 

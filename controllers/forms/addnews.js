@@ -19,15 +19,15 @@ module.exports = {
 		const { globalLimits } = config.get;
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.message), expected: true, error: 'メッセージがありません' },
-			{ result: existsBody(req.body.title), expected: true, error: 'タイトルがありません' },
-			{ result: numberBody(res.locals.messageLength, 0, globalLimits.fieldLength.message), expected: true, error: `メッセージは${globalLimits.fieldLength.message}文字以下である必要があります。` },
-			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: 'タイトルは50文字以下である必要があります' },
+			{ result: existsBody(req.body.message), expected: true, error: 'Missing message' },
+			{ result: existsBody(req.body.title), expected: true, error: 'Missing title' },
+			{ result: numberBody(res.locals.messageLength, 0, globalLimits.fieldLength.message), expected: true, error: `Message must be ${globalLimits.fieldLength.message} characters or less` },
+			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: 'Title must be 50 characters or less' },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/globalmanage/news.html'
 			});

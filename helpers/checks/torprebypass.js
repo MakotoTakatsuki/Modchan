@@ -34,7 +34,7 @@ module.exports = async (req, res, next) => {
 				}
 				const page = (req.body.minimal || req.path === '/blockbypass' ? 'bypass' : 'message');
 				return dynamicResponse(req, res, 403, page, {
-					'title': '禁断',
+					'title': 'Forbidden',
 					'message': err,
 					'redirect': req.headers.referer,
 				});
@@ -69,12 +69,12 @@ module.exports = async (req, res, next) => {
 		res.clearCookie('bypassid');
 		deleteTempFiles(req).catch(e => console.error);
 		return dynamicResponse(req, res, 403, 'message', {
-			'title': '禁断',
-			'message': '続行するには、ブロックバイパスを完了してください',
+			'title': 'Forbidden',
+			'message': 'Please complete a block bypass to continue',
 			'frame': '/bypass_minimal.html',
 			'link': {
 				'href': '/bypass.html',
-				'text': 'ブロックバイパスを取得',
+				'text': 'Get block bypass',
 			},
 		});
 	}

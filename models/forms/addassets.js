@@ -27,8 +27,8 @@ module.exports = async (req, res, next) => {
 			})) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': `${req.files.file[i].name} のファイル形式が無効です。Mimetype ${req.files.file[i].mimetype} は許可されません。`,
+				'title': 'Bad request',
+				'message': `Invalid file type for ${req.files.file[i].name}. Mimetype ${req.files.file[i].mimetype} not allowed.`,
 				'redirect': redirect
 			});
 		}
@@ -37,8 +37,8 @@ module.exports = async (req, res, next) => {
 			if (!(await mimeTypes.realMimeCheck(req.files.file[i]))) {
 				deleteTempFiles(req).catch(e => console.error);
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': '要求の形式が正しくありません',
-					'message': `ファイル "${req.files.file[i].name}" の MIME タイプが不一致です。"`,
+					'title': 'Bad request',
+					'message': `Mime type mismatch for file "${req.files.file[i].name}"`,
 					'redirect': redirect
 				});
 			}
@@ -74,8 +74,8 @@ module.exports = async (req, res, next) => {
 	// no new assets
 	if (filenames.length === 0) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': `資産${res.locals.numFiles > 1 ? 's' : ''} は既に存在する${res.locals.numFiles > 1 ? '' : 's'}`,
+			'title': 'Bad request',
+			'message': `Asset${res.locals.numFiles > 1 ? 's' : ''} already exist${res.locals.numFiles > 1 ? '' : 's'}`,
 			'redirect': redirect
 		});
 	}
@@ -87,8 +87,8 @@ module.exports = async (req, res, next) => {
 	res.locals.board.assets = res.locals.board.assets.concat(filenames);
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': `新しいアセットを${filenames.length}アップロードしました。`,
+		'title': 'Success',
+		'message': `Uploaded ${filenames.length} new assets.`,
 		'redirect': redirect
 	});
 

@@ -80,14 +80,14 @@ module.exports = {
 			{ result: lengthBody(req.body.meta_site_name, 0, 100), expected: false, error: 'Meta site name must not exceed 100 characters' },
 			{ result: lengthBody(req.body.meta_url, 0, 100), expected: false, error: 'Meta url must not exceed 100 characters' },
 			{ result: inArrayBody(req.body.captcha_options_type, ['grid', 'text', 'google', 'hcaptcha']), expected: true, error: 'Invalid captcha options type' },
-			{ result: numberBody(req.body.captcha_options_generate_limit, 1), expected: true, error: 'CAPTCHA options generate limit must be a number > 0' },
-			{ result: numberBody(req.body.captcha_options_grid_size, 2, 6), expected: true, error: 'CAPTCHA options grid size must be a number from 2-6' },
-			{ result: numberBody(req.body.captcha_options_image_size, 50, 500), expected: true, error: 'CAPTCHA options image size must be a number from 50-500' },
-			{ result: numberBody(req.body.captcha_options_grid_icon_y_offset, 0, 50), expected: true, error: 'CAPTCHA options icon y offset must be a number from 0-50' },
-			{ result: numberBody(req.body.captcha_options_num_distorts_min, 0, 10), expected: true, error: 'CAPTCHA options min distorts must be a number from 0-10' },
-			{ result: numberBody(req.body.captcha_options_num_distorts_max, 0, 10), expected: true, error: 'CAPTCHA options max distorts must be a number from 0-10' },
-			{ result: minmaxBody(req.body.captcha_options_num_distorts_min, req.body.captcha_options_num_distorts_max), expected: true, error: 'CAPTCHA options distorts min must be less than max' },
-			{ result: numberBody(req.body.captcha_options_distortion, 0, 50), expected: true, error: 'CAPTCHA options distortion must be a number from 0-50' },
+			{ result: numberBody(req.body.captcha_options_generate_limit, 1), expected: true, error: 'Captcha options generate limit must be a number > 0' },
+			{ result: numberBody(req.body.captcha_options_grid_size, 2, 6), expected: true, error: 'Captcha options grid size must be a number from 2-6' },
+			{ result: numberBody(req.body.captcha_options_image_size, 50, 500), expected: true, error: 'Captcha options image size must be a number from 50-500' },
+			{ result: numberBody(req.body.captcha_options_grid_icon_y_offset, 0, 50), expected: true, error: 'Captcha options icon y offset must be a number from 0-50' },
+			{ result: numberBody(req.body.captcha_options_num_distorts_min, 0, 10), expected: true, error: 'Captcha options min distorts must be a number from 0-10' },
+			{ result: numberBody(req.body.captcha_options_num_distorts_max, 0, 10), expected: true, error: 'Captcha options max distorts must be a number from 0-10' },
+			{ result: minmaxBody(req.body.captcha_options_num_distorts_min, req.body.captcha_options_num_distorts_max), expected: true, error: 'Captcha options distorts min must be less than max' },
+			{ result: numberBody(req.body.captcha_options_distortion, 0, 50), expected: true, error: 'Captcha options distortion must be a number from 0-50' },
 			{ result: numberBody(req.body.dnsbl_cache_time), expected: true, error: 'Invalid dnsbl cache time' },
 			{ result: numberBody(req.body.flood_timers_same_content_same_ip), expected: true, error: 'Invalid flood time same content same ip' },
 			{ result: numberBody(req.body.flood_timers_same_content_any_ip), expected: true, error: 'Invalid flood time same contenet any ip' },
@@ -203,7 +203,7 @@ module.exports = {
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/globalmanage/settings.html'
 			});

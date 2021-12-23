@@ -20,29 +20,29 @@ module.exports = {
 		const { globalLimits } = config.get;
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.message), expected: true, error: 'メッセージがありません' },
-			{ result: existsBody(req.body.title), expected: true, error: 'タイトルがありません' },
-			{ result: existsBody(req.body.page), expected: true, error: '.html名がありません' },
+			{ result: existsBody(req.body.message), expected: true, error: 'Missing message' },
+			{ result: existsBody(req.body.title), expected: true, error: 'Missing title' },
+			{ result: existsBody(req.body.page), expected: true, error: 'Missing .html name' },
 			{ result: () => {
                 if (req.body.page) {
                     return /^[a-z0-9_-]+$/i.test(req.body.page);
                 }
                 return false;
-            } , expected: true, error: '.html名にはa-z0-9_-のみが含まれている必要があります' },
-			{ result: numberBody(res.locals.messageLength, 0, globalLimits.customPages.maxLength), expected: true, error: `メッセージは ${globalLimits.customPages.maxLength} 文字以下でなければなりません。` },
-			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: 'タイトルは50文字以下である必要があります' },
-			{ result: lengthBody(req.body.page, 0, 50), expected: false, error: '.html名は50文字以下である必要があります' },
+            } , expected: true, error: '.html name must contain a-z 0-9 _ - only' },
+			{ result: numberBody(res.locals.messageLength, 0, globalLimits.customPages.maxLength), expected: true, error: `Message must be ${globalLimits.customPages.maxLength} characters or less` },
+			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: 'Title must be 50 characters or less' },
+			{ result: lengthBody(req.body.page, 0, 50), expected: false, error: '.html name must be 50 characters or less' },
 			{ result: async () => {
 				return (await CustomPages.boardCount(req.params.board)) > globalLimits.customPages.max;
-			}, expected: false, error: `1板あたり${globalLimits.customPages.max}のページしか作成できない。`},
+			}, expected: false, error: `Can only create ${globalLimits.customPages.max} pages per board`},
 			{ result: async () => {
 				return (await CustomPages.findOne(req.params.board, req.body.page)) == null;
-			}, expected: true, error: '.html名は一意である必要があります'},
+			}, expected: true, error: '.html name must be unique'},
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.booard}/manage/custompages.html`
 			});

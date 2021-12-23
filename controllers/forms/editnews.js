@@ -17,16 +17,16 @@ module.exports = {
 	controller: async (req, res, next) => {
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.news_id), expected: true, error: 'ニュースIDがありません' },
-			{ result: existsBody(req.body.message), expected: true, error: 'メッセージがありません' },
-			{ result: numberBody(res.locals.messageLength, 0, 10000), expected: true, error: 'メッセージは10000文字以下である必要があります' },
-			{ result: existsBody(req.body.title), expected: true, error: 'タイトルがありません' },
-			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: 'タイトルは50文字以下である必要があります' },
+			{ result: existsBody(req.body.news_id), expected: true, error: 'Missing news id' },
+			{ result: existsBody(req.body.message), expected: true, error: 'Missing message' },
+			{ result: numberBody(res.locals.messageLength, 0, 10000), expected: true, error: 'Message must be 10000 characters or less' },
+			{ result: existsBody(req.body.title), expected: true, error: 'Missing title' },
+			{ result: lengthBody(req.body.title, 0, 50), expected: false, error: 'Title must be 50 characters or less' },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': req.headers.referer || '/globalmanage/news.html'
 			});

@@ -23,7 +23,7 @@ const  updateLocals = () => {
 		lockWait, globalLimits, boardDefaults, cacheTemplates, reverseImageLinksURL,
 		meta, enableWebring, captchaOptions, globalAnnouncement } = config.get);
 	renderLocals = {
-		authLevelNames: ['管理者', 'グローバルスタッフ', 'グローバル板所有者', 'グローバル板モデレーター', '通常ユーザー'],
+		authLevelNames: ['Admin', 'Global Staff', 'Global Board Owner', 'Global Board Mod', 'Regular User'],
 		cache: cacheTemplates,
 		archiveLinksURL,
 		reverseImageLinksURL,

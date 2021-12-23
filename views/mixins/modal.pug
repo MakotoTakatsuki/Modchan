@@ -23,7 +23,7 @@ mixin modal(data)
 		else if data.link
 			.row
 				a.button.mv-0(href=data.link.href target='_blank') #{data.link.text}
-		else if data.redirect && data.title === '成功'
+		else if data.redirect && data.title === 'Success'
 			.row
 				a.button.mv-0(href=data.redirect) OK
 		else if data.settings
@@ -34,138 +34,138 @@ mixin modal(data)
 							.row
 								label.postform-style.ph-5
 									input#live-setting(type='checkbox')
-								.rlabel ライブ投稿
+								.rlabel Live posts
 							.row
 								label.postform-style.ph-5
 									input#notification-setting(type='checkbox')
-								.rlabel 通知
+								.rlabel Notifications
 							.row
 								label.postform-style.ph-5
 									input#notification-yous-only(type='checkbox')
-								.rlabel （あなた）にのみ通知する
+								.rlabel Only notify (You)s
 							.row
 								label.postform-style.ph-5
 									input#scroll-setting(type='checkbox')
-								.rlabel 新しい投稿までスクロール
+								.rlabel Scroll to new posts
 							.row
 								label.postform-style.ph-5
 									input#localtime-setting(type='checkbox')
-								.rlabel 現地時間
+								.rlabel Local time
 							.row
 								label.postform-style.ph-5
 									input#24hour-setting(type='checkbox')
-								.rlabel 24時間
+								.rlabel 24h time
 							.row
 								label.postform-style.ph-5
 									input#relative-setting(type='checkbox')
-								.rlabel 相対時間を表示する
+								.rlabel Show relative time
 							.row
 								label.postform-style.ph-5
 									input#noncolorids-setting(type='checkbox')
-								.rlabel 非カラーID
+								.rlabel Non-color IDs
 							.row
 								label.postform-style.ph-5
 									input#hidepoststubs-setting(type='checkbox')
-								.rlabel 投稿スタブを非表示
+								.rlabel Hide post stubs
 							.row
 								label.postform-style.ph-5
 									input#disableboardcss-setting(type='checkbox')
-								.rlabel 板カスタムCSSを無効にする
+								.rlabel Disable board custom CSS
 
 						.col
 							.row
 								label.postform-style.ph-5
-									input#hidethumbnails-setting(type='checkbox' accesskey='s')
-								.rlabel サムネイルを非表示にする
+									input#hidethumbnails-setting(type='checkbox')
+								.rlabel Hide thumbnails
 							.row
 								label.postform-style.ph-5
 									input#hiderecursive-setting(type='checkbox')
-								.rlabel 再帰的な投稿の非表示
+								.rlabel Recursive post hide
 							.row
 								label.postform-style.ph-5
 									input#loop-setting(type='checkbox')
-								.rlabel オーディオ/ビデオのループ
+								.rlabel Loop audio/video
 							.row
 								label.postform-style.ph-5
 									input#heightlimit-setting(type='checkbox')
-								.rlabel メディアの高さを無制限にする
+								.rlabel Unlimit media height
 							.row
 								label.postform-style.ph-5
 									input#crispimages-setting(type='checkbox')
-								.rlabel 鮮明な画像レンダリング
+								.rlabel Crisp image rendering
 							.row
 								label.postform-style.ph-5
 									input#imageloadingbars-setting(type='checkbox')
-								.rlabel 画像読み込みバー
+								.rlabel Image loading bars
 							.row
 								label.postform-style.ph-5
 									input#alwaysshowspoilers-setting(type='checkbox')
-								.rlabel 常にテキストネタバレを明らかにする
+								.rlabel Always reveal text spoilers
 							.row
 								label.postform-style.ph-5
 									input#yous-setting(type='checkbox')
-								.rlabel （あなた）を表示
+								.rlabel Show (You)s
 							.row
 								label.postform-style.ph-5
 									input#smoothscrolling-setting(type='checkbox')
-								.rlabel スムーズなスクロール
+								.rlabel Smooth scrolling
 					.row.mt-5
-						.label （あなた）
+						.label (You)s
 						input.mr-1#youslist-setting(type='text' readonly)
 						input#youslist-clear(type='button' value='Clear')
 					.row
-						.label 隠し画像
+						.label Hidden images
 						input.mr-1#hiddenimages-setting(type='text' readonly)
 						input#hiddenimages-clear(type='button' value='Clear')
 					.row
-						.label キャッシュ
+						.label Cache
 						input.mr-1#hovercachelist-setting(type='text' readonly)
 						input#hovercachelist-clear(type='button' value='Clear')
 					.row
-						.label ビデオ/オーディオボリューム
+						.label Video/Audio volume
 						label.postform-style.ph-5
 							input#volume-setting(type='range' min='0' max='100')
 					.row
-						.label デフォルト名
+						.label Default name
 						input#name-setting(type='text' name='name')
 					.row
-						.label 投稿パスワード
+						.label Post password
 						input#postpassword-setting(type='password' name='postpassword' autocomplete='new-password')
 					.row
-						.label テーマ
+						.label Theme
 						select#theme-setting
-							option(value='default') ディフォルト
+							option(value='default') default
 							each theme in data.settings.themes
 								option(value=theme) #{theme}
 					.row
-						.label コードテーマ
+						.label Code theme
 						select#codetheme-setting
-							option(value='default') ディフォルト
+							option(value='default') default
 							each theme in data.settings.codeThemes
 								option(value=theme) #{theme}
 					.row
-						.label カスタムCSS
+						.label Custom CSS
 						textarea#customcss-setting(rows=7)
 					.row.mt-5
 						form.text-center#filter-form
 							table
 								tbody#advancedfilters
 									tr
-										th ポストフィルター
+										th Post Filters
 										th
 										th
 										th
 									tr
-										td 種類
-										td 価値
-										td 正規表現？
+										td Type
+										td Value
+										td Regex?
 										td: input.right#filters-clear(type='button' value='Clear')
 									tr
 										td: select(name='type')
-											option(value='fname') 名前
-											option(value='ftrip') トリップコード
-											option(value='fsub') 件名
-											option(value='fmsg') メッセージ
+											option(value='fname') Name
+											option(value='ftrip') Tripcode
+											option(value='fsub') Subject
+											option(value='fmsg') Message
 										td
 											input#filter-value-input(required type='text' name='value')
 										td
@@ -173,11 +173,10 @@ mixin modal(data)
 										td: input.right(type='submit' value='Add')
 					.row.mt-5
 						.label
-							| 設定のインポート/エクスポート
-							small.title 信頼できない設定データをインポートしないでください！
-							small エクスポートには、投稿パスワードまたは（あなた）のパスワードは含まれません
+							| Import/Export Settings
+							small.title Do NOT import untrusted settings data!
+							small Export does not include post password or (You)'s
 						textarea#import-export-setting(type='text')
 					.row
 						input.mr-1#export-setting(type='button' value='Export')
 						input#import-setting(type='button' value='Import')
-			

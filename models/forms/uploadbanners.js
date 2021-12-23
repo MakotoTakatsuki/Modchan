@@ -28,8 +28,8 @@ module.exports = async (req, res, next) => {
 			})) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': `${req.files.file[i].name} のファイル形式が無効です。Mimetype ${req.files.file[i].mimetype} は許可されません。`,
+				'title': 'Bad request',
+				'message': `Invalid file type for ${req.files.file[i].name}. Mimetype ${req.files.file[i].mimetype} not allowed.`,
 				'redirect': redirect
 			});
 		}
@@ -39,7 +39,7 @@ module.exports = async (req, res, next) => {
 			if (!(await mimeTypes.realMimeCheck(req.files.file[i]))) {
 				deleteTempFiles(req).catch(e => console.error);
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': '要求の形式が正しくありません',
+					'title': 'Bad request',
 					'message': `Mime type mismatch for file "${req.files.file[i].name}"`,
 					'redirect': redirect
 				});
@@ -58,8 +58,8 @@ module.exports = async (req, res, next) => {
 				&& (geometry.width/geometry.height !== 3))) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': `ファイル ${req.files.file[i].name} が無効です。バナーの最大寸法は${globalLimits.bannerFiles.width}x${globalLimits.bannerFiles.height}${globalLimits.bannerFiles.forceAspectRatio ===true?' で、アスペクト比は3:1でなければなりません' : ''}.`,
+				'title': 'Bad request',
+				'message': `Invalid file ${req.files.file[i].name}. Max banner dimensions are ${globalLimits.bannerFiles.width}x${globalLimits.bannerFiles.height}${globalLimits.bannerFiles.forceAspectRatio === true ? ' and must be a 3:1 aspect ratio' : '' }.`,
 				'redirect': redirect
 			});
 		}
@@ -94,8 +94,8 @@ module.exports = async (req, res, next) => {
 	// no new banners
 	if (filenames.length === 0) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': `Banner${res.locals.numFiles > 1 ? 's' : ''} は既に存在する${res.locals.numFiles > 1 ? '' : 's'}`,
+			'title': 'Bad request',
+			'message': `Banner${res.locals.numFiles > 1 ? 's' : ''} already exist${res.locals.numFiles > 1 ? '' : 's'}`,
 			'redirect': redirect
 		});
 	}
@@ -117,8 +117,8 @@ module.exports = async (req, res, next) => {
 	}
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': `新しいバナー${filenames.length}をアップロードしました。`,
+		'title': 'Success',
+		'message': `Uploaded ${filenames.length} new banners.`,
 		'redirect': redirect
 	});
 

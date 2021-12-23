@@ -17,18 +17,18 @@ module.exports = {
 	controller: async (req, res, next) => {
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.confirm), expected: true, error: '確認がありません' },
-			{ result: existsBody(req.body.board), expected: true, error: '板を選択しませんでした' },
-			{ result: alphaNumericRegex.test(req.body.board), expected: true, error: 'URIにはa-z0〜9のみを含める必要があります' },
+			{ result: existsBody(req.body.confirm), expected: true, error: 'Missing confirmation' },
+			{ result: existsBody(req.body.board), expected: true, error: 'You did not select a board' },
+			{ result: alphaNumericRegex.test(req.body.board), expected: true, error: 'URI must contain a-z 0-9 only' },
 			{ result: async () => {
 				res.locals.board = await Boards.findOne(req.body.board);
 				return res.locals.board != null;
-			}, expected: true, error: `板 /${req.body.board}/ が存在しない。` },
+			}, expected: true, error: `Board /${req.body.board}/ does not exist` },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/account.html`
 			})

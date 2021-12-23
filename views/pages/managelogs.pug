@@ -5,10 +5,10 @@ include ../mixins/managenav.pug
 include ../mixins/boardheader.pug
 
 block head
-	title /#{board._id}/ - 管理
+	title /#{board._id}/ - Manage
 
 block content
-	+boardheader('ログ')
+	+boardheader('Logs')
 	br
 	+managenav('logs')
 	hr(size=1)
@@ -17,20 +17,20 @@ block content
 		form.form-post.mv-5(action=`/${board._id}/manage/logs.html` method='GET')
 			input(type='hidden' value=page)
 			.row
-				.label ユーザー名
+				.label Username
 				input(type='text' name='username' value=username)
-			input(type='submit', value='フィルター')
-		h4.no-m-p ログ：
+			input(type='submit', value='Filter')
+		h4.no-m-p Logs:
 		if logs && logs.length > 0
 			.table-container.flex-center.mv-10.text-center
 				table.fw
 						tr
-							th 日にち
-							th ユーザー
+							th Date
+							th User
 							th IP
-							th 行動
-							th 投稿
-							th ログメッセージ
+							th Actions
+							th Posts
+							th Log Message
 						for log in logs
 							tr
 								- const logDate = new Date(log.date);
@@ -54,4 +54,4 @@ block content
 			.pages.mv-5
 				include ../includes/pages.pug
 		else
-			p ログはありません。
+			p No logs.

@@ -15,12 +15,12 @@ module.exports = {
 	controller: async (req, res, next) => {
 
 		const errors = await checkSchema([
-			{ result: lengthBody(req.body.checkedbanners, 1), expected: false, error: '削除するバナーを少なくとも1つ選択する必要があります' },
+			{ result: lengthBody(req.body.checkedbanners, 1), expected: false, error: 'Must select at least one banner to delete' },
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': `/${req.params.board}/manage/assets.html`
 			})
@@ -29,8 +29,8 @@ module.exports = {
 		for (let i = 0; i < req.body.checkedbanners.length; i++) {
 			if (!res.locals.board.banners.includes(req.body.checkedbanners[i])) {
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': '要求の形式が正しくありません',
-					'message': '無効なバナーが選択されました',
+					'title': 'Bad request',
+					'message': 'Invalid banners selected',
 					'redirect': `/${req.params.board}/manage/assets.html`
 				})
 			}

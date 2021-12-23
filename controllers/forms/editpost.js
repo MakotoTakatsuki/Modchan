@@ -21,22 +21,22 @@ module.exports = {
 		const { rateLimitCost, globalLimits } = config.get;
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.board), expected: true, error: '板がありません' },
-			{ result: numberBody(req.body.postId, 1), expected: true, error: '投稿IDがありません' },
-			{ result: lengthBody(req.body.message, 0, globalLimits.fieldLength.message), expected: false, error: `メッセージは${globalLimits.fieldLength.message}文字以下である必要があります。` },
-			{ result: lengthBody(req.body.name, 0, globalLimits.fieldLength.name), expected: false, error: `名前は${globalLimits.fieldLength.name}文字以下でなければならない。` },
-			{ result: lengthBody(req.body.subject, 0, globalLimits.fieldLength.subject), expected: false, error: `件名は${globalLimits.fieldLength.subject}文字以下である必要があります。` },
-			{ result: lengthBody(req.body.email, 0, globalLimits.fieldLength.email), expected: false, error: `電子メールは${globalLimits.fieldLength.email}文字以下である必要があります。` },
-			{ result: lengthBody(req.body.log_message, 0, globalLimits.fieldLength.log_message), expected: false, error: `ログメッセージは ${globalLimits.fieldLength.log_message} 文字以下である必要があります。` },
+			{ result: existsBody(req.body.board), expected: true, error: 'Missing board' },
+			{ result: numberBody(req.body.postId, 1), expected: true, error: 'Missing postId' },
+			{ result: lengthBody(req.body.message, 0, globalLimits.fieldLength.message), expected: false, error: `Message must be ${globalLimits.fieldLength.message} characters or less` },
+			{ result: lengthBody(req.body.name, 0, globalLimits.fieldLength.name), expected: false, error: `Name must be ${globalLimits.fieldLength.name} characters or less` },
+			{ result: lengthBody(req.body.subject, 0, globalLimits.fieldLength.subject), expected: false, error: `Subject must be ${globalLimits.fieldLength.subject} characters or less` },
+			{ result: lengthBody(req.body.email, 0, globalLimits.fieldLength.email), expected: false, error: `Email must be ${globalLimits.fieldLength.email} characters or less` },
+			{ result: lengthBody(req.body.log_message, 0, globalLimits.fieldLength.log_message), expected: false, error: `Modlog message must be ${globalLimits.fieldLength.log_message} characters or less` },
 			{ result: async () => {
 				res.locals.post = await Posts.getPost(req.body.board, req.body.postId);
 				return res.locals.post != null;
-			}, expected: true, error: `投稿は存在しません` }
+			}, expected: true, error: `Post doesn't exist` }
 		]);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 			});
 		}
@@ -46,8 +46,8 @@ module.exports = {
 			const ratelimitIp = res.locals.anonymizer ? 0 : (await Ratelimits.incrmentQuota(res.locals.ip.single, 'edit', rateLimitCost.editPost));
 			if (ratelimitUser > 100 || ratelimitIp > 100) {
 				return dynamicResponse(req, res, 429, 'message', {
-					'title': 'レート制限',
-					'error': '投稿の編集が速すぎます。しばらく待ってからもう一度お試しください',
+					'title': 'Ratelimited',
+					'error': 'You are editing posts too quickly, please wait a minute and try again',
 				});
 			}
 		}

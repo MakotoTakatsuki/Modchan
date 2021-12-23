@@ -9,8 +9,8 @@ module.exports = async (req, res, next) => {
 	const ownsBoard = res.locals.user.ownedBoards.includes(req.body.board);
 	if (!ownsBoard && !moderatesBoard) {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': 'あなたはその板を所有またはモデレートしていません',
+			'title': 'Bad request',
+			'message': 'You do not own or moderate that board',
 			'redirect': `/account.html`
 		});
 	}
@@ -28,8 +28,8 @@ module.exports = async (req, res, next) => {
 	}
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': `退会しました ${ownsBoard ? 'owner' : 'moderator'} /${req.body.board}/ の役職を辞任しました。`,
+		'title': 'Success',
+		'message': `Resigned from ${ownsBoard ? 'owner' : 'moderator'} position on /${req.body.board}/`,
 		'redirect': `/account.html`
 	});
 

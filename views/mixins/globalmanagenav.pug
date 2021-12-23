@@ -1,19 +1,19 @@
 mixin globalmanagenav(selected)
 	nav.pages
-		a(href='reports.html' class=(selected === 'reports' ? 'bold' : '')) [レポート]
+		a(href='reports.html' class=(selected === 'reports' ? 'bold' : '')) [Reports]
 		|  
-		a(href='bans.html' class=(selected === 'bans' ? 'bold' : '')) [禁止]
+		a(href='bans.html' class=(selected === 'bans' ? 'bold' : '')) [Bans]
 		|  
-		a(href='recent.html' class=(selected === 'recent' ? 'bold' : '')) [最近]
+		a(href='recent.html' class=(selected === 'recent' ? 'bold' : '')) [Recent]
 		|  
-		a(href='boards.html' class=(selected === 'boards' ? 'bold' : '')) [板]
+		a(href='boards.html' class=(selected === 'boards' ? 'bold' : '')) [Boards]
 		|  
-		a(href='globallogs.html' class=(selected === 'logs' ? 'bold' : '')) [ログ]
+		a(href='globallogs.html' class=(selected === 'logs' ? 'bold' : '')) [Logs]
 		if permLevel === 0
 			|  
-			a(href='accounts.html' class=(selected === 'accounts' ? 'bold' : '')) [アカウント]
+			a(href='accounts.html' class=(selected === 'accounts' ? 'bold' : '')) [Accounts]
 			|  
-			a(href='news.html' class=(selected === 'news' ? 'bold' : '')) [ニュース]
+			a(href='news.html' class=(selected === 'news' ? 'bold' : '')) [News]
 			|  
-			a(href='settings.html' class=(selected === 'settings' ? 'bold' : '')) [設定]
+			a(href='settings.html' class=(selected === 'settings' ? 'bold' : '')) [Settings]
 

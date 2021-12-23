@@ -3,39 +3,39 @@ include ../mixins/ban.pug
 include ../mixins/globalmanagenav.pug
 
 block head
-	title 管理
+	title Manage
 
 block content
-	h1.board-title グローバルマネジメント
+	h1.board-title Global Management
 	br
 	+globalmanagenav('logs')
 	hr(size=1)
 	.form-wrapper.flexleft
-		h4.no-m-p 検索：
+		h4.no-m-p Search:
 		form.form-post.mv-5(action=`/globalmanage/globallogs.html` method='GET')
 			input(type='hidden' value=page)
 			.row
-				.label 板URI
+				.label Board URI
 				input(type='text' name='uri' value=uri)
 			.row
-				.label ユーザー名
+				.label Username
 				input(type='text' name='username' value=username)
 			.row
 				.label IP
 				input(type='text' name='ip' value=ip)
-			input(type='submit', value='フィルター')
+			input(type='submit', value='Filter')
 		h4.no-m-p Global Logs:
 		if logs && logs.length > 0
 			.table-container.flex-center.mv-10.text-center
 				table.fw
 						tr
-							th 日にち
-							th 板
-							th ユーザー
+							th Date
+							th Board
+							th User
 							th IP
-							th 行動
-							th 投稿
-							th ログメッセージ
+							th Actions
+							th Posts
+							th Log Message
 						for log in logs
 							tr
 								- const logDate = new Date(log.date);
@@ -45,7 +45,7 @@ block content
 									|   
 									a(href=`?uri=${log.board}`) [+]
 								td
-									if log.user !== '未登録ユーザー'
+									if log.user !== 'Unregistered User'
 										a(href=`accounts.html?username=${log.user}`) #{log.user}
 									else
 										| #{log.user}
@@ -68,4 +68,4 @@ block content
 			.pages.mv-5
 				include ../includes/pages.pug
 		else
-			p ログはありません。
+			p No logs.

@@ -50,8 +50,8 @@ module.exports = (req, res, next) => {
 	} catch(e)  {
 		console.error('Ip parse failed', e);
 		return res.status(400).render('message', {
-			'title': '要求の形式が正しくありません',
-			'message': '不正な形式のIP' //should never get here
+			'title': 'Bad request',
+			'message': 'Malformed IP' //should never get here
 		});
 	}
 

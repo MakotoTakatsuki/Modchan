@@ -22,14 +22,14 @@ module.exports = {
 		const { globalLimits } = config.get;
 
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.message), expected: true, error: 'アピールにはメッセージを含める必要があります' },
-			{ result: existsBody(req.body.checkedbans), expected: true, error: '訴えるには少なくとも1つの禁止を選択する必要があります' },
-			{ result: numberBody(res.locals.messageLength, 0, globalLimits.fieldLength.message), expected: true, error: `アピールメッセージは${globalLimits.fieldLength.message}文字以下である必要があります。` },
+			{ result: existsBody(req.body.message), expected: true, error: 'Appeals must include a message' },
+			{ result: existsBody(req.body.checkedbans), expected: true, error: 'Must select at least one ban to appeal' },
+			{ result: numberBody(res.locals.messageLength, 0, globalLimits.fieldLength.message), expected: true, error: `Appeal message must be ${globalLimits.fieldLength.message} characters or less` },
 		]); //should appeals really be based off message field length global limit? minor.
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': '/'
 			});
@@ -46,15 +46,15 @@ module.exports = {
 			/* this can occur if they selected invalid id, non-ip match, already appealed, or unappealable bans. prevented by databse filter, so we use
 				use the updatedCount return value to check if any appeals were made successfully. if not, we end up here. */
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'error': '無効な禁止が選択されました',
+				'title': 'Bad request',
+				'error': 'Invalid bans selected',
 				'redirect': '/'
 			});
 		}
 
 		return dynamicResponse(req, res, 200, 'message', {
-			'title': '成功',
-			'message': `禁止令の申請（${amount}）成功`,
+			'title': 'Success',
+			'message': `Appealed ${amount} bans successfully`,
 			'redirect': '/'
 		});
 

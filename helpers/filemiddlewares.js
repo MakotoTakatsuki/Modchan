@@ -7,15 +7,15 @@ const { debugLogs } = require(__dirname+'/../configs/secrets.js')
 	, fileHandlers = {}
 	, fileSizeLimitFunction = (req, res, next) => {
 		return dynamicResponse(req, res, 413, 'message', {
-			'title': 'ペイロードが大きすぎます',
-			'message': 'アップロードが大きすぎました',
+			'title': 'Payload Too Large',
+			'message': 'Your upload was too large',
 			'redirect': req.headers.referer
 		});
 	}
 	, missingExtensionLimitFunction = (req, res, next) => {
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': 'ファイル拡張子がありません',
+			'title': 'Bad Request',
+			'message': 'Missing file extensions',
 			'redirect': req.headers.referer
 		});
 	}
@@ -26,9 +26,9 @@ const { debugLogs } = require(__dirname+'/../configs/secrets.js')
 			const fileNumLimit = globalLimits[`${fileType}Files`];
 			const fileNumLimitFunction = (req, res, next) => {
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': 'ファイルが多すぎます',
-					'message': (req.path.endsWith('/post') && res.locals.board) ? `投稿ごとの最大ファイル数 ${res.locals.board.settings.maxFiles < globalLimits.postFiles.max ? 'この板で' : ''}は ${res.locals.board.settings.maxFiles} です。`
-						: `1リクエストあたりの最大ファイル数は${fileNumLimit.max}です。`,
+					'title': 'Too many files',
+					'message': (req.path.endsWith('/post') && res.locals.board) ? `Max files per post ${res.locals.board.settings.maxFiles < globalLimits.postFiles.max ? 'on this board ' : ''}is ${res.locals.board.settings.maxFiles}`
+						: `Max files per request is ${fileNumLimit.max}`,
 					'redirect': req.headers.referer
 				});
 			};

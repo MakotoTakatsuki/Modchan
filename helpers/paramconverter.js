@@ -39,8 +39,8 @@ module.exports = (options) => {
 			const val = req.body[key];
 			if (!allowedArrays.includes(key) && Array.isArray(val)) {
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': '要求の形式が正しくありません',
-					'message': '不正な入力'
+					'title': 'Bad request',
+					'message': 'Malformed input'
 				});
 			} else if (allowedArrays.includes(key) && !Array.isArray(val)) {
 				req.body[key] = makeArrayIfSingle(req.body[key]); //convert to arrays with single item for simpler case batch handling later
@@ -130,8 +130,8 @@ module.exports = (options) => {
 			}
 		} catch (e) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': '不正な入力'
+				'title': 'Bad request',
+				'message': 'Malformed input'
 			});
 		}
 
@@ -144,8 +144,8 @@ module.exports = (options) => {
 		if (processDateParam && req.params.date) {
 			let [ month, day, year ] = req.params.date.split('-');
 			month = month-1;
-			const date = new Date(Date.JST(year, month, day, 0, 0, 0, 0));
-			if (date !== '無効な日付') {
+			const date = new Date(Date.UTC(year, month, day, 0, 0, 0, 0));
+			if (date !== 'Invalid Date') {
 				res.locals.date = { month, day, year, date };
 			}
 		}

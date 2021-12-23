@@ -41,8 +41,8 @@ module.exports = async (req, res, next) => {
 	if (flood) {
 		deleteTempFiles(req).catch(e => console.error);
 		return dynamicResponse(req, res, 429, 'message', {
-			'title': '洪水が検出されました',
-			'message': '別の投稿、または別のユーザーに類似した投稿を行う前にお待ちください',
+			'title': 'Flood detected',
+			'message': 'Please wait before making another post, or a post similar to another user',
 			'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
 		});
 	}
@@ -59,8 +59,8 @@ module.exports = async (req, res, next) => {
 		&& res.locals.country
 		&& blockedCountries.includes(res.locals.country.code)) {
 		return dynamicResponse(req, res, 403, 'message', {
-			'title': '禁断',
-			'message': `あなたの国「${res.locals.country.name}」は、この掲示板への投稿が許可されていません。`,
+			'title': 'Forbidden',
+			'message': `Your country "${res.locals.country.name}" is not allowed to post on this board`,
 			'redirect': redirect
 		});
 	}
@@ -68,8 +68,8 @@ module.exports = async (req, res, next) => {
 		&& res.locals.permLevel >= 4) { //and not staff
 		await deleteTempFiles(req).catch(e => console.error);
 		return dynamicResponse(req, res, 400, 'message', {
-			'title': '要求の形式が正しくありません',
-			'message': lockMode === 1 ? 'スレッド作成がロックされました' : '板がロックされていますた',
+			'title': 'Bad request',
+			'message': lockMode === 1 ? 'Thread creation locked' : 'Board locked',
 			'redirect': redirect
 		});
 	}
@@ -78,8 +78,8 @@ module.exports = async (req, res, next) => {
 		if (!thread || thread.thread != null) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': 'スレッドが存在しません',
+				'title': 'Bad request',
+				'message': 'Thread does not exist',
 				'redirect': redirect
 			});
 		}
@@ -88,16 +88,16 @@ module.exports = async (req, res, next) => {
 		if (thread.locked && res.locals.permLevel >= 4) {
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': 'スレッドがロックされています',
+				'title': 'Bad request',
+				'message': 'Thread Locked',
 				'redirect': redirect
 			});
 		}
 		if (thread.replyposts >= replyLimit && !thread.cyclic) { //reply limit
 			await deleteTempFiles(req).catch(e => console.error);
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
-				'message': 'スレッドが応答制限に達しました',
+				'title': 'Bad request',
+				'message': 'Thread reached reply limit',
 				'redirect': redirect
 			});
 		}
@@ -132,8 +132,8 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 			const useFilterMode = hitGlobalFilter ? globalFilterMode : filterMode; //global override local filter
 			if (useFilterMode === 1) {
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': '要求の形式が正しくありません',
-					'message': 'あなたの投稿はワードフィルターによってブロックされました',
+					'title': 'Bad request',
+					'message': 'Your post was blocked by a word filter',
 					'redirect': redirect
 				});
 			} else { //otherwise filter mode must be 2
@@ -147,10 +147,10 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 						'raw': res.locals.ip.raw,
 					},
 					'type': 'single',
-					'reason': `${hitGlobalFilter ? 'グローバル ' :''}ワードフィルター自動禁止`,
+					'reason': `${hitGlobalFilter ? 'global ' :''}word filter auto ban`,
 					'board': banBoard,
 					'posts': null,
-					'issuer': 'システム', //what should i call this
+					'issuer': 'system', //what should i call this
 					'date': banDate,
 					'expireAt': banExpiry,
 					'allowAppeal': true, //should i make this configurable if appealable?
@@ -177,8 +177,8 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 			if (postWithExistingMessage != null) {
 				await deleteTempFiles(req).catch(e => console.error);
 				return dynamicResponse(req, res, 409, 'message', {
-					'title': '対立',
-					'message': `メッセージは一意でなければなりません ${messageR9KMode === 1 ? 'このスレッド内' : 'この掲示板'}. あなたのメッセージはユニークではありません。`,
+					'title': 'Conflict',
+					'message': `Messages must be unique ${messageR9KMode === 1 ? 'in this thread' : 'on this board'}. Your message is not unique.`,
 					'redirect': redirect
 				});
 			}
@@ -200,8 +200,8 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 					.map(f => f.name)
 					.join(', ');
 				return dynamicResponse(req, res, 409, 'message', {
-					'title': '対立',
-					'message': `アップロードしたファイルが一意であること ${fileR9KMode === 1 ? 'このスレッド内' : 'この掲示板上'}. \少なくとも次のファイルが${conflictingFiles.length > 1 ? 's are': ' is'} 一意ではない： ${conflictingFiles} ... 続きを読む`,
+					'title': 'Conflict',
+					'message': `Uploaded files must be unique ${fileR9KMode === 1 ? 'in this thread' : 'on this board'}.\nAt least the following file${conflictingFiles.length > 1 ? 's are': ' is'} not unique: ${conflictingFiles}`,
 					'redirect': redirect
 				});
 			}
@@ -212,8 +212,8 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 			if (!mimeTypes.allowed(req.files.file[i].mimetype, allowedFileTypes)) {
 				await deleteTempFiles(req).catch(e => console.error);
 				return dynamicResponse(req, res, 400, 'message', {
-					'title': '要求の形式が正しくありません',
-					'message': `${req.files.file[i].name} に対する MIME タイプ "${req.files.file[i].mimetype}" が許可されていない`,
+					'title': 'Bad request',
+					'message': `Mime type "${req.files.file[i].mimetype}" for "${req.files.file[i].name}" not allowed`,
 					'redirect': redirect
 				});
 			}
@@ -225,8 +225,8 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 				if (!(await mimeTypes.realMimeCheck(req.files.file[i]))) {
 					deleteTempFiles(req).catch(e => console.error);
 					return dynamicResponse(req, res, 400, 'message', {
-						'title': '要求の形式が正しくありません',
-						'message': `ファイル "${req.files.file[i].name}" の MIME タイプが不一致です。"`,
+						'title': 'Bad request',
+						'message': `Mime type mismatch for file "${req.files.file[i].name}"`,
 						'redirect': redirect
 					});
 				}
@@ -283,14 +283,14 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 						} catch (e) {
 							await deleteTempFiles(req).catch(e => console.error);
 							return dynamicResponse(req, res, 400, 'message', {
-								'title': '要求の形式が正しくありません',
-								'message': `サーバーは "${req.files.file[i].name}" の処理に失敗しました。サポートされていないファイルか破損している可能性があります。`,
+								'title': 'Bad request',
+								'message': `The server failed to process "${req.files.file[i].name}". Possible unsupported or corrupt file.`,
 								'redirect': redirect
 							});
 						}
-						if (imageData['チャネル統計'] && imageData['チャネル統計']['不透明度']) {
+						if (imageData['Channel Statistics'] && imageData['Channel Statistics']['Opacity']) {
 							//does this depend on GM version or anything?
-							const opacityMaximum = imageData['チャネル統計']['不透明度']['最大'];
+							const opacityMaximum = imageData['Channel Statistics']['Opacity']['Maximum'];
 							if (opacityMaximum !== '0.00 (0.0000)') {
 								processedFile.thumbextension = '.png';
 							}
@@ -362,7 +362,7 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 						}
 						break;
 					default:
-						throw new Error(`無効なファイルの MIME タイプ: ${processedFile.mimetype}.`);
+						throw new Error(`invalid file mime type: ${processedFile.mimetype}`);
 				}
 			}
 
@@ -420,7 +420,7 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 	const spoiler = (res.locals.permLevel >= 4 || userPostSpoiler) && req.body.spoiler_all ? true : false;
 
 	//forceanon and sageonlyemail only allow sage email
-	let email = (res.locals.permLevel < 4 || (!forceAnon && !sageOnlyEmail) || req.body.email === '下げる') ? req.body.email : null;
+	let email = (res.locals.permLevel < 4 || (!forceAnon && !sageOnlyEmail) || req.body.email === 'sage') ? req.body.email : null;
 	//disablereplysubject
 	let subject = (res.locals.permLevel >= 4 && req.body.thread && disableReplySubject) ? null : req.body.subject;
 
@@ -636,7 +636,7 @@ ${res.locals.numFiles > 0 ? req.files.file.map(f => f.name+'|'+(f.phash || '')).
 	} else if (data.thread) {
 		//refersh pages
 		const threadPage = await Posts.getThreadPage(req.params.board, thread);
-		if (data.email === '下げる' || thread.bumplocked) {
+		if (data.email === 'sage' || thread.bumplocked) {
 			//refresh the page that the thread is on
 			buildQueue.push({
 				'task': 'buildBoard',

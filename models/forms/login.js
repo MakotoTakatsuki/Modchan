@@ -21,8 +21,8 @@ module.exports = async (req, res, next) => {
 	//if the account doesnt exist, reject
 	if (!account) {
 		return dynamicResponse(req, res, 403, 'message', {
-			'title': '禁断',
-			'message': 'ユーザーネームまたはパスワードが違います',
+			'title': 'Forbidden',
+			'message': 'Incorrect username or password',
 			'redirect': failRedirect
 		});
 	}
@@ -43,8 +43,8 @@ module.exports = async (req, res, next) => {
 	}
 
 	return dynamicResponse(req, res, 403, 'message', {
-		'title': '禁断',
-		'message': 'ユーザーネームまたはパスワードが違います',
+		'title': 'Forbidden',
+		'message': 'Incorrect username or password',
 		'redirect': failRedirect
 	});
 

@@ -18,19 +18,19 @@ module.exports = {
 
 		let board = null;
 		const errors = await checkSchema([
-			{ result: existsBody(req.body.confirm), expected: true, error: '確認がありません' },
-			{ result: existsBody(req.body.uri), expected: true, error: 'URIがありません' },
-			{ result: alphaNumericRegex.test(req.body.uri), blocking: true, expected: true, error: 'URIにはa-z0〜9のみを含める必要があります'},
-			{ result: (req.params.board === req.body.uri), expected: true, error: 'URIが現在の板と一致しません' },
+			{ result: existsBody(req.body.confirm), expected: true, error: 'Missing confirmation' },
+			{ result: existsBody(req.body.uri), expected: true, error: 'Missing URI' },
+			{ result: alphaNumericRegex.test(req.body.uri), blocking: true, expected: true, error: 'URI must contain a-z 0-9 only'},
+			{ result: (req.params.board === req.body.uri), expected: true, error: 'URI does not match current board' },
 			{ result: async () => {
 				board = await Boards.findOne(req.body.uri);
 				return board != null;
-			}, expected: true, error: `板 /${req.body.uri}/ が存在しない。` }
+			}, expected: true, error: `Board /${req.body.uri}/ does not exist` }
 		], res.locals.permLevel);
 
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
-				'title': '要求の形式が正しくありません',
+				'title': 'Bad request',
 				'errors': errors,
 				'redirect': req.params.board ? `/${req.params.board}/manage/settings.html` : '/globalmanage/settings.html'
 			});
@@ -43,8 +43,8 @@ module.exports = {
 		}
 
 		return dynamicResponse(req, res, 200, 'message', {
-			'title': '成功',
-			'message': '板が削除されました',
+			'title': 'Success',
+			'message': 'Board deleted',
 			'redirect': req.params.board ? '/' : '/globalmanage/settings.html'
 		});
 

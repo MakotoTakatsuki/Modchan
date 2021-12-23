@@ -1,22 +1,15 @@
 unless minimal
-	a(href='https://my-store-c0f105-2.creator-spring.com' target='_blank')
-		img.centerpiece(src='/asset/i/74970b8585bcb3de192d4a58ce7a0569fab16675ad8211d3130c331af02ababa.png' title='モッドちゃんねる')
 	small.footer#bottom
-		| • 
-		a(href='/news.html') ニュース
-		|  • 
-		a(href='/rules.html') 利用規約
-		|  • 
-		a(href='/faq.html') よくある質問
-		|  • 
-		a(href='/faq.html#legalDMCA') 法務
-		|  • 
-		a(href='/faq.html#contact') お問い合わせ
-		|  • 
-		a(href='/faq.html#crypto') 寄付と広告
-		|  • 
+		| - 
+		a(href='/news.html') news
+		|  - 
+		a(href='/rules.html') rules
+		|  - 
+		a(href='/faq.html') faq
+		|  - 
 		div
-			p このページのすべての商標および著作権は、それぞれの当事者が所有しています。 アップロードされた画像はポスターの責任です。 コメントは投稿者が所有します。
-		div
-			p © Cocora Inc.
+			a(href='https://gitgud.io/fatchan/jschan/') jschan
+			|  #{version}
+
+//- "render" script - for scripted things that are blocking
 script(src=`/js/render.js?v=${commit}`)

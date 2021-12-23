@@ -60,7 +60,7 @@ a.post-name:before {
 
 .you::after {
 	margin-left: 3px;
-	content: "(あなた)";
+	content: "(You)";
 	font-weight: lighter;
 	font-style: italic;
 	font-size: 13px;

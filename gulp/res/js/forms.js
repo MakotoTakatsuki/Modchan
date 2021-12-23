@@ -55,7 +55,7 @@ function doModal(data, postcallback) {
 			}
 			if (postcallback) {
 				checkInterval = setInterval(() => {
-					if (modalframe && modalframe.contentDocument.title == '成功') {
+					if (modalframe && modalframe.contentDocument.title == 'Success') {
 						clearInterval(checkInterval);
 						removeModal();
 						postcallback();
@@ -272,14 +272,14 @@ class postFormHandler {
 					if (xhr.status === 413) {
 						//not json, must be nginx response
 						doModal({
-							'title': 'ペイロードが大きすぎます',
-							'message': 'アップロードが大きすぎました',
+							'title': 'Payload Too Large',
+							'message': 'Your upload was too large',
 						});
 					} else if (json) {
 						if (!this.captchaField && json.message === 'Incorrect captcha answer') {
 							captchaController.addMissingCaptcha();
 							this.captchaField = true;
-						} else if (json.message === 'CAPTCHA expired') {
+						} else if (json.message === 'Captcha expired') {
 							const captcha = this.form.querySelector('.captcharefresh');
 							if (captcha) {
 								captcha.dispatchEvent(new Event('click'));

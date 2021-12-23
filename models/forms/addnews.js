@@ -29,8 +29,8 @@ module.exports = async (req, res, next) => {
 	});
 
 	return dynamicResponse(req, res, 200, 'message', {
-		'title': '成功',
-		'message': 'ニュース投稿を追加',
+		'title': 'Success',
+		'message': 'Added newspost',
 		'redirect': '/globalmanage/news.html'
 	});
 
