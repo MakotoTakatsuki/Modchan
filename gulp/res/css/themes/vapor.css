@@ -70,3 +70,8 @@ a:active, a:hover {
 .captcha {
 	filter: invert(90%) sepia(100%) saturate(100) hue-rotate(194deg);
 }
+
+.centerpiece {
+
+	content: url(/asset/i/5ba0114fa31dd25b779bdd9b5caa11511eb597ef398130ed68ab744f382a1013.png);
+  }

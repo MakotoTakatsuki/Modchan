@@ -3,6 +3,7 @@
 const { getInsecureTrip, getSecureTrip } = require(__dirname+'/tripcode.js')
 	, nameRegex = /^(?<name>[^#].*?)?(?:(?<tripcode>##(?<strip>[^ ].*?)|#(?<itrip>[^#].*?)))?(?<capcode>##(?<capcodetext> .*?)?)?$/
 	, staffLevels = ['Admin', 'Global Staff', 'Board Owner', 'Board Mod']
+	, vanityStaffNames = ['*✓', 'Sysop✓', 'Admin✓', 'Mod✓']
 	, staffLevelsRegex = new RegExp(`(${staffLevels.join('|')})+`, 'igm')
 
 module.exports = async (inputName, permLevel, boardSettings, boardOwner, username) => {
@@ -36,23 +37,24 @@ module.exports = async (inputName, permLevel, boardSettings, boardOwner, usernam
 					tripcode = `!${getInsecureTrip(tripcodeText)}`;
 				}
 			}
-			//capcode
-			if (permLevel < 4 && groups.capcode) {
-				let capcodeInput = groups.capcodetext ? groups.capcodetext.trim() : '';
-				//by default, use board staff if ismod/owner, else use higher staff
-				let staffLevel = staffLevels.find((sl, l) => capcodeInput.toLowerCase().startsWith(sl.toLowerCase()) && l === permLevel)
-					|| (isBoardOwner ? staffLevels[2]
-					: isBoardMod ? staffLevels[3]
-					: staffLevels[permLevel]); //kill me
-				capcode = staffLevel;
-				if (capcodeInput && capcodeInput.toLowerCase() !== staffLevel.toLowerCase()) {
-					capcode = `${staffLevel} ${capcodeInput.replace(staffLevelsRegex, '').trim()}`;
-				}
-				capcode = `## ${capcode}`;
-			}
-		}
+//capcode
+if (permLevel < 4 && groups.capcode) {
+	let capcodeInput = groups.capcodetext ? groups.capcodetext.trim() : '';
+	//by default, use board staff if ismod/owner, else use higher staff
+	let staffIndex = staffLevels.findIndex((sl, l) => capcodeInput.toLowerCase().startsWith(sl.toLowerCase()) && l === permLevel);
+	let staffLevel = (staffIndex === -1 ? false : vanityStaffNames[staffIndex])
+		|| (isBoardOwner ? vanityStaffNames[2]
+		: isBoardMod ? vanityStaffNames[3]
+		: vanityStaffNames[permLevel]); //kill me
+	capcode = staffLevel;
+	if (capcodeInput && capcodeInput.toLowerCase() !== staffLevel.toLowerCase()) {
+		capcode = `${staffLevel} ${capcodeInput.replace(staffLevelsRegex, '').trim()}`;
 	}
+	capcode = `${capcode}`;
+}
+}
+}
 
-	return { name, tripcode, capcode };
+return { name, tripcode, capcode };
 
 }

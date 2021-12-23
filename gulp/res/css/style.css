@@ -1398,14 +1398,6 @@ row.wrap.sb .col {
 	}
 }
 
-
-@media only screen and (min-width: 600px) {
-	/* not-completely-shit way to "fix" short text squishing on single file posts */
-	.post-files:not(.fn) + .post-message {
-		min-width: 40em;
-	}
-}
-
 @media only screen and (max-width: 600px) {
 
 	.ct-r2 .catalog-thumb.small {
@@ -1592,36 +1584,1608 @@ row.wrap.sb .col {
 
 }
 
-.flag, .customflag, .customflag::before {
-	display: inline-block;
-	width: 16px;
-	height: 11px;
-	background:url(/file/flags.png) no-repeat;
-	image-rendering: crisp-edges;
-	image-rendering: pixelated;
-	image-rendering: -webkit-optimize-contrast;
-	-ms-interpolation-mode: nearest-neighbor;
+
+.catalog-tile:hover {
+    overflow-y: scroll
+}
+
+.customflag,.customflag::before,.flag {
+    display: inline-block;
+    width: unset;
+    height: unset;
+    background: url(/file/flags.png) no-repeat;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -webkit-optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+    vertical-align: top
 }
 
 .customflag {
-	background: none;
+    background: 0 0;
+    max-width: 50px;
+    max-height: 30px
 }
+
 .customflag::before {
-	content: ' ';
-	background-position:-48px -165px;
+    content: ' ';
+    background-position: -48px -165px
 }
 
 .flag.flag-xx {
-	background-position:-48px -165px;
+    background-position: -48px -165px
 }
-.flag.flag-tor, .flag.flag-t1 { /* t1 is cloudflare tor exit node */
-	background-position:-64px -165px;
+
+.flag.flag-t1,.flag.flag-tor {
+    background: url(/file/flags/onion.png) no-repeat;
+    width: 14px;
+    height: 19px
 }
+
 .flag.flag-loki {
-	background-position:-80px -165px;
+    background: url(/file/flags/lokinet.png) no-repeat;
+    width: 15px;
+    height: 15px
 }
 
 /*!
- * Generated with CSS Flag Sprite generator (https://www.flag-sprites.com/) -
+ * Adapted to country balls, put them in the folder -
  */
-.flag.flag-gu{background-position:-96px -55px}.flag.flag-mn{background-position:-208px -88px}.flag.flag-va{background-position:-48px -154px}.flag.flag-tibet{background-position:-32px -143px}.flag.flag-fo{background-position:-64px -44px}.flag.flag-th{background-position:-16px -143px}.flag.flag-tr{background-position:-144px -143px}.flag.flag-tl{background-position:-80px -143px}.flag.flag-kz{background-position:-144px -77px}.flag.flag-zm{background-position:-16px -165px}.flag.flag-uz{background-position:-32px -154px}.flag.flag-dk{background-position:-64px -33px}.flag.flag-scotland{background-position:-176px -121px}.flag.flag-gi{background-position:-224px -44px}.flag.flag-gy{background-position:-128px -55px}.flag.flag-bj{background-position:-112px -11px}.flag.flag-fr{background-position:-80px -44px}.flag.flag-mo{background-position:-224px -88px}.flag.flag-ir{background-position:-112px -66px}.flag.flag-io{background-position:-80px -66px}.flag.flag-tm{background-position:-96px -143px}.flag.flag-ch{background-position:-96px -22px}.flag.flag-mt{background-position:-32px -99px}.flag.flag-nl{background-position:-240px -99px}.flag.flag-gp{background-position:-16px -55px}.flag.flag-im{background-position:-48px -66px}.flag.flag-tv{background-position:-176px -143px}.flag.flag-mu{background-position:-48px -99px}.flag.flag-pe{background-position:-96px -110px}.flag.flag-vi{background-position:-112px -154px}.flag.flag-hn{background-position:-176px -55px}.flag.flag-ss{background-position:-128px -132px}.flag.flag-ae{background-position:-16px 0}.flag.flag-td{background-position:-240px -132px}.flag.flag-pw{background-position:0 -121px}.flag.flag-nu{background-position:-32px -110px}.flag.flag-bt{background-position:-208px -11px}.flag.flag-ms{background-position:-16px -99px}.flag.flag-cv{background-position:-240px -22px}.flag.flag-es{background-position:-224px -33px}.flag.flag-mh{background-position:-144px -88px}.flag.flag-la{background-position:-160px -77px}.flag.flag-vn{background-position:-128px -154px}.flag.flag-py{background-position:-16px -121px}.flag.flag-br{background-position:-176px -11px}.flag.flag-ye{background-position:-224px -154px}.flag.flag-ie{background-position:0 -66px}.flag.flag-gh{background-position:-208px -44px}.flag.flag-cg{background-position:-80px -22px}.flag.flag-cu{background-position:-224px -22px}.flag.flag-hu{background-position:-224px -55px}.flag.flag-sg{background-position:-224px -121px}.flag.flag-at{background-position:-176px 0}.flag.flag-lk{background-position:-224px -77px}.flag.flag-vu{background-position:-144px -154px}.flag.flag-bo{background-position:-160px -11px}.flag.flag-jo{background-position:-208px -66px}.flag.flag-er{background-position:-208px -33px}.flag.flag-za{background-position:-256px -154px}.flag.flag-rs{background-position:-80px -121px}.flag.flag-nr{background-position:-16px -110px}.flag.flag-ls{background-position:-256px -77px}.flag.flag-jm{background-position:-192px -66px}.flag.flag-tz{background-position:-208px -143px}.flag.flag-ki{background-position:-16px -77px}.flag.flag-sj{background-position:0 -132px}.flag.flag-cz{background-position:-16px -33px}.flag.flag-pg{background-position:-128px -110px}.flag.flag-lv{background-position:-32px -88px}.flag.flag-do{background-position:-96px -33px}.flag.flag-lu{background-position:-16px -88px}.flag.flag-no{background-position:-256px -99px}.flag.flag-kw{background-position:-112px -77px}.flag.flag-mx{background-position:-96px -99px}.flag.flag-yt{background-position:-240px -154px}.flag.flag-ly{background-position:-48px -88px}.flag.flag-cy{background-position:0 -33px}.flag.flag-ph{background-position:-144px -110px}.flag.flag-my{background-position:-112px -99px}.flag.flag-sm{background-position:-48px -132px}.flag.flag-et{background-position:-240px -33px}.flag.flag-ru{background-position:-96px -121px}.flag.flag-tj{background-position:-48px -143px}.flag.flag-ai{background-position:-64px 0}.flag.flag-pl{background-position:-176px -110px}.flag.flag-kp{background-position:-64px -77px}.flag.flag-uy{background-position:-16px -154px}.flag.flag-gb{background-position:-112px -44px}.flag.flag-gs{background-position:-64px -55px}.flag.flag-kurdistan{background-position:-96px -77px}.flag.flag-rw{background-position:-112px -121px}.flag.flag-ec{background-position:-128px -33px}.flag.flag-mm{background-position:-192px -88px}.flag.flag-pa{background-position:-80px -110px}.flag.flag-wales{background-position:-160px -154px}.flag.flag-kg{background-position:-256px -66px}.flag.flag-ve{background-position:-80px -154px}.flag.flag-tk{background-position:-64px -143px}.flag.flag-ca{background-position:-16px -22px}.flag.flag-is{background-position:-128px -66px}.flag.flag-ke{background-position:-240px -66px}.flag.flag-ro{background-position:-64px -121px}.flag.flag-gq{background-position:-32px -55px}.flag.flag-pt{background-position:-256px -110px}.flag.flag-tf{background-position:-256px -132px}.flag.flag-ad{background-position:0 0}.flag.flag-sk{background-position:-16px -132px}.flag.flag-pm{background-position:-192px -110px}.flag.flag-om{background-position:-64px -110px}.flag.flag-an{background-position:-112px 0}.flag.flag-ws{background-position:-192px -154px}.flag.flag-sh{background-position:-240px -121px}.flag.flag-mp{background-position:-240px -88px}.flag.flag-gt{background-position:-80px -55px}.flag.flag-cf{background-position:-64px -22px}.flag.flag-zanzibar{background-position:0 -165px}.flag.flag-mw{background-position:-80px -99px}.flag.flag-catalonia{background-position:-32px -22px}.flag.flag-ug{background-position:-240px -143px}.flag.flag-je{background-position:-176px -66px}.flag.flag-km{background-position:-32px -77px}.flag.flag-in{background-position:-64px -66px}.flag.flag-bf{background-position:-48px -11px}.flag.flag-mc{background-position:-80px -88px}.flag.flag-sy{background-position:-192px -132px}.flag.flag-sn{background-position:-64px -132px}.flag.flag-kr{background-position:-80px -77px}.flag.flag-eu{background-position:-256px -33px}.flag.flag-bn{background-position:-144px -11px}.flag.flag-st{background-position:-144px -132px}.flag.flag-england{background-position:-192px -33px}.flag.flag-lc{background-position:-192px -77px}.flag.flag-dm{background-position:-80px -33px}.flag.flag-be{background-position:-32px -11px}.flag.flag-ni{background-position:-224px -99px}.flag.flag-ua{background-position:-224px -143px}.flag.flag-mz{background-position:-128px -99px}.flag.flag-pf{background-position:-112px -110px}.flag.flag-tn{background-position:-112px -143px}.flag.flag-ee{background-position:-144px -33px}.flag.flag-xk{background-position:-208px -154px}.flag.flag-sx{background-position:-176px -132px}.flag.flag-sd{background-position:-192px -121px}.flag.flag-gd{background-position:-128px -44px}.flag.flag-ci{background-position:-112px -22px}.flag.flag-sz{background-position:-208px -132px}.flag.flag-cl{background-position:-144px -22px}.flag.flag-fi{background-position:0 -44px}.flag.flag-ga{background-position:-96px -44px}.flag.flag-jp{background-position:-224px -66px}.flag.flag-de{background-position:-32px -33px}.flag.flag-np{background-position:0 -110px}.flag.flag-re{background-position:-48px -121px}.flag.flag-bg{background-position:-64px -11px}.flag.flag-sc{background-position:-160px -121px}.flag.flag-ng{background-position:-208px -99px}.flag.flag-qa{background-position:-32px -121px}.flag.flag-mk{background-position:-160px -88px}.flag.flag-aw{background-position:-208px 0}.flag.flag-kn{background-position:-48px -77px}.flag.flag-al{background-position:-80px 0}.flag.flag-bw{background-position:-240px -11px}.flag.flag-um{background-position:-256px -143px}.flag.flag-ky{background-position:-128px -77px}.flag.flag-tt{background-position:-160px -143px}.flag.flag-so{background-position:-80px -132px}.flag.flag-lt{background-position:0 -88px}.flag.flag-by{background-position:-256px -11px}.flag.flag-bb{background-position:0 -11px}.flag.flag-us{background-position:0 -154px}.flag.flag-md{background-position:-96px -88px}.flag.flag-ag{background-position:-48px 0}.flag.flag-hm{background-position:-160px -55px}.flag.flag-as{background-position:-160px 0}.flag.flag-eg{background-position:-160px -33px}.flag.flag-sv{background-position:-160px -132px}.flag.flag-sl{background-position:-32px -132px}.flag.flag-fk{background-position:-32px -44px}.flag.flag-am{background-position:-96px 0}.flag.flag-ck{background-position:-128px -22px}.flag.flag-tw{background-position:-192px -143px}.flag.flag-kh{background-position:0 -77px}.flag.flag-to{background-position:-128px -143px}.flag.flag-se{background-position:-208px -121px}.flag.flag-cd{background-position:-48px -22px}.flag.flag-pn{background-position:-208px -110px}.flag.flag-gr{background-position:-48px -55px}.flag.flag-id{background-position:-256px -55px}.flag.flag-vc{background-position:-64px -154px}.flag.flag-somaliland{background-position:-96px -132px}.flag.flag-bi{background-position:-96px -11px}.flag.flag-pk{background-position:-160px -110px}.flag.flag-pr{background-position:-224px -110px}.flag.flag-bd{background-position:-16px -11px}.flag.flag-co{background-position:-192px -22px}.flag.flag-fm{background-position:-48px -44px}.flag.flag-bm{background-position:-128px -11px}.flag.flag-ar{background-position:-144px 0}.flag.flag-bv{background-position:-224px -11px}.flag.flag-sb{background-position:-144px -121px}.flag.flag-mq{background-position:-256px -88px}.flag.flag-eh{background-position:-176px -33px}.flag.flag-bh{background-position:-80px -11px}.flag.flag-it{background-position:-144px -66px}.flag.flag-hr{background-position:-192px -55px}.flag.flag-sa{background-position:-128px -121px}.flag.flag-mv{background-position:-64px -99px}.flag.flag-mg{background-position:-128px -88px}.flag.flag-dz{background-position:-112px -33px}.flag.flag-gg{background-position:-192px -44px}.flag.flag-gm{background-position:-256px -44px}.flag.flag-af{background-position:-32px 0}.flag.flag-li{background-position:-208px -77px}.flag.flag-sr{background-position:-112px -132px}.flag.flag-vg{background-position:-96px -154px}.flag.flag-cr{background-position:-208px -22px}.flag.flag-tc{background-position:-224px -132px}.flag.flag-ao{background-position:-128px 0}.flag.flag-ma{background-position:-64px -88px}.flag.flag-mr{background-position:0 -99px}.flag.flag-gn{background-position:0 -55px}.flag.flag-ne{background-position:-176px -99px}.flag.flag-nf{background-position:-192px -99px}.flag.flag-wf{background-position:-176px -154px}.flag.flag-hk{background-position:-144px -55px}.flag.flag-gf{background-position:-160px -44px}.flag.flag-ps{background-position:-240px -110px}.flag.flag-ic{background-position:-240px -55px}.flag.flag-cw{background-position:-256px -22px}.flag.flag-ml{background-position:-176px -88px}.flag.flag-ax{background-position:-224px 0}.flag.flag-gl{background-position:-240px -44px}.flag.flag-dj{background-position:-48px -33px}.flag.flag-cn{background-position:-176px -22px}.flag.flag-ht{background-position:-208px -55px}.flag.flag-lr{background-position:-240px -77px}.flag.flag-tg{background-position:0 -143px}.flag.flag-ba{background-position:-256px 0}.flag.flag-ge{background-position:-144px -44px}.flag.flag-bz{background-position:0 -22px}.flag.flag-au{background-position:-192px 0}.flag.flag-iq{background-position:-96px -66px}.flag.flag-cm{background-position:-160px -22px}.flag.flag-gw{background-position:-112px -55px}.flag.flag-az{background-position:-240px 0}.flag.flag-na{background-position:-144px -99px}.flag.flag-fj{background-position:-16px -44px}.flag.flag-zw{background-position:-32px -165px}.flag.flag-bs{background-position:-192px -11px}.flag.flag-il{background-position:-16px -66px}.flag.flag-nz{background-position:-48px -110px}.flag.flag-me{background-position:-112px -88px}.flag.flag-si{background-position:-256px -121px}.flag.flag-nc{background-position:-160px -99px}.flag.flag-lb{background-position:-176px -77px}
+.flag.flag-gu {
+    background: url(/file/flags/gu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mn {
+    background: url(/file/flags/mn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-va {
+    background: url(/file/flags/va.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tibet {
+    background-position: -32px -143px
+}
+
+.flag.flag-fo {
+    background: url(/file/flags/fo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-th {
+    background: url(/file/flags/th.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tr {
+    background: url(/file/flags/tr.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tl {
+    background: url(/file/flags/tl.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kz {
+    background: url(/file/flags/kz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-zm {
+    background: url(/file/flags/zm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-uz {
+    background: url(/file/flags/uz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-dk {
+    background: url(/file/flags/dk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-scotland {
+    background-position: -176px -121px
+}
+
+.flag.flag-gi {
+    background: url(/file/flags/gi.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gy {
+    background: url(/file/flags/gy.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bj {
+    background: url(/file/flags/bj.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-fr {
+    background: url(/file/flags/fr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mo {
+    background: url(/file/flags/mo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ir {
+    background: url(/file/flags/ir.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-io {
+    background: url(/file/flags/io.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tm {
+    background: url(/file/flags/tm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ch {
+    background: url(/file/flags/ch.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mt {
+    background: url(/file/flags/mt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-nl {
+    background: url(/file/flags/nl.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gp {
+    background: url(/file/flags/gp.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-im {
+    background: url(/file/flags/im.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tv {
+    background: url(/file/flags/tv.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mu {
+    background: url(/file/flags/mu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pe {
+    background: url(/file/flags/pe.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-vi {
+    background: url(/file/flags/vi.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-hn {
+    background: url(/file/flags/hn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ss {
+    background: url(/file/flags/ss.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ae {
+    background: url(/file/flags/ae.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-td {
+    background: url(/file/flags/td.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pw {
+    background: url(/file/flags/pw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-nu {
+    background: url(/file/flags/nu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bt {
+    background: url(/file/flags/bt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ms {
+    background: url(/file/flags/ms.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cv {
+    background: url(/file/flags/cv.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-es {
+    background: url(/file/flags/es.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mh {
+    background: url(/file/flags/mh.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-la {
+    background: url(/file/flags/la.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-vn {
+    background: url(/file/flags/vn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-py {
+    background: url(/file/flags/py.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-br {
+    background: url(/file/flags/br.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ye {
+    background: url(/file/flags/ye.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ie {
+    background: url(/file/flags/ie.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gh {
+    background: url(/file/flags/gh.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cg {
+    background: url(/file/flags/cg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cu {
+    background: url(/file/flags/cu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-hu {
+    background: url(/file/flags/hu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sg {
+    background: url(/file/flags/sg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-at {
+    background: url(/file/flags/at.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-lk {
+    background: url(/file/flags/lk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-vu {
+    background: url(/file/flags/vu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bo {
+    background: url(/file/flags/bo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-jo {
+    background: url(/file/flags/jo.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-er {
+    background: url(/file/flags/er.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-za {
+    background: url(/file/flags/za.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-rs {
+    background: url(/file/flags/rs.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-nr {
+    background: url(/file/flags/nr.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ls {
+    background: url(/file/flags/ls.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-jm {
+    background: url(/file/flags/jm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tz {
+    background: url(/file/flags/tz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ki {
+    background: url(/file/flags/ki.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sj {
+    background: url(/file/flags/sj.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cz {
+    background: url(/file/flags/cz.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pg {
+    background: url(/file/flags/pg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-lv {
+    background: url(/file/flags/lv.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-do {
+    background: url(/file/flags/do.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-lu {
+    background: url(/file/flags/lu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-no {
+    background: url(/file/flags/no.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kw {
+    background: url(/file/flags/kw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mx {
+    background: url(/file/flags/mx.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-yt {
+    background: url(/file/flags/yt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ly {
+    background: url(/file/flags/ly.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cy {
+    background: url(/file/flags/cy.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ph {
+    background: url(/file/flags/ph.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-my {
+    background: url(/file/flags/my.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sm {
+    background: url(/file/flags/sm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-et {
+    background: url(/file/flags/et.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ru {
+    background: url(/file/flags/ru.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tj {
+    background: url(/file/flags/tj.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ai {
+    background: url(/file/flags/ai.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pl {
+    background: url(/file/flags/pl.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kp {
+    background: url(/file/flags/kp.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-uy {
+    background: url(/file/flags/uy.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gb {
+    background: url(/file/flags/gb.png) no-repeat;
+    width: 17px;
+    height: 18px
+}
+
+.flag.flag-gs {
+    background: url(/file/flags/gs.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kurdistan {
+    background-position: -96px -77px
+}
+
+.flag.flag-rw {
+    background: url(/file/flags/rw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ec {
+    background: url(/file/flags/ec.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mm {
+    background: url(/file/flags/mm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pa {
+    background: url(/file/flags/pa.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-wales {
+    background-position: -160px -154px
+}
+
+.flag.flag-kg {
+    background: url(/file/flags/kg.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ve {
+    background: url(/file/flags/ve.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tk {
+    background: url(/file/flags/tk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ca {
+    background: url(/file/flags/ca.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-is {
+    background: url(/file/flags/is.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ke {
+    background: url(/file/flags/ke.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ro {
+    background: url(/file/flags/ro.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gq {
+    background: url(/file/flags/gq.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pt {
+    background: url(/file/flags/pt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-tf {
+    background: url(/file/flags/tf.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ad {
+    background: url(/file/flags/ad.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sk {
+    background: url(/file/flags/sk.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-pm {
+    background: url(/file/flags/pm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-om {
+    background: url(/file/flags/om.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-an {
+    background: url(/file/flags/an.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ws {
+    background: url(/file/flags/ws.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sh {
+    background: url(/file/flags/sh.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mp {
+    background: url(/file/flags/mp.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-gt {
+    background: url(/file/flags/gt.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-cf {
+    background: url(/file/flags/cf.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-zanzibar {
+    background-position: 0 -165px
+}
+
+.flag.flag-mw {
+    background: url(/file/flags/mw.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-catalonia {
+    background-position: -32px -22px
+}
+
+.flag.flag-ug {
+    background: url(/file/flags/ug.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-je {
+    background: url(/file/flags/je.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-km {
+    background: url(/file/flags/km.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-in {
+    background: url(/file/flags/in.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bf {
+    background: url(/file/flags/bf.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-mc {
+    background: url(/file/flags/mc.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sy {
+    background: url(/file/flags/sy.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-sn {
+    background: url(/file/flags/sn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-kr {
+    background: url(/file/flags/kr.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-eu {
+    background: url(/file/flags/eu.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-bn {
+    background: url(/file/flags/bn.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-st {
+    background: url(/file/flags/st.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-england {
+    background-position: -192px -33px
+}
+
+.flag.flag-lc {
+    background: url(/file/flags/lc.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-dm {
+    background: url(/file/flags/dm.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-be {
+    background: url(/file/flags/be.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ni {
+    background: url(/file/flags/ni.png) no-repeat;
+    width: 17px;
+    height: 16px
+}
+
+.flag.flag-ua {
+    background: url(/file/flags/ua.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mz {
+    background: url(/file/flags/mz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pf {
+    background: url(/file/flags/pf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tn {
+    background: url(/file/flags/tn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ee {
+    background: url(/file/flags/ee.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-xk {
+    background: url(/file/flags/xk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sx {
+    background: url(/file/flags/sx.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sd {
+    background: url(/file/flags/sd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gd {
+    background: url(/file/flags/gd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ci {
+    background: url(/file/flags/ci.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sz {
+    background: url(/file/flags/sz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cl {
+    background: url(/file/flags/cl.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fi {
+    background: url(/file/flags/fi.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ga {
+    background: url(/file/flags/ga.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-jp {
+    background: url(/file/flags/jp.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-de {
+    background: url(/file/flags/de.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-np {
+    background: url(/file/flags/np.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-re {
+    background: url(/file/flags/re.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bg {
+    background: url(/file/flags/bg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sc {
+    background: url(/file/flags/sc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ng {
+    background: url(/file/flags/ng.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-qa {
+    background: url(/file/flags/qa.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mk {
+    background: url(/file/flags/mk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-aw {
+    background: url(/file/flags/aw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-kn {
+    background: url(/file/flags/kn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-al {
+    background: url(/file/flags/al.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bw {
+    background: url(/file/flags/bw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-um {
+    background: url(/file/flags/um.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ky {
+    background: url(/file/flags/ky.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tt {
+    background: url(/file/flags/tt.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-so {
+    background: url(/file/flags/so.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-lt {
+    background: url(/file/flags/lt.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-by {
+    background: url(/file/flags/by.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bb {
+    background: url(/file/flags/bb.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-us {
+    background: url(/file/flags/us.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-md {
+    background: url(/file/flags/md.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ag {
+    background: url(/file/flags/ag.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-hm {
+    background: url(/file/flags/hm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-as {
+    background: url(/file/flags/as.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-eg {
+    background: url(/file/flags/eg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sv {
+    background: url(/file/flags/sv.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sl {
+    background: url(/file/flags/sl.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fk {
+    background: url(/file/flags/fk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-am {
+    background: url(/file/flags/am.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ck {
+    background: url(/file/flags/ck.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tw {
+    background: url(/file/flags/tw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-kh {
+    background: url(/file/flags/kh.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-to {
+    background: url(/file/flags/to.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-se {
+    background: url(/file/flags/se.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cd {
+    background: url(/file/flags/cd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pn {
+    background: url(/file/flags/pn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gr {
+    background: url(/file/flags/gr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-id {
+    background: url(/file/flags/id.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-vc {
+    background: url(/file/flags/vc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-somaliland {
+    background-position: -96px -132px
+}
+
+.flag.flag-bi {
+    background: url(/file/flags/bi.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pk {
+    background: url(/file/flags/pk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-pr {
+    background: url(/file/flags/pr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bd {
+    background: url(/file/flags/bd.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-co {
+    background: url(/file/flags/co.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fm {
+    background: url(/file/flags/fm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bm {
+    background: url(/file/flags/bm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ar {
+    background: url(/file/flags/ar.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bv {
+    background: url(/file/flags/bv.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sb {
+    background: url(/file/flags/sb.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mq {
+    background: url(/file/flags/mq.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-eh {
+    background: url(/file/flags/eh.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bh {
+    background: url(/file/flags/bh.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-it {
+    background: url(/file/flags/it.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-hr {
+    background: url(/file/flags/hr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sa {
+    background: url(/file/flags/sa.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mv {
+    background: url(/file/flags/mv.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mg {
+    background: url(/file/flags/mg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-dz {
+    background: url(/file/flags/dz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gg {
+    background: url(/file/flags/gg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gm {
+    background: url(/file/flags/gm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-af {
+    background: url(/file/flags/af.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-li {
+    background: url(/file/flags/li.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-sr {
+    background: url(/file/flags/sr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-vg {
+    background: url(/file/flags/vg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cr {
+    background: url(/file/flags/cr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tc {
+    background: url(/file/flags/tc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ao {
+    background: url(/file/flags/ao.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ma {
+    background: url(/file/flags/ma.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-mr {
+    background: url(/file/flags/mr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gn {
+    background: url(/file/flags/gn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ne {
+    background: url(/file/flags/ne.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-nf {
+    background: url(/file/flags/nf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-wf {
+    background: url(/file/flags/wf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-hk {
+    background: url(/file/flags/hk.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gf {
+    background: url(/file/flags/gf.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ps {
+    background: url(/file/flags/ps.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ic {
+    background: url(/file/flags/ic.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cw {
+    background: url(/file/flags/cw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ml {
+    background: url(/file/flags/ml.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ax {
+    background: url(/file/flags/ax.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gl {
+    background: url(/file/flags/gl.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-dj {
+    background: url(/file/flags/dj.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cn {
+    background: url(/file/flags/cn.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ht {
+    background: url(/file/flags/ht.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-lr {
+    background: url(/file/flags/lr.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-tg {
+    background: url(/file/flags/tg.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ba {
+    background: url(/file/flags/ba.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-ge {
+    background: url(/file/flags/ge.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bz {
+    background: url(/file/flags/bz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-au {
+    background: url(/file/flags/au.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-iq {
+    background: url(/file/flags/iq.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-cm {
+    background: url(/file/flags/cm.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-gw {
+    background: url(/file/flags/gw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-az {
+    background: url(/file/flags/az.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-na {
+    background: url(/file/flags/na.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-fj {
+    background: url(/file/flags/fj.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-zw {
+    background: url(/file/flags/zw.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-bs {
+    background: url(/file/flags/bs.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-il {
+    background: url(/file/flags/il.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-nz {
+    background: url(/file/flags/nz.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-me {
+    background: url(/file/flags/me.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-si {
+    background: url(/file/flags/si.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-nc {
+    background: url(/file/flags/nc.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.flag.flag-lb {
+    background: url(/file/flags/lb.png) no-repeat;
+    width: 17px;
+    height: 14px
+}
+
+.logo {
+    display: block;
+    margin: auto;
+    max-width: 100%
+}
+
+.centerpiece {
+    display: block;
+    margin: auto;
+    max-width: 100%
+}
+
+span.title {
+	color: var(--title-color);
+}
+
+span.sorte {
+    background: linear-gradient(to right,red,#ffa600,#fff500,#06ff00,#00c9ff,#2300ff,#ff00fa,red);
+    background-size: 200% auto;
+    color: #000;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: title 1s linear infinite
+}
+
+@keyframes title {
+    to {
+        background-position: 200% center
+    }
+}
+
+[data-email=migi] {
+    align-self: flex-end
+}
+
+.upload-list {
+    max-height: none;
+}
+
+.upload-item p {
+    max-height: 2.5em;
+}

@@ -1,9 +1,9 @@
 'use strict';
 
 const countries = require('i18n-iso-countries')
-	, countryNamesMap = countries.getNames('en')
-	, extraCountryCodes = ['EU', 'XX', 'T1']
-	, anonymizerCountryCodes = ['TOR', 'LOKI']
+	, countryNamesMap = countries.getNames('pt')
+	, extraCountryCodes = ['EU', 'XX']
+	, anonymizerCountryCodes = ['TOR', 'LOKI', 'T1']
 	, anonymizerCountryCodesSet = new Set(anonymizerCountryCodes)
 	, countryCodes = Object.keys(countryNamesMap)
 		.concat(extraCountryCodes, anonymizerCountryCodes);

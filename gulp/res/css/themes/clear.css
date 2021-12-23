@@ -13,23 +13,36 @@
 	--darken: #0000000f;
 	--highlighted-post-color: #EEDACB;
 	--highlighted-post-outline-color: #d2d2d2;
-	--board-title: maroon;
+	--board-title: #313370;
 	--hr: #DDD;
 	--font-color: #333;
-	--name-color: #333;
+	--name-color: #313370;
 	--capcode-color: #f00;
-	--subject-color: #004A99;
+	--subject-color: #c33;
 	--link-color: black;
 	--post-link-color: darkblue;
-	--link-hover: #a74300;
+	--link-hover: #313370;
 	--input-borders: #d2d2d2;
 	--input-color: #333;
 	--input-background: #f5f5f5;
 	--dice-color: maroon;
-	--title-color: #d70000;
+	--title-color: #c33;
 	--greentext-color: #789922;
 	--pinktext-color:#E0727F;
 }
 .post-info, .post-container:target .post-info, .post-container.highlighted .post-info {
 	background:none!important;border:none!important
+}
+
+input[type=submit] {
+    background-color: var(--board-title);
+    color: var(--background-rest);
+}
+
+.upload-list {
+    max-height: none;
+}
+
+.upload-item p {
+    max-height: 2.5em;
 }

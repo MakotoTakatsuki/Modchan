@@ -48,10 +48,11 @@ module.exports = async (req, res, next) => {
 	const filenames = [];
 	for (let i = 0; i < res.locals.numFiles; i++) {
 		const file = req.files.file[i];
-		file.filename = file.sha256 + file.extension;
+		const filename = file.sha256 + path.extname(file.name);
+		file.filename = filename;
 
 		//check if already exists
-		const exists = await pathExists(`${uploadDirectory}/asset/${req.params.board}/${file.filename}`);
+		const exists = await pathExists(`${uploadDirectory}/asset/${req.params.board}/${filename}`);
 
 		if (exists) {
 			await remove(file.tempFilePath);
@@ -59,10 +60,10 @@ module.exports = async (req, res, next) => {
 		}
 
 		//add to list after checking it doesnt already exist
-		filenames.push(file.filename);
+		filenames.push(filename);
 
 		//then upload it
-		await moveUpload(file, file.filename, `asset/${req.params.board}`);
+		await moveUpload(file, filename, `asset/${req.params.board}`);
 
 		//and delete the temp file
 		await remove(file.tempFilePath);

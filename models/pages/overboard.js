@@ -52,14 +52,14 @@ module.exports = async (req, res, next) => {
 				.concat(addBoards)
 				.filter(b => !removeBoardsSet.has(b));
 			threads = await Posts.getRecent(selectedBoards, 1, overboardLimit, false, false);
-			cache.set(`overboard:${cacheQueryString}`, threads, 60);
+			cache.set(`overboard:${cacheQueryString}`, threads, 30);
 		} catch (err) {
 			return next(err);
 		}
 	}
 
 	res
-	.set('Cache-Control', 'public, max-age=60')
+	.set('Cache-Control', 'public, max-age=30')
 
 	if (req.path === '/overboard.json') {
 		res.json({

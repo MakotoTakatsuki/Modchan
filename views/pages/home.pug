@@ -5,20 +5,24 @@ block head
 	title #{meta.siteName}
 
 block content
-	h1.board-title #{meta.siteName}
+	//h1.board-title #{meta.siteName}
+	img.logo(src='/misc/marutanew.png' title='Um redesítio de desenhos animados.')
 	.table-container.flex-center.mv-10.text-center
+	
 		table
 			tr
-				th.alt Welcome
+				th.alt Sobre
 			tr
 				td
 					pre.no-m-p
-						| The site administrator should edit views/pages/home.pug, then run "pm2 reload all" and "gulp html" to customise this page.
+						| O ptchan.org é um site dedicado à comunidade de língua portuguesa onde se pode participar de forma anónima e 
+						a(href='/faq.html#make-a-board') criar tábuas
+						|.
 	if recentNews && recentNews.length > 0
 		.table-container.flex-center.mv-5
 			table.newstable
 				tr
-					th(colspan=3) Latest News
+					th(colspan=3) Notícias
 				each post in recentNews
 					tr
 						td
@@ -28,7 +32,22 @@ block content
 						td
 							- const newsDate = new Date(post.date);
 							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(undefined, {hourCycle:'h23'})}
+	if hotThreads && hotThreads.length > 0
+		.table-container.flex-center.mv-5
+			table.posttable
+				tr(colspan=3) 
+				each post in hotThreads
+					tr
+						td 🔥#{post.replyposts + post.replyfiles}
+						td 
+							if post.nomarkup != null
+								a.quote(href=`/${post.board}/thread/${post.postId}.html#${post.postId}`) #{`${post.subject.substring(0,30)}${post.subject && post.subject.length > 30 ? '...' : ''} ${post.nomarkup && post.nomarkup.substring(0,50)}${post.nomarkup && post.nomarkup.length > 50 ? '...' : ''}`}
+							if post.nomarkup === null
+								a.quote(href=`/${post.board}/thread/${post.postId}.html#${post.postId}`) (Sem texto)
 
+						td
+							- const newsDate = new Date(post.bumped);
+							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(undefined, {hourCycle:'h23'})}
 	if boards && boards.length > 0
 		+boardtable(true, false)
 			each board in boards
@@ -47,16 +66,20 @@ block content
 			if localStats.total-localStats.unlisted > boards.length
 				tr
 					td(colspan=6)
-						a.bold(href='/boards.html') More Boards
+						a.bold(href='/boards.html') Mais tábuas
 		.table-container.flex-center.mv-10.text-center
 			table(style='max-width:450px')
 				tr
-					th Local Stats
+					th Informações
 				tr
 					td
 						pre.no-m-p
-							| There are currently #[span.bold #{localStats.total-localStats.unlisted}] public boards, #[span.bold #{localStats.total}] in total. Sitewide, #[span.bold #{localStats.ppd}] post#{localStats.ppd === 1 ? ' has' : 's have'} been made in the last day, #[span.bold #{localStats.pph}] in the last hour, #[span.bold #{localStats.posts}] in total.
-							| #[span.bold #{fileStats.count}] file#{fileStats.count === 1 ? ' is' : 's are'} being served, totaling #[span.bold #{fileStats.totalSizeString}].
+							| Existem #[span.bold #{localStats.total-localStats.unlisted}] tábuas públicas, #[span.bold #{localStats.total}] no total. Foram feitas #[span.bold #{localStats.ppd}] publicações#{localStats.ppd === 1 ? ' ' : ''} no último dia, #[span.bold #{localStats.pph}] na última hora, #[span.bold #{localStats.posts}] no total.
+							| #[span.bold #{fileStats.count}] #{fileStats.count === 1 ? '' : ''}Ficheiros #[span.bold #{fileStats.totalSizeString}].
+							| 
+							a(href='http://jieq75a6uwqbj5sjzaxlnd7xwgs35audjmkk4g3gfjwosfrz7cp47xid.onion') Tor
+							| 
+							a(href='http://yg8tt1wnsgmkjxkhm5oxc4h3tgtch1q3yycngx8h8xwg3ef7bjco.loki') Loki
 		if enableWebring === true && webringStats != null
 			.table-container.flex-center.mv-10.text-center
 				table(style='max-width:450px')

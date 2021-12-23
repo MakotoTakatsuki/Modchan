@@ -2,95 +2,199 @@ extends ../layout.pug
 include ../mixins/post.pug
 
 block head
-	title Frequently Asked Questions
+	title Perguntas Frequentes
 
 block content
-	h1.board-title FAQ
+	h1.board-title Perguntas Frequentes
 	include ../includes/stickynav.pug
 	.table-container.flex-center.mv-5
 		.anchor
 		table
 			tr
-				th Frequently Asked Questions 
+				th Perguntas frequentes 
 			tr
 				td.post-message
-					b General
+					b Geral
 					ul.mv-0
-						li: a(href='#whats-an-imageboard') What is an imageboard?
-						li: a(href='/rules.html') What are the rules?
-						li: a(href='#contact') How can I contact the administration?
-					b Making posts
+						li: a(href='#denunciar') Como posso denunciar uma publicação?
+						li: a(href='#cripto') Como posso ajudar o ptchan.org?
+						li: a(href='#legalDMCA') Remoção de conteúdo que infringe direitos legais/DMCA.
+						li: a(href='#contactar') Como posso contactar a administração?
+						li: a(href='#source') Source?
+						
+					b Participar
 					ul.mv-0
-						li: a(href='#captcha') How do I solve CAPTCHA?
-						li: a(href='#name-formatting') How do names, tripcodes and capcodes work?
-						li: a(href='#post-styling') What kind of styling options are available when making a post?
-						li: a(href='#post-info') What is the file size limit?
-						li: a(href='#moderation') How does moderation work?
-					b Boards, users & permissions
+						li: a(href='#criarfio') Como crio um fio?
+						li: a(href='#responder') Como respondo a um fio?
+						li: a(href='#responderu') Como respondo a outro utilizador?
+						li: a(href='#sage') O que é um sage?
+						li: a(href='#IDs') O que são IDs?
+						li: a(href='#captcha') Como resolvo o CAPTCHA?
+						li: a(href='#name-formatting') Como funcionam os nomes, tripcodes e capcodes?
+						li: a(href='#post-styling') Como posso formatar o meu texto?
+						//li: a(href='#post-info') Qual é o limite de ficheiros?
+						//li: a(href='#moderation') Como funciona a moderação?
+						//li: a(href='#banido') Fui banido, e agora?
+					b Tábuas, utilizadores & permissões
 					ul.mv-0
-						li: a(href='#make-a-board') How do I make my own board?
-						li: a(href='#staff-and-permissions') How do staff, users and permissions work?
-						li: a(href='#antispam') What do the board settings for antispam do?
-						li: a(href='#archive-reverse-url-format') What is the archive/reverse image search link url format?
+						li: a(href='#make-a-board') Como faço uma tábua?
+						//li: a(href='#staff-and-permissions') Como é que o staff, utilizadores e permissões funcionam?
+						//li: a(href='#antispam') What do the board settings for antispam do?
+					b Política de privacide e cookies/local storage.
+					ul.mv-0
+						li: a(href='#privacidadecookies') Política de privacidade e cookies/local storage.
+
 	.table-container.flex-center.mv-5
-		.anchor#whats-an-imageboard
+		.anchor#denunciar
 		table
 			tr
-				th: a(href='#whats-an-imageboard') What is an imageboard?
+				th: a(href='#denunciar') Como posso denunciar uma publicação?
+			tr
+				td.post-message
+					p
+						| Podes denunciar uma publicação que infrinja as regras clicando na seta em cima da publicação e Denunciar/Moderar - depois clica em Denúnciar ou Denúncia Global, preenche o motivo, completa o CAPTCHA e envia. 
+					p
+						| Para denunciares várias publicações ao mesmo tempo clica nas checkboxes das publicações e vai a Ações no final da página.
+	.table-container.flex-center.mv-5
+		.anchor#cripto
+		table
+			tr
+				th: a(href='#cripto') Como posso ajudar o ptchan.org?
+			tr
+				td
+					ul
+						li(style='display: contents;'): img(src='/misc/btc.png' title='BTC' style='width: 15px; height: 15px; vertical-align: top;')
+						|   Bitcoin:
+						a.mono(href='bitcoin:12dGju65fe3eqmen5QJ1BwVZ6qvKVqRcA4') 12dGju65fe3eqmen5QJ1BwVZ6qvKVqRcA4
+					ul(style='word-break: break-all;')
+						li(style='display: contents;'): img(src='/misc/xmr.png' title='XMR' style='width: 16px; height: 16px; vertical-align: top;')
+						|   Monero:
+						a.mono(href='monero:85CoSP2webVCM1ygP3M6HqTkbxAkNE7FAUMFkySp6p2LKdtnzX2uvF5b2c4stcUaRCWeWY4jPnU1JgNBXZrLxgeGUGsbKxT') 85CoSP2webVCM1ygP3M6HqTkbxAkNE7FAUMFkySp6p2LKdtnzX2uvF5b2c4stcUaRCWeWY4jPnU1JgNBXZrLxgeGUGsbKxT
+
+	.table-container.flex-center.mv-5
+		.anchor#legalDMCA
+		table
+			tr
+				th: a(href='#legalDMCA') Remoção de conteúdo que infringe direitos legais/DMCA
+			tr
+				td.post-message
+					p
+						| If something on this website infringes on your legal rights please submit a properly formated DMCA Takedown Notice or legal equivalent to info@ptchan.org and the content will be taken down as soon as possible.
+					p
+						| Se algo neste site infringe os teus direitos legais envia um DMCA Takedown ou equivalente legal devidamente formatado para info@ptchan.org e o conteúdo será prontamente removido.
+	.table-container.flex-center.mv-5
+		.anchor#contactar
+		table
+			tr
+				th: a(href='#contactar') Como posso contactar a administração?
+			tr
+				td.post-message
+					p
+						a(href='mailto:info@ptchan.org') info@ptchan.org
+	.table-container.flex-center.mv-5
+		.anchor#source
+		table
+			tr
+				th: a(href='#Source') Source
 			tr
 				td
 					p
-						| An imageboard is a type of discussion board where users share images and text about various topics. 
+						a(href='https://gitgud.io/l29utp0/ptchina' target='_blank') https://gitgud.io/l29utp0/ptchina
+
+
+	.table-container.flex-center.mv-5
+		.anchor#criarfio
+		table
+			tr
+				th: a(href='#criarfio') Como crio um fio?
+			tr
+				td
 					p
-						| The primary difference between imageboards and traditional forums is that anybody can make a post without registering 
-						| an account or providing any personal information. This lowers the barrier to entry, protects user identities and focuses on what is said, rather than who says it. 
+						| Para criares um fio clica em Novo Fio no topo da página ou catálogo de uma tábua.
+	.table-container.flex-center.mv-5
+		.anchor#responder
+		table
+			tr
+				th: a(href='#criarfio') Como respondo a um fio?
+			tr
+				td
+					p
+						| Para responderes a um fio primeiro tens que o abrir clicando em Responder e depois em Responder no topo da página do fio, também podes clicar no número da publicação para abrir o fio/caixa de resposta de forma mais rápida.
+	.table-container.flex-center.mv-5
+		.anchor#responderu
+		table
+			tr
+				th: a(href='#responderu') Como respondo a outro utilizador?
+			tr
+				td
+					p
+						| Para responderes a outro utilizador clica no seu número de publicação e este é adicionado automáticamente à caixa de resposta.
+	.table-container.flex-center.mv-5
+		.anchor#sage
+		table
+			tr
+				th: a(href='#sage') O que é um sage?
+			tr
+				td
+					p
+						| Ao escreveres sage na caixa de email/opção a tua publicação não eleva o fio para o topo da página.
+	.table-container.flex-center.mv-5
+		.anchor#IDs
+		table
+			tr
+				th: a(href='#IDs') O que são IDs?
+			tr
+				td
+					p
+						| Os IDs, quando ativos numa tábua, são uma forma de identificar utilizadores dentro de um fio.
 	.table-container.flex-center.mv-5
 		.anchor#captcha
 		table
 			tr
-				th: a(href='#captcha') How do I solve CAPTCHA?
+				th: a(href='#captcha') Como resolvo o CAPTCHA?
 			tr
-				td.post-message
-					p Select the boxes that correspond to each solid/filled icon in the grid. The image is shuffled and distorted, so use your brain.
+				td
+					p
+						img.centerpiece(src='/misc/captcha.png' title='Usa o cérebro')
 	.table-container.flex-center.mv-5
 		.anchor#name-formatting
 		table
 			tr
-				th: a(href='#name-formatting') Name formatting
+				th: a(href='#name-formatting') Como funcionam os nomes, tripcodes e capcodes?
 			tr
 				td.post-message
-					p When posting, you can format the name field to include a name, tripcode , capcode, any combination of the three including leaving the field completely blank. Instead of a blank name,  "Anonymous" is used, however this depends on board-specific configuration. The optional components are explained below.
+					p Ao fazeres uma publicação podes formatar o campo do nome para incluir um nome, tripcode, capcode ou uma combinação dos três. Também podes deixar o nome em branco e o default da tábua será usado.
 
-					b Format
+					b Formato de nome
 					p 
-						| Names should be input like: 
-						input(disabled='true' spellcheck='false' type='text' value='Name##Tripcode## Capcode')
-						| . Tripcode and capcode are optional components. Please note the whitespace before capcodes is significant. 
-					p Valid examples: 
+						| Nomes devem ser inseridos da seguinte forma: 
+						input(disabled='true' spellcheck='false' type='text' value='Nome##Tripcode## Capcode')
+						| .
+					p Exemplos válidos:: 
 					ol.mv-0
-						li name
+						li nome
 						li #tripcode
 						li ##tripcode
 						li ## capcode
-						li name#tripcode
-						li name##tripcode
-						li name## capcode
-						li name#tripcode## capcode
-						li name##tripcode## capcode
+						li nome#tripcode
+						li nome##tripcode
+						li nome## capcode
+						li nome#tripcode## capcode
+						li nome##tripcode## capcode
 						li #tripcode## capcode
 						li ##tripcode## capcode
 						li ##
-					p The last example is considered a blank capcode and can be used as a shortcut to display your role. Additionally, if a user has multiple aplicable roles (e.g. a board owner, but the user is also global staff) capcodes will default to their lowest role. To show the higher role, you must be explicit and precede any capcode with the role name e.g. ## Global Staff or ## Global Staff capcode
-					p Each component can be used in combination or independently. In a post number 9 would look like:
+					p O último exemplo apenas mostra a tua posição na tábua, se és o dono, mod, etc.
+					p Cada elemento pode ser usado numa combinação ou independentemente, o exemplo número 9 seria:
 						-
 							const examplePost = {
 								"date" : new Date("2019-08-02T09:48:44.180Z"),
-								"name" : "name",
+								"name" : "nome",
 								"board" : "example",
 								"tripcode" : "!!X8NXmAS44=",
 								"capcode" : "##Board Owner capcode",
-								"message" : "Hello, world!",
-								"nomarkup" : "Hello, world!",
+								"message" : "Olá mundo!",
+								"nomarkup" : "Olá mundo!",
 								"thread" : 1,
 								"password" : null,
 								"email" : "",
@@ -104,73 +208,71 @@ block content
 								"postId" : 123
 							}	
 						+post(examplePost)
-					p The name appears bold in the top left, followed by the tripcode in regular weight with a !! prefix, then the capcode in a different color, bold and with a ## prefix. The colours may vary between themes but are generally distinct from each other
+					//p The name appears bold in the top left, followed by the tripcode in regular weight with a !! prefix, then the capcode in a different color, bold and with a ## prefix. The colours may vary between themes but are generally distinct from each other
 
-					b Name
-					p The name is simply what name you want to be shown alongside your post. Other users can post with the same name so there is nothing preventing impersonation. This is not related to your username (for registered users).
+					b Nome
+					p O Nome é apenas o que queres mostrar ao lado da tua publicação, outros utilizadores podem escrever o mesmo Nome portanto não existe nada que impeça a impersonalização. Não está realacionado com a tua conta (para utilizadores registados).
 
 					b Tripcode
-					p A tripcode is a password of sorts, which users can provide in the tripcode component of their name. This tripcode is used in conjunction with a server-known secret to generate a unique* tripcode portion of the name. Long, unique tripcodes can be used as a form of identity. It is important that you keep tripcodes secret if you use them for some form of identity. A compromised tripcode can be used for impersonation and cannot be revoked in any way. Single # before tripcodes will use the traditional (what is now sometimes known as "insecure") tripcode algorithm shared by many imageboard softwares and websites. Double # before tripcodes will use a sha256 hash with server-side secret for a more secure, non-portable tripcode.
+					p Um Tripcode é uma forma de identidade.
 
 					b Capcode
-					p A capcode is a component of the name field only available to authenticated users. This includes admins, global staff, board owners and board moderators. If there is no text after the ##, the role will be displayed alone. Leaving a space and putting custom text will be prefixed by the role name. This way, the role is always shown to prevent role impersonation.
+					p Um Capcode é uma forma de identificação para utilizadores registados e com algum tipo de função. Isto inclui admins, staff global, donos de tábuas e moderadores.
 	.table-container.flex-center.mv-5
 		.anchor#post-styling
 		table
 			tr
-				th(colspan=2): a(href='#post-styling') Post styling
+				th(colspan=2): a(href='#post-styling') Formatação de texto
 			tr
 				th Input
 				th Output
 			tr
-				td &gt;greentext
+				td &gt;citar
 				td
-					span.greentext &gt;greentext
+					span.greentext &gt;citar
 			tr
-				td &lt;pinktext
+				td &lt;rosacitar
 				td
-					span.pinktext &lt;pinktext
+					span.pinktext &lt;risacitar
 			tr
-				td ==title==
+				td ==título==
 				td
-					span.title title
+					span.title título
 			tr
-				td ''bold''
+				td ''negrito''
 				td
-					span.bold bold
+					span.bold negrito
 			tr
-				td __underline__
+				td __sublinhado__
 				td
-					span.underline underline
+					span.underline sublinhado
 			tr
-				td ~~strikethrough~~
+				td ~~riscado~~
 				td
-					span.strike strikethrough
+					span.strike riscado
 			tr
-				td ||spoiler text||
+				td ||spoiler||
 				td
-					span.spoiler spoiler text
+					span.spoiler spoiler
 			tr
-				td **italic**
+				td **itálico**
 				td
-					span.em italic
-			tr
+					span.em itálico
+			//tr
 				td (((detected)))
 				td
-					span.detected ((( detected )))
+					span.detected (((detected)))
 			tr
 				td ##2d9+3
 				td
 					img(src='/file/dice.png' height='16' width='16')
-					span.dice (##2d9+3) Rolled 2 dice with 9 sides and modifier +3 = 10
+					span.dice (##2d9+3) 2 dados de 9 e modificador +3 = 10
 			tr
 				td https://example.com
 				td: a(href='#!') https://example.com
 			tr
-				td
-					| [Board Rules](https://your.imageboard/a/custompage/rules.html)
-					small (staff only)
-				td: a(href='#!') Board Rules
+				td [links personalizados](https://example.com)
+				td: a(href='#!') links personalizados
 			tr
 				td &gt;&gt;123
 				td: a(class="quote" href="#!") &gt;&gt;123
@@ -198,20 +300,21 @@ block content
 					pre
 						| [code]aa
 						| ∧＿∧
-						| ( ・ω・) Let's try that again.
+						| ( ・ω・) Vamos tentar outra vez.
 						| [&#x2F;code]
 				td
 					pre.aa
 						| ∧＿∧
-						| ( ・ω・) Let's try that again.
+						| ( ・ω・) Vamos tentar outra vez.
 			tr
 				td(colspan=2)
-					| The "language" of code blocks is optional. Without it, automatic language detection is used. 
-					| If the language is "plain", highlighting is disabled for the code block. If "aa" is used, the font will be adjusted for Japanese Shift JIS art. 
-					| Not all programming languages are supported, a subset of popular languages is used. 
-					| If the language is not in the supported list, the code block will be rendered like "plain" with no highlighting.
-					| Languages supported: #{codeLanguages.join(', ')}
-	.table-container.flex-center.mv-5
+					| A "language" das tags de código é opcional, sem ela deteção automática de código é usada.
+					p
+					| Se for "plain" a deteção de código é desativada. Se "aa" for usado a fonte é ajustada para Arte ASCII/Japanese Shift JIS art.
+					| Nem todas as linguagens de programação são suportadas.
+					p
+					| Linguagens suportadas: #{codeLanguages.join(', ')}
+	//.table-container.flex-center.mv-5
 		.anchor#post-info
 		table
 			tr
@@ -219,34 +322,31 @@ block content
 			tr
 				td
 					p Max size of form data per-post is #{postFilesSize}. Because other fields e.g. name, message, etc contribute to this, the maximum size of file uploads will be very slightly smaller than this.
-	.table-container.flex-center.mv-5
+	//.table-container.flex-center.mv-5
 		.anchor#moderation
 		table
 			tr
-				th: a(href='#moderation') How does moderation work?
+				th: a(href='#moderation') Como funciona a moderação?
 			tr
 				td.post-message
-					b General
+					b Geral
 					p
 						| Moderation is very simple. Moderation permissions are different between regular users, board staff (board owner or moderator) and globals (global staff or admin). 
 						| By default, regular users can delete, spoiler or remove the files from their own posts, provided a matching post password is supplied. They can also report or global report posts. 
 						| Board staff have near full power over posts on their board including removing posts, stickying, spoilering, etc. even for other users posts without the need for a password. They also have access to board specific management page.
 						| Global staff have full power over all posts on all boards, can access the board specific management page for any board and additionally have access to the global management page.
-						| More details on the specifics of permission levels is available 
-						a(href='#staff-and-permissions') here
-						| .
-					b Local vs. Global reports
+					b Denúncias locais vs. globais
 					p
 						| There exists the concept of "local" and "global" reports. Reporting a post locally will show the post along with reports on the report page for that particular board, and the reports 
 						| may be actioned upon by the board staff. Reporting a post globally will show the post along with reports on the global manage page available only to global staff and may be actioned upon by global staff. 
 						| Global reports should be used to flag posts that violate global rules such as illegal content or spam, in contrast to local reports which are for posts that abide by global rules but break 
 						| board-specific rules (which may be made arbitrarily by board staff). It is also possible to be banned from a board or globally for abuse of the report system.
-					b Batch processing of posts
+					b Processar publicações em massa
 					p
 						| Each post has a checkbox in the top left to select it for moderation actions. Multiple posts may be selected to allow batch processing e.g. reporting multiple offending posts in one request. 
 						| The same is present in moderation interfaces. Some actions for example bans (which are based on IP) may also be handled in batches. Selecting multiple posts and using the ban action will 
 						| apply a single ban for each unique IP of the selected posts.
-					b Time format in moderation interfaces
+					b Formato da duração de bans, etc
 					p
 						| Some moderation interfaces, for example the ban duration when moderating posts, or the ban duration for post filtering use a shorthand for times/length. This format supports years, months, weeks, days, hours, minutes and seconds.
 						| An input of "3mo" would mean 3 months and "1y2mo3w4d5h6m7s" would mean 1 year, 2 months, 3 weeks, 4 days, 5 hours, 6 minutes and 7 seconds. Units of time should be in descending order, so "2w1mo" is invalid.
@@ -255,19 +355,19 @@ block content
 		.anchor#make-a-board
 		table
 			tr
-				th: a(href='#make-a-board') How do I make my own board?
+				th: a(href='#make-a-board') Como faço uma tábua?
 			tr
 				td
 					p
-						a(href='/register.html') Register
-						|  an account, then 
-						a(href='/create.html') create a board
-						|. Please avoid making excessive amounts of boards, duplicate or boards similar to an existing one unless you expect that many users will migrate to the new board for whatever reason e.g. tyrannical moderation.
-	.table-container.flex-center.mv-5
+						a(href='/register.html') Regista
+						|  uma conta, depois 
+						a(href='/create.html') cria uma tábua
+						|. Evita fazer tábuas excessivas ou que já existam.
+	//.table-container.flex-center.mv-5
 		.anchor#staff-and-permissions
 		table
 			tr
-				th: a(href='#staff-and-permissions') How do staff, users and permissions work?
+				th: a(href='#staff-and-permissions') Como é que o staff, utilizadores e permissões funcionam?
 			tr
 				td
 					p
@@ -285,11 +385,11 @@ block content
 							li Board owner: Same as board moderator
 							li Board moderator: All below, move/merge, ban, delete-by-ip, sticky/sage/lock/cycle
 							li Regular user: Reports, and post spoiler/delete/unlink if the board has them enabled
-						| Administrators can set account types for users on the global management accounts page. Normally only Admin (level 0), Global Staff (level 1) and Regular User (level 4) are assigned here.
-						| Level 2 or 3 permission is handled internally for users on boards they own or moderate, while their account remains listed as "Regular User". However admins can manually assign Global Board Owner (level 2) and Global Board Mod (level 3)
-						| to grant an account board owner or moderation permissions on all boards, but without access to the global moderation interfaces. If assigning Global Board Owner (level 2), they will have access to the board settings
+						| Administrators have the ability to assign a permission level directly to users through the global management page. Typically a user is level 4 (regular user), 1 (global staff) or 0 (administrator).
+						| Level 2 and 3 are usually only applicable to users when on a board they are owner or moderator. However, level 2 or 3 can be assigned manually to create global board owners or global board moderators
+						| who have board owner or moderation permissions on all boards, but without access to the global moderation interfaces. If assigning global board owners (level 2), they will have access to the board settings
 						| and the ability to reassign board owners.
-	.table-container.flex-center.mv-5
+	//.table-container.flex-center.mv-5
 		.anchor#antispam
 		table
 			tr
@@ -311,24 +411,148 @@ block content
 					p Strict Filtering: More aggressively match filters, by normalising the input compared against the filters.
 					p Filter Mode: What to do when a post matches a filter.
 					p Filter Auto Ban Duration: How long to automatically ban for when filter mode is set to ban. Input the duration in time format described in the #[a(href='#moderation') moderation section].
+					
 	.table-container.flex-center.mv-5
-		.anchor#archive-reverse-url-format
+		.anchor#privacidadecookies
 		table
 			tr
-				th: a(href='#archive-reverse-url-format') What is the archive/reverse image search link url format?
+				th: a(href='#privacidadecookies') Política de privacidade
 			tr
-				td
+				td.post-message
+					p 
+						| Os endereços IP são anonimizados e apenas estão disponíveis no seu formato original à administração, ficam associados à publicação e são automaticamente eliminados quando a publicação sai da tábua ou depois de 7 dias.
 					p
-						| Put a link with 
-						span.mono %s
-						|  where the url of the page/file should go for reverse image search or archive links. For example 
-						span.mono https://tineye.com/search?url=#[span.bold %s]
-						| .
-	.table-container.flex-center.mv-5
-		.anchor#contact
+						| Todos os cookies e local storage utilizados pelo ptchan são apenas para o seu correto funcionamento e personalização. O ptchan não usa cookies de terceiros ou tracking publicitário.
+		.table-container.flex-center.mv-5
 		table
 			tr
-				th: a(href='#contact') How can I contact the administration?
+				th(colspan=3) Cookies e Local Storage
 			tr
-				td
-					p Example						
+				th Nome
+				th Tipo
+				th Função
+			tr
+				td connect.sid
+				td Cookie
+				td Sessão de conta
+			tr
+				td captchaid
+				td Cookie
+				td Captcha
+			tr
+				td wpcc
+				td Cookie
+				td Consentimento cookies
+			tr
+				td /css/themes/*
+				td Local Storage
+				td Personalização
+			tr
+				td 24
+				td Local Storage
+				td Personalização
+			tr
+				td alwaysshowreplies
+				td Local Storage
+				td Personalização
+			tr
+				td codetheme
+				td Local Storage
+				td Personalização
+			tr
+				td crispimages
+				td Local Storage
+				td Personalização
+			tr
+				td customcss
+				td Local Storage
+				td Personalização
+			tr
+				td dragleft
+				td Local Storage
+				td Personalização
+			tr
+				td dragtop
+				td Local Storage
+				td Personalização
+			tr
+				td filters1
+				td Local Storage
+				td Personalização
+			tr
+				td heightlimit
+				td Local Storage
+				td Personalização
+			tr
+				td hiddenimages
+				td Local Storage
+				td Personalização
+			tr
+				td hiddenrecursive
+				td Local Storage
+				td Personalização
+			tr
+				td hiddenthumbnails
+				td Local Storage
+				td Personalização
+			tr
+				td hiddenloadingbars
+				td Local Storage
+				td Personalização
+			tr
+				td hidepoststubs
+				td Local Storage
+				td Personalização
+			tr
+				td live
+				td Local Storage
+				td Personalização
+			tr
+				td name
+				td Local Storage
+				td Personalização
+			tr
+				td localtime
+				td Local Storage
+				td Personalização
+			tr
+				td notifications-yous-only
+				td Local Storage
+				td Personalização
+			tr
+				td noncolorids
+				td Local Storage
+				td Personalização
+			tr
+				td notifications
+				td Local Storage
+				td Personalização
+			tr
+				td postpassword
+				td Local Storage
+				td Personalização
+			tr
+				td relative
+				td Local Storage
+				td Personalização
+			tr
+				td scroll
+				td Local Storage
+				td Personalização
+			tr
+				td theme
+				td Local Storage
+				td Personalização
+			tr
+				td volume
+				td Local Storage
+				td Personalização
+			tr
+				td yous-setting
+				td Local Storage
+				td Personalização
+			tr
+				td yous
+				td Local Storage
+				td Personalização
+			tr

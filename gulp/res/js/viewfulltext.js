@@ -62,8 +62,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			detail: {
 				post: parentPost,
 				postId: postJson.postId,
-				json: postJson,
-				viewfulltext: true,
+				json: postJson
 			}
 		});
 		window.dispatchEvent(updatePostMessageEvent);
